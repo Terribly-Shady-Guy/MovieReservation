@@ -100,6 +100,8 @@ namespace MovieReservation.Models
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("genre");
+
+                entity.HasIndex(e => e.Genre);
             });
 
             modelBuilder.Entity<Showing>(entity =>
