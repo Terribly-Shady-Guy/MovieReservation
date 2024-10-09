@@ -49,7 +49,7 @@ namespace MovieReservation.Models
                 .IsRequired()
                 .HasColumnName("role");
 
-                entity.ToTable(nameof(AppUser));
+                entity.ToTable(nameof(AppUser) + "s");
             });
 
             modelBuilder.Entity<Reservation>(entity =>

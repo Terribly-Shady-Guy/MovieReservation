@@ -12,7 +12,7 @@ namespace MovieReservation.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppUser",
+                name: "AppUsers",
                 columns: table => new
                 {
                     user_id = table.Column<int>(type: "int", nullable: false)
@@ -78,7 +78,7 @@ namespace MovieReservation.Migrations
                     table.ForeignKey(
                         name: "fk_app_user_reservation",
                         column: x => x.user_id,
-                        principalTable: "AppUser",
+                        principalTable: "AppUsers",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -247,7 +247,7 @@ namespace MovieReservation.Migrations
                 name: "ShowingSeats");
 
             migrationBuilder.DropTable(
-                name: "AppUser");
+                name: "AppUsers");
 
             migrationBuilder.DropTable(
                 name: "Seats");

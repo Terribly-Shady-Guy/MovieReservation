@@ -12,7 +12,7 @@ using MovieReservation.Models;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241009042157_InitialCreate")]
+    [Migration("20241009224433_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -68,7 +68,7 @@ namespace MovieReservation.Migrations
                     b.HasKey("UserId")
                         .HasName("pk_user_id");
 
-                    b.ToTable("AppUser", (string)null);
+                    b.ToTable("AppUsers", (string)null);
                 });
 
             modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>
