@@ -21,6 +21,9 @@ namespace MovieReservation.Models
             {
                 entity.HasKey(e => e.UserId).HasName("pk_user_id");
 
+                entity.Property(e => e.UserId)
+                .HasColumnName("user_id");
+
                 entity.Property(e => e.Username)
                 .IsRequired()
                 .HasColumnName("username")
@@ -45,11 +48,16 @@ namespace MovieReservation.Models
                 entity.Property(e => e.Role)
                 .IsRequired()
                 .HasColumnName("role");
+
+                entity.ToTable(nameof(AppUser));
             });
 
             modelBuilder.Entity<Reservation>(entity =>
             {
                 entity.HasKey(e => e.ReservationId).HasName("pk_reservation_id");
+
+                entity.Property(e => e.ReservationId)
+                .HasColumnName("reservation_id");
 
                 entity.Property(e => e.DateReserved)
                 .IsRequired()
@@ -66,6 +74,9 @@ namespace MovieReservation.Models
                 .HasColumnType("DateTime")
                 .HasColumnName("date_cancelled");
 
+                entity.Property(e => e.UserId)
+                .HasColumnName ("user_id");
+
                 entity.HasOne(e => e.User)
                 .WithMany(e => e.Reservations)
                 .HasForeignKey(e => e.UserId)
@@ -73,12 +84,21 @@ namespace MovieReservation.Models
 
                 entity.HasMany(e => e.ShowingSeats)
                 .WithMany(e => e.Reservations)
-                .UsingEntity("ReservedSeats");
+                .UsingEntity("ReservedSeats", j =>
+                {
+                    j.Property<int>("ShowingSeatId").HasColumnName("showing_seat_id").HasColumnType("Integer");
+                    j.Property<int>("ReservationId").HasColumnName("reservation_id").HasColumnType("Integer");
+
+                    j.HasKey("ShowingSeatId", "ReservationId").HasName("pk_showingseat_reservation");
+                });
             });
 
             modelBuilder.Entity<Movie>(entity =>
             {
                 entity.HasKey(e => e.MovieId).HasName("pk_movie_id");
+
+                entity.Property(e => e.MovieId)
+                .HasColumnName("movie_id");
 
                 entity.Property(e => e.Title)
                 .HasColumnName("title")
@@ -108,10 +128,16 @@ namespace MovieReservation.Models
             {
                 entity.HasKey(e => e.ShowingId).HasName("pk_showing_id");
 
+                entity.Property(e => e.ShowingId)
+                .HasColumnName("showing_id");
+
                 entity.Property(e => e.Date)
                 .HasColumnName("date")
                 .IsRequired()
                 .HasColumnType("DateTime");
+
+                entity.Property(e => e.MovieId)
+                .HasColumnName("movie_id");
 
                 entity.HasOne(e => e.Movie)
                 .WithMany(e => e.Showings)
@@ -122,6 +148,9 @@ namespace MovieReservation.Models
             modelBuilder.Entity<Location>(entity =>
             {
                 entity.HasKey(e => e.LocationId).HasName("pk_location_id");
+
+                entity.Property(e => e.LocationId)
+                .HasColumnName("location_id");
 
                 entity.Property(e => e.Street)
                 .IsRequired()
@@ -160,6 +189,9 @@ namespace MovieReservation.Models
                 .IsRequired()
                 .HasColumnName("max_capacity");
 
+                entity.Property(e => e.LocationId)
+                .HasColumnName("location_id");
+
                 entity.HasOne(e => e.Location)
                 .WithMany(e => e.Auditoriums)
                 .HasForeignKey(e => e.LocationId)
@@ -175,19 +207,35 @@ namespace MovieReservation.Models
             {
                 entity.HasKey(e => e.SeatId).HasName("pk_seat_id");
 
+                entity.Property(e => e.SeatId)
+                .HasColumnName("seat_id");
+
                 entity.Property(e => e.Price)
                 .IsRequired()
                 .HasColumnName("price")
                 .HasColumnType("MONEY");
 
+                entity.Property(e => e.AuditoriumNumber)
+                .HasColumnName("auditorium_number");
+
                 entity.HasOne(e => e.Auditorium)
                 .WithMany(e => e.Seats)
+                .HasForeignKey(e => e.AuditoriumNumber)
                 .HasConstraintName("fk_seat_auditorium");
             });
 
             modelBuilder.Entity<ShowingSeat>(entity =>
             {
                 entity.HasKey(e => e.ShowingSeatId).HasName("pk_showing_seat_id");
+
+                entity.Property(e => e.ShowingSeatId)
+                .HasColumnName("showing_seat_id");
+
+                entity.Property(e => e.ShowingId)
+                .HasColumnName("showing_id");
+
+                entity.Property(e => e.SeatId)
+                .HasColumnName("seat_id");
 
                 entity.HasOne(e => e.Showing)
                 .WithMany(e => e.ShowingSeats)
