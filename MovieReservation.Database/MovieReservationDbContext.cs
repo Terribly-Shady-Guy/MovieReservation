@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieReservation.Database.Models;
 
-namespace MovieReservation.Models
+namespace MovieReservation.Database
 {
     public class MovieReservationDbContext : DbContext 
     {
@@ -49,16 +50,7 @@ namespace MovieReservation.Models
                 .IsRequired()
                 .HasColumnName("role");
 
-                entity.Property(e => e.RefreshToken)
-                .IsUnicode(false)
-                .HasColumnName("refresh_token")
-                .HasColumnType("varchar(20)");
-
-                entity.Property(e => e.ExpirationDate)
-                .HasColumnType("datetime")
-                .HasColumnName("expiration_date");
-
-                entity.ToTable(nameof(AppUser) + "s");
+                entity.ToTable(nameof(AppUser));
             });
 
             modelBuilder.Entity<Reservation>(entity =>
