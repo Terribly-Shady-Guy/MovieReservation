@@ -49,6 +49,7 @@ namespace MovieReservation.Models
                 .IsRequired()
                 .HasColumnName("role");
 
+<<<<<<< HEAD
                 entity.Property(e => e.RefreshToken)
                 .IsUnicode(false)
                 .HasColumnName("refresh_token")
@@ -59,6 +60,9 @@ namespace MovieReservation.Models
                 .HasColumnName("expiration_date");
 
                 entity.ToTable(nameof(AppUser) + "s");
+=======
+                entity.ToTable(nameof(AppUser));
+>>>>>>> parent of f5eece0 (fixed db table name for appusers)
             });
 
             modelBuilder.Entity<Reservation>(entity =>

@@ -74,7 +74,7 @@ namespace MovieReservation.Migrations
                     b.HasKey("UserId")
                         .HasName("pk_user_id");
 
-                    b.ToTable("AppUsers", (string)null);
+                    b.ToTable("AppUser", (string)null);
                 });
 
             modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>
