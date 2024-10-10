@@ -6,7 +6,7 @@ namespace MovieReservation.Models
     {
         public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) : base(options) { }
 
-        public virtual DbSet<AppUser> appUsers { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
         public virtual DbSet<Showing> Showings { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
