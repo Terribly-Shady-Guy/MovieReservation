@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Models;
 using MovieReservation.Services;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +13,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<RsaSecurityKey>((provider) =>
+{
+    var rsa = RSA.Create();
+    return new RsaSecurityKey(rsa);
+});
+
 builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
 
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<JwtManager>();
 
 var app = builder.Build();
 

@@ -54,5 +54,22 @@ namespace MovieReservation.Services
 
             return true;
         }
+
+        public async Task<AppUser?> GetUserAsync(UserLoginVM loginUser)
+        {
+            List<AppUser> users = await _context.AppUsers.Where(e => e.Username == loginUser.Username).ToListAsync();
+            var hasher = new PasswordHasher<AppUser>();
+
+            foreach (var user in users)
+            {
+                var result = hasher.VerifyHashedPassword(user, user.Password, loginUser.Password);
+                if (result == PasswordVerificationResult.Success)
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
     }
 }
