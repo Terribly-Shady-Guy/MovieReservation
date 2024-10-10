@@ -96,17 +96,17 @@ namespace MovieReservation.Models
 
                 entity.HasMany(e => e.ShowingSeats)
                 .WithMany(e => e.Reservations)
-                .UsingEntity("ReservedSeats", join =>
+                .UsingEntity("ReservedSeats", joinEntity =>
                 {
-                    join.Property<int>("ShowingSeatId")
+                    joinEntity.Property<int>("ShowingSeatId")
                     .HasColumnName("showing_seat_id")
                     .HasColumnType("Integer");
 
-                    join.Property<int>("ReservationId")
+                    joinEntity.Property<int>("ReservationId")
                     .HasColumnName("reservation_id")
                     .HasColumnType("Integer");
 
-                    join.HasKey("ShowingSeatId", "ReservationId")
+                    joinEntity.HasKey("ShowingSeatId", "ReservationId")
                     .HasName("pk_showingseat_reservation");
                 });
             });
