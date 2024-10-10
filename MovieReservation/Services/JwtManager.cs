@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.IdentityModel.JsonWebTokens;
+﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Models;
 using System.Security.Claims;
@@ -12,14 +10,15 @@ namespace MovieReservation.Services
         private readonly IConfiguration _configuration;
         private readonly RsaSecurityKey _securityKey;
 
-        public JwtManager(IConfiguration configuration)
+        public JwtManager(IConfiguration configuration, RsaSecurityKey securityKey)
         {
             _configuration = configuration;
+            _securityKey = securityKey;
         }
 
         public string GenerateJwt(AppUser user)
         {
-            var signingCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.RsaSha256Signature);
+            var signingCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.RsaSha256);
 
             Claim[] claims =
             [
