@@ -21,7 +21,7 @@ namespace MovieReservation.Controllers
         {
             if (!Regex.IsMatch(user.Email, "[a-zA-Z0-9]+@[a-z]+[.]com"))
             {
-                return BadRequest();
+                return BadRequest(new {Message = "email is not a valid format."});
             }
 
             int id = await _userService.AddNewUserAsync(user);
