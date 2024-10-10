@@ -84,7 +84,8 @@ namespace MovieReservation.Models
                 .HasColumnName("date_cancelled");
 
                 entity.Property(e => e.UserId)
-                .HasColumnName ("user_id");
+                .IsRequired()
+                .HasColumnName("user_id");
 
                 entity.HasOne(e => e.User)
                 .WithMany(e => e.Reservations)
@@ -146,6 +147,7 @@ namespace MovieReservation.Models
                 .HasColumnType("DateTime");
 
                 entity.Property(e => e.MovieId)
+                .IsRequired()
                 .HasColumnName("movie_id");
 
                 entity.HasOne(e => e.Movie)
@@ -199,7 +201,8 @@ namespace MovieReservation.Models
                 .HasColumnName("max_capacity");
 
                 entity.Property(e => e.LocationId)
-                .HasColumnName("location_id");
+                .HasColumnName("location_id")
+                .IsRequired();
 
                 entity.HasOne(e => e.Location)
                 .WithMany(e => e.Auditoriums)
@@ -225,6 +228,7 @@ namespace MovieReservation.Models
                 .HasColumnType("MONEY");
 
                 entity.Property(e => e.AuditoriumNumber)
+                .IsRequired(true)
                 .HasColumnName("auditorium_number");
 
                 entity.HasOne(e => e.Auditorium)
@@ -241,6 +245,7 @@ namespace MovieReservation.Models
                 .HasColumnName("showing_seat_id");
 
                 entity.Property(e => e.ShowingId)
+                .IsRequired()
                 .HasColumnName("showing_id");
 
                 entity.Property(e => e.SeatId)

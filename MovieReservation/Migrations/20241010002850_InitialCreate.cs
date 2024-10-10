@@ -12,7 +12,7 @@ namespace MovieReservation.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppUser",
+                name: "AppUsers",
                 columns: table => new
                 {
                     user_id = table.Column<int>(type: "int", nullable: false)
@@ -22,7 +22,9 @@ namespace MovieReservation.Migrations
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    refresh_token = table.Column<string>(type: "varchar(20)", unicode: false, nullable: true),
+                    expiration_date = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -78,7 +80,7 @@ namespace MovieReservation.Migrations
                     table.ForeignKey(
                         name: "fk_app_user_reservation",
                         column: x => x.user_id,
-                        principalTable: "AppUser",
+                        principalTable: "AppUsers",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -247,7 +249,7 @@ namespace MovieReservation.Migrations
                 name: "ShowingSeats");
 
             migrationBuilder.DropTable(
-                name: "AppUser");
+                name: "AppUsers");
 
             migrationBuilder.DropTable(
                 name: "Seats");

@@ -12,8 +12,8 @@ using MovieReservation.Models;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241009234636_RefreshToken")]
-    partial class RefreshToken
+    [Migration("20241010002850_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

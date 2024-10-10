@@ -3,12 +3,12 @@
     public class ShowingSeat
     {
         public int ShowingSeatId { get; set; }
-        public int ShowingId { get; set; }
-        public int SeatId { get; set; }
+        public required int ShowingId { get; set; }
+        public required int SeatId { get; set; }
 
-        public Showing Showing { get; set; }
-        public Seat Seat { get; set; }
+        public required Showing Showing { get; set; }
+        public required Seat Seat { get; set; }
 
-        public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

@@ -2,11 +2,11 @@
 {
     public class Auditorium
     {
-        public string AuditoriumNumber { get; set; }
-        public int MaxCapacity { get; set; }
-        public int LocationId { get; set; }
+        public required string AuditoriumNumber { get; set; }
+        public required int MaxCapacity { get; set; }
+        public required int LocationId { get; set; }
 
-        public Location Location { get; set; }
-        public ICollection<Seat> Seats { get; set; }
+        public required Location Location { get; set; }
+        public ICollection<Seat> Seats { get; set; } = new List<Seat>();
     }
 }
