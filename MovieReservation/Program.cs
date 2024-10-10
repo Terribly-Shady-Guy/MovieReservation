@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MovieReservation.Models;
+using MovieReservation.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
+
+builder.Services.AddTransient<UserService>();
 
 var app = builder.Build();
 
