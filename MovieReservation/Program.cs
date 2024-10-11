@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Models;
@@ -15,9 +16,43 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton((provider) =>
 {
+    var path = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
     var rsa = RSA.Create();
+
+    if (!Directory.Exists(path))
+    {
+        Directory.CreateDirectory(path);
+        File.WriteAllText(Path.Combine(path, "key.xml"), rsa.ToXmlString(true));
+    }
+    else
+    {
+        rsa.FromXmlString(File.ReadAllText(Path.Combine(path, "key.xml")));
+    }
+
     return new RsaSecurityKey(rsa);
 });
+
+builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<RsaSecurityKey>((options, signingKey) =>
+    {
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAlgorithms = [SecurityAlgorithms.RsaSha256],
+            IssuerSigningKey = signingKey,
+            ValidAudience = builder.Configuration.GetSection("Jwt").GetValue<string>("Audience"),
+            ValidIssuer = builder.Configuration.GetSection("Jwt").GetValue<string>("Issuer")
+        };
+    });
+
+builder.Services.AddAuthentication(configureOptions =>
+{
+    configureOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    configureOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer();
 
 builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 {

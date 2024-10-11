@@ -30,7 +30,9 @@ namespace MovieReservation.Services
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(10),
-                Subject = new ClaimsIdentity(claims)
+                Subject = new ClaimsIdentity(claims),
+                Issuer = _configuration.GetSection("Jwt").GetValue<string>("Issuer"),
+                Audience = _configuration.GetSection("Jwt").GetValue<string>("Audience")
             };
 
             return new JsonWebTokenHandler().CreateToken(descriptor);

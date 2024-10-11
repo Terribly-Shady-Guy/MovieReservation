@@ -30,7 +30,7 @@ namespace MovieReservation.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> PromoteUser(int id)
         {
             bool isSucessful = await _userService.PromoteToAdmin(id);
