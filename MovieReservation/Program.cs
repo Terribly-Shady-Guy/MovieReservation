@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<RsaSecurityKey>((provider) =>
+builder.Services.AddSingleton((provider) =>
 {
     var rsa = RSA.Create();
     return new RsaSecurityKey(rsa);
