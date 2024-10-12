@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieReservation.Models
 {
@@ -53,13 +54,15 @@ namespace MovieReservation.Models
                 entity.Property(e => e.RefreshToken)
                 .IsUnicode(false)
                 .HasColumnName("refresh_token")
-                .HasColumnType("varchar(20)");
+                .HasColumnType("varchar(200)");
 
                 entity.Property(e => e.ExpirationDate)
                 .HasColumnType("datetime")
                 .HasColumnName("expiration_date");
 
                 entity.ToTable(nameof(AppUser) + "s");
+
+                entity.HasData(new DataSeeder().SeededAdmin);
             });
 
             modelBuilder.Entity<Reservation>(entity =>
@@ -275,6 +278,29 @@ namespace MovieReservation.Models
                 .HasForeignKey(e => e.SeatId)
                 .HasConstraintName("fk_showing_seat_seat");
             });
+        }
+
+        private class DataSeeder
+        {
+            public AppUser SeededAdmin { get; private set; }
+
+            public DataSeeder()
+            {
+                SeededAdmin = new AppUser
+                {
+                    UserId = 1,
+                    Email = "someEmail@localhost.com",
+                    Username = "root",
+                    Password = "admin246810",
+                    FirstName = "root",
+                    LastName = "root",
+                    Role = "Admin"
+                };
+
+                var hasher = new PasswordHasher<AppUser>();
+
+                SeededAdmin.Password = hasher.HashPassword(SeededAdmin, SeededAdmin.Password);
+            }
         }
     }
 }

@@ -57,7 +57,7 @@ namespace MovieReservation.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
+                        .HasColumnType("varchar(200)")
                         .HasColumnName("refresh_token");
 
                     b.Property<string>("Role")
@@ -75,6 +75,18 @@ namespace MovieReservation.Migrations
                         .HasName("pk_user_id");
 
                     b.ToTable("AppUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Email = "someEmail@localhost.com",
+                            FirstName = "root",
+                            LastName = "root",
+                            Password = "AQAAAAIAAYagAAAAEMBcjCP0r6FUYwlPYtIgfP95VurbNvjqGNtiV1AUCwhV2bk4jIIpv4LQY4vnhGYdVA==",
+                            Role = "Admin",
+                            Username = "root"
+                        });
                 });
 
             modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>

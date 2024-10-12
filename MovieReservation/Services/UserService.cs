@@ -71,5 +71,27 @@ namespace MovieReservation.Services
 
             return null;
         }
+
+        public async Task<AppUser?> GetUserAsync(int id)
+        {
+            return await _context.AppUsers.FindAsync(id);
+        }
+
+        public async Task UpdateRefreshToken(string? token, DateTime? expiration, AppUser user)
+        {
+            user.RefreshToken = token;
+            user.ExpirationDate = expiration;
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRefreshToken(string? token, DateTime? expiration, int id)
+        {
+            AppUser? user = await _context.AppUsers.FindAsync(id);
+            if (user == null) { return; }
+
+            await UpdateRefreshToken(token, expiration, user);
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MovieReservation.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,7 @@ namespace MovieReservation.Migrations
                     username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    refresh_token = table.Column<string>(type: "varchar(20)", unicode: false, nullable: true),
+                    refresh_token = table.Column<string>(type: "varchar(200)", unicode: false, nullable: true),
                     expiration_date = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
@@ -194,6 +194,11 @@ namespace MovieReservation.Migrations
                         principalColumn: "showing_seat_id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AppUsers",
+                columns: new[] { "user_id", "email", "expiration_date", "first_name", "last_name", "password", "refresh_token", "role", "username" },
+                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAEMBcjCP0r6FUYwlPYtIgfP95VurbNvjqGNtiV1AUCwhV2bk4jIIpv4LQY4vnhGYdVA==", null, "Admin", "root" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auditoriums_location_id",

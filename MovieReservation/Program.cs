@@ -60,7 +60,7 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 });
 
 builder.Services.AddTransient<UserService>();
-builder.Services.AddTransient<JwtManager>();
+builder.Services.AddTransient<AuthenticationTokenManager>();
 
 var app = builder.Build();
 
