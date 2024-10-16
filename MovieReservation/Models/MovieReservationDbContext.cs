@@ -21,7 +21,7 @@ namespace MovieReservation.Models
             modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                .HasName("pk_user_id");
+                .HasName("PK_user_id");
 
                 entity.Property(e => e.UserId)
                 .HasColumnName("user_id");
@@ -68,7 +68,7 @@ namespace MovieReservation.Models
             modelBuilder.Entity<Reservation>(entity =>
             {
                 entity.HasKey(e => e.ReservationId)
-                .HasName("pk_reservation_id");
+                .HasName("PK_reservation_id");
 
                 entity.Property(e => e.ReservationId)
                 .HasColumnName("reservation_id");
@@ -95,7 +95,7 @@ namespace MovieReservation.Models
                 entity.HasOne(e => e.User)
                 .WithMany(e => e.Reservations)
                 .HasForeignKey(e => e.UserId)
-                .HasConstraintName("fk_app_user_reservation");
+                .HasConstraintName("FK_app_user_reservation");
 
                 entity.HasMany(e => e.ShowingSeats)
                 .WithMany(e => e.Reservations)
@@ -110,14 +110,14 @@ namespace MovieReservation.Models
                     .HasColumnType("Integer");
 
                     joinEntity.HasKey("ShowingSeatId", "ReservationId")
-                    .HasName("pk_showingseat_reservation");
+                    .HasName("PK_showingseat_reservation");
                 });
             });
 
             modelBuilder.Entity<Movie>(entity =>
             {
                 entity.HasKey(e => e.MovieId)
-                .HasName("pk_movie_id");
+                .HasName("PK_movie_id");
 
                 entity.Property(e => e.MovieId)
                 .HasColumnName("movie_id");
@@ -149,7 +149,7 @@ namespace MovieReservation.Models
             modelBuilder.Entity<Showing>(entity =>
             {
                 entity.HasKey(e => e.ShowingId)
-                .HasName("pk_showing_id");
+                .HasName("PK_showing_id");
 
                 entity.Property(e => e.ShowingId)
                 .HasColumnName("showing_id");
@@ -166,13 +166,13 @@ namespace MovieReservation.Models
                 entity.HasOne(e => e.Movie)
                 .WithMany(e => e.Showings)
                 .HasForeignKey(e => e.MovieId)
-                .HasConstraintName("fk_movie_showing");
+                .HasConstraintName("FK_movie_showing");
             });
 
             modelBuilder.Entity<Location>(entity =>
             {
                 entity.HasKey(e => e.LocationId)
-                .HasName("pk_location_id");
+                .HasName("PK_location_id");
 
                 entity.Property(e => e.LocationId)
                 .HasColumnName("location_id");
@@ -203,7 +203,7 @@ namespace MovieReservation.Models
             modelBuilder.Entity<Auditorium>(entity =>
             {
                 entity.HasKey(e => e.AuditoriumNumber)
-                .HasName("pk_auditorium_number");
+                .HasName("PK_auditorium_number");
 
                 entity.Property(e => e.AuditoriumNumber)
                 .IsRequired()
@@ -222,18 +222,18 @@ namespace MovieReservation.Models
                 entity.HasOne(e => e.Location)
                 .WithMany(e => e.Auditoriums)
                 .HasForeignKey(e => e.LocationId)
-                .HasConstraintName("fk_auditorium_location");
+                .HasConstraintName("FK_auditorium_location");
 
                 entity.ToTable("Auditoriums", table =>
                 {
-                    table.HasCheckConstraint("chk_max_capacity", "max_capacity > 0");
+                    table.HasCheckConstraint("CK_max_capacity", "max_capacity > 0");
                 });
             });
 
             modelBuilder.Entity<Seat>(entity =>
             {
                 entity.HasKey(e => e.SeatId)
-                .HasName("pk_seat_id");
+                .HasName("PK_seat_id");
 
                 entity.Property(e => e.SeatId)
                 .HasColumnName("seat_id");
@@ -250,13 +250,13 @@ namespace MovieReservation.Models
                 entity.HasOne(e => e.Auditorium)
                 .WithMany(e => e.Seats)
                 .HasForeignKey(e => e.AuditoriumNumber)
-                .HasConstraintName("fk_seat_auditorium");
+                .HasConstraintName("FK_seat_auditorium");
             });
 
             modelBuilder.Entity<ShowingSeat>(entity =>
             {
                 entity.HasKey(e => e.ShowingSeatId)
-                .HasName("pk_showing_seat_id");
+                .HasName("PK_showing_seat_id");
 
                 entity.Property(e => e.ShowingSeatId)
                 .HasColumnName("showing_seat_id");
@@ -271,12 +271,12 @@ namespace MovieReservation.Models
                 entity.HasOne(e => e.Showing)
                 .WithMany(e => e.ShowingSeats)
                 .HasForeignKey(e => e.ShowingId)
-                .HasConstraintName("fk_showing_seat_showing");
+                .HasConstraintName("FK_showing_seat_showing");
 
                 entity.HasOne(e => e.Seat)
                 .WithMany(e => e.ShowingSeats)
                 .HasForeignKey(e => e.SeatId)
-                .HasConstraintName("fk_showing_seat_seat");
+                .HasConstraintName("FK_showing_seat_seat");
             });
         }
 

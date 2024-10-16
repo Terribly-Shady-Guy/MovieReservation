@@ -12,8 +12,8 @@ using MovieReservation.Models;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241012170103_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20241016045042_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,7 +75,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("username");
 
                     b.HasKey("UserId")
-                        .HasName("pk_user_id");
+                        .HasName("PK_user_id");
 
                     b.ToTable("AppUsers", (string)null);
 
@@ -86,7 +86,7 @@ namespace MovieReservation.Migrations
                             Email = "someEmail@localhost.com",
                             FirstName = "root",
                             LastName = "root",
-                            Password = "AQAAAAIAAYagAAAAEMBcjCP0r6FUYwlPYtIgfP95VurbNvjqGNtiV1AUCwhV2bk4jIIpv4LQY4vnhGYdVA==",
+                            Password = "AQAAAAIAAYagAAAAEF+svH+gq2u9CWUjt0MndRBiFMEta2faBHJmvuUBQvXYtLpehP5GpTX+k2mkph5Oyg==",
                             Role = "Admin",
                             Username = "root"
                         });
@@ -108,13 +108,13 @@ namespace MovieReservation.Migrations
                         .HasColumnName("max_capacity");
 
                     b.HasKey("AuditoriumNumber")
-                        .HasName("pk_auditorium_number");
+                        .HasName("PK_auditorium_number");
 
                     b.HasIndex("LocationId");
 
                     b.ToTable("Auditoriums", null, t =>
                         {
-                            t.HasCheckConstraint("chk_max_capacity", "max_capacity > 0");
+                            t.HasCheckConstraint("CK_max_capacity", "max_capacity > 0");
                         });
                 });
 
@@ -154,7 +154,7 @@ namespace MovieReservation.Migrations
                         .IsFixedLength();
 
                     b.HasKey("LocationId")
-                        .HasName("pk_location_id");
+                        .HasName("PK_location_id");
 
                     b.ToTable("Locations");
                 });
@@ -194,7 +194,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("title");
 
                     b.HasKey("MovieId")
-                        .HasName("pk_movie_id");
+                        .HasName("PK_movie_id");
 
                     b.HasIndex("Genre");
 
@@ -227,7 +227,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("ReservationId")
-                        .HasName("pk_reservation_id");
+                        .HasName("PK_reservation_id");
 
                     b.HasIndex("UserId");
 
@@ -253,7 +253,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("price");
 
                     b.HasKey("SeatId")
-                        .HasName("pk_seat_id");
+                        .HasName("PK_seat_id");
 
                     b.HasIndex("AuditoriumNumber");
 
@@ -278,7 +278,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("movie_id");
 
                     b.HasKey("ShowingId")
-                        .HasName("pk_showing_id");
+                        .HasName("PK_showing_id");
 
                     b.HasIndex("MovieId");
 
@@ -303,7 +303,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("showing_id");
 
                     b.HasKey("ShowingSeatId")
-                        .HasName("pk_showing_seat_id");
+                        .HasName("PK_showing_seat_id");
 
                     b.HasIndex("SeatId");
 
@@ -323,7 +323,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("reservation_id");
 
                     b.HasKey("ShowingSeatId", "ReservationId")
-                        .HasName("pk_showingseat_reservation");
+                        .HasName("PK_showingseat_reservation");
 
                     b.HasIndex("ReservationId");
 
@@ -337,7 +337,7 @@ namespace MovieReservation.Migrations
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_auditorium_location");
+                        .HasConstraintName("FK_auditorium_location");
 
                     b.Navigation("Location");
                 });
@@ -349,7 +349,7 @@ namespace MovieReservation.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_app_user_reservation");
+                        .HasConstraintName("FK_app_user_reservation");
 
                     b.Navigation("User");
                 });
@@ -361,7 +361,7 @@ namespace MovieReservation.Migrations
                         .HasForeignKey("AuditoriumNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_seat_auditorium");
+                        .HasConstraintName("FK_seat_auditorium");
 
                     b.Navigation("Auditorium");
                 });
@@ -373,7 +373,7 @@ namespace MovieReservation.Migrations
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_movie_showing");
+                        .HasConstraintName("FK_movie_showing");
 
                     b.Navigation("Movie");
                 });
@@ -385,14 +385,14 @@ namespace MovieReservation.Migrations
                         .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_showing_seat_seat");
+                        .HasConstraintName("FK_showing_seat_seat");
 
                     b.HasOne("MovieReservation.Models.Showing", "Showing")
                         .WithMany("ShowingSeats")
                         .HasForeignKey("ShowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_showing_seat_showing");
+                        .HasConstraintName("FK_showing_seat_showing");
 
                     b.Navigation("Seat");
 

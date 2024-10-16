@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MovieReservation.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,7 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_id", x => x.user_id);
+                    table.PrimaryKey("PK_user_id", x => x.user_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,7 +44,7 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_location_id", x => x.location_id);
+                    table.PrimaryKey("PK_location_id", x => x.location_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,7 +60,7 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_movie_id", x => x.movie_id);
+                    table.PrimaryKey("PK_movie_id", x => x.movie_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,9 +76,9 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_reservation_id", x => x.reservation_id);
+                    table.PrimaryKey("PK_reservation_id", x => x.reservation_id);
                     table.ForeignKey(
-                        name: "fk_app_user_reservation",
+                        name: "FK_app_user_reservation",
                         column: x => x.user_id,
                         principalTable: "AppUsers",
                         principalColumn: "user_id",
@@ -95,10 +95,10 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_auditorium_number", x => x.auditorium_number);
-                    table.CheckConstraint("chk_max_capacity", "max_capacity > 0");
+                    table.PrimaryKey("PK_auditorium_number", x => x.auditorium_number);
+                    table.CheckConstraint("CK_max_capacity", "max_capacity > 0");
                     table.ForeignKey(
-                        name: "fk_auditorium_location",
+                        name: "FK_auditorium_location",
                         column: x => x.location_id,
                         principalTable: "Locations",
                         principalColumn: "location_id",
@@ -116,9 +116,9 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_showing_id", x => x.showing_id);
+                    table.PrimaryKey("PK_showing_id", x => x.showing_id);
                     table.ForeignKey(
-                        name: "fk_movie_showing",
+                        name: "FK_movie_showing",
                         column: x => x.movie_id,
                         principalTable: "Movies",
                         principalColumn: "movie_id",
@@ -136,9 +136,9 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_seat_id", x => x.seat_id);
+                    table.PrimaryKey("PK_seat_id", x => x.seat_id);
                     table.ForeignKey(
-                        name: "fk_seat_auditorium",
+                        name: "FK_seat_auditorium",
                         column: x => x.auditorium_number,
                         principalTable: "Auditoriums",
                         principalColumn: "auditorium_number",
@@ -156,15 +156,15 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_showing_seat_id", x => x.showing_seat_id);
+                    table.PrimaryKey("PK_showing_seat_id", x => x.showing_seat_id);
                     table.ForeignKey(
-                        name: "fk_showing_seat_seat",
+                        name: "FK_showing_seat_seat",
                         column: x => x.seat_id,
                         principalTable: "Seats",
                         principalColumn: "seat_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_showing_seat_showing",
+                        name: "FK_showing_seat_showing",
                         column: x => x.showing_id,
                         principalTable: "Showings",
                         principalColumn: "showing_id",
@@ -180,7 +180,7 @@ namespace MovieReservation.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_showingseat_reservation", x => new { x.showing_seat_id, x.reservation_id });
+                    table.PrimaryKey("PK_showingseat_reservation", x => new { x.showing_seat_id, x.reservation_id });
                     table.ForeignKey(
                         name: "FK_ReservedSeats_Reservations_reservation_id",
                         column: x => x.reservation_id,
@@ -198,7 +198,7 @@ namespace MovieReservation.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "user_id", "email", "expiration_date", "first_name", "last_name", "password", "refresh_token", "role", "username" },
-                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAEMBcjCP0r6FUYwlPYtIgfP95VurbNvjqGNtiV1AUCwhV2bk4jIIpv4LQY4vnhGYdVA==", null, "Admin", "root" });
+                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAEF+svH+gq2u9CWUjt0MndRBiFMEta2faBHJmvuUBQvXYtLpehP5GpTX+k2mkph5Oyg==", null, "Admin", "root" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auditoriums_location_id",
