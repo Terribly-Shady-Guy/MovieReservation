@@ -57,7 +57,7 @@ namespace MovieReservation.Models
                 .HasColumnType("varchar(200)");
 
                 entity.Property(e => e.ExpirationDate)
-                .HasColumnType("datetime")
+                .HasColumnType("DATETIME")
                 .HasColumnName("expiration_date");
 
                 entity.ToTable(nameof(AppUser) + "s");
@@ -75,7 +75,7 @@ namespace MovieReservation.Models
 
                 entity.Property(e => e.DateReserved)
                 .IsRequired()
-                .HasColumnType("DateTime")
+                .HasColumnType("DATETIME")
                 .HasColumnName("date_reserved");
 
                 entity.Property(e => e.Total)
@@ -85,7 +85,7 @@ namespace MovieReservation.Models
 
                 entity.Property(e => e.DateCancelled)
                 .IsRequired(false)
-                .HasColumnType("DateTime")
+                .HasColumnType("DATETIME")
                 .HasColumnName("date_cancelled");
 
                 entity.Property(e => e.UserId)
@@ -103,11 +103,11 @@ namespace MovieReservation.Models
                 {
                     joinEntity.Property<int>("ShowingSeatId")
                     .HasColumnName("showing_seat_id")
-                    .HasColumnType("Integer");
+                    .HasColumnType("INTEGER");
 
                     joinEntity.Property<int>("ReservationId")
                     .HasColumnName("reservation_id")
-                    .HasColumnType("Integer");
+                    .HasColumnType("INTEGER");
 
                     joinEntity.HasKey("ShowingSeatId", "ReservationId")
                     .HasName("PK_showingseat_reservation");
@@ -157,7 +157,7 @@ namespace MovieReservation.Models
                 entity.Property(e => e.Date)
                 .HasColumnName("date")
                 .IsRequired()
-                .HasColumnType("DateTime");
+                .HasColumnType("DATETIME");
 
                 entity.Property(e => e.MovieId)
                 .IsRequired()
