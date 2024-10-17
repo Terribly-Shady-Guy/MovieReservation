@@ -62,6 +62,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<AuthenticationTokenManager>();
 
+builder.Services.AddTransient<MovieService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

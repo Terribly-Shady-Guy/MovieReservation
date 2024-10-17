@@ -37,7 +37,7 @@ namespace MovieReservation.Migrations
                         .HasColumnName("email");
 
                     b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("datetime")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("expiration_date");
 
                     b.Property<string>("FirstName")
@@ -83,7 +83,7 @@ namespace MovieReservation.Migrations
                             Email = "someEmail@localhost.com",
                             FirstName = "root",
                             LastName = "root",
-                            Password = "AQAAAAIAAYagAAAAEF+svH+gq2u9CWUjt0MndRBiFMEta2faBHJmvuUBQvXYtLpehP5GpTX+k2mkph5Oyg==",
+                            Password = "AQAAAAIAAYagAAAAEDrYO7vkHGvqATLnyqcmJe3N7oCdcWB/tvCfPH45ZwDj2a9MJqS7TpG42kFN3mlVIw==",
                             Role = "Admin",
                             Username = "root"
                         });
@@ -187,13 +187,15 @@ namespace MovieReservation.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("varchar(900)")
                         .HasColumnName("title");
 
                     b.HasKey("MovieId")
                         .HasName("PK_movie_id");
 
                     b.HasIndex("Genre");
+
+                    b.HasIndex("Title");
 
                     b.ToTable("Movies");
                 });
@@ -208,11 +210,11 @@ namespace MovieReservation.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
                     b.Property<DateTime?>("DateCancelled")
-                        .HasColumnType("DateTime")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("date_cancelled");
 
                     b.Property<DateTime>("DateReserved")
-                        .HasColumnType("DateTime")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("date_reserved");
 
                     b.Property<decimal>("Total")
@@ -267,7 +269,7 @@ namespace MovieReservation.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowingId"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("DateTime")
+                        .HasColumnType("DATETIME")
                         .HasColumnName("date");
 
                     b.Property<int>("MovieId")
@@ -312,11 +314,11 @@ namespace MovieReservation.Migrations
             modelBuilder.Entity("ReservedSeats", b =>
                 {
                     b.Property<int>("ShowingSeatId")
-                        .HasColumnType("Integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("showing_seat_id");
 
                     b.Property<int>("ReservationId")
-                        .HasColumnType("Integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("reservation_id");
 
                     b.HasKey("ShowingSeatId", "ReservationId")

@@ -24,7 +24,7 @@ namespace MovieReservation.Migrations
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     refresh_token = table.Column<string>(type: "varchar(200)", unicode: false, nullable: true),
-                    expiration_date = table.Column<DateTime>(type: "datetime", nullable: true)
+                    expiration_date = table.Column<DateTime>(type: "DATETIME", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,7 +53,7 @@ namespace MovieReservation.Migrations
                 {
                     movie_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    title = table.Column<string>(type: "varchar(900)", unicode: false, nullable: false),
                     description = table.Column<string>(type: "varchar(300)", unicode: false, maxLength: 300, nullable: false),
                     poster_image_name = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     genre = table.Column<string>(type: "varchar(900)", unicode: false, nullable: false)
@@ -70,9 +70,9 @@ namespace MovieReservation.Migrations
                     reservation_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     user_id = table.Column<int>(type: "int", nullable: false),
-                    date_reserved = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    date_reserved = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     total = table.Column<decimal>(type: "MONEY", nullable: false),
-                    date_cancelled = table.Column<DateTime>(type: "DateTime", nullable: true)
+                    date_cancelled = table.Column<DateTime>(type: "DATETIME", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -112,7 +112,7 @@ namespace MovieReservation.Migrations
                     showing_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     movie_id = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "DateTime", nullable: false)
+                    date = table.Column<DateTime>(type: "DATETIME", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,8 +175,8 @@ namespace MovieReservation.Migrations
                 name: "ReservedSeats",
                 columns: table => new
                 {
-                    showing_seat_id = table.Column<int>(type: "Integer", nullable: false),
-                    reservation_id = table.Column<int>(type: "Integer", nullable: false)
+                    showing_seat_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    reservation_id = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -198,7 +198,7 @@ namespace MovieReservation.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "user_id", "email", "expiration_date", "first_name", "last_name", "password", "refresh_token", "role", "username" },
-                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAEF+svH+gq2u9CWUjt0MndRBiFMEta2faBHJmvuUBQvXYtLpehP5GpTX+k2mkph5Oyg==", null, "Admin", "root" });
+                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAEDrYO7vkHGvqATLnyqcmJe3N7oCdcWB/tvCfPH45ZwDj2a9MJqS7TpG42kFN3mlVIw==", null, "Admin", "root" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auditoriums_location_id",
@@ -209,6 +209,11 @@ namespace MovieReservation.Migrations
                 name: "IX_Movies_genre",
                 table: "Movies",
                 column: "genre");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_title",
+                table: "Movies",
+                column: "title");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_user_id",

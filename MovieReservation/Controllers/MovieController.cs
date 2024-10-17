@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.Services;
+using MovieReservation.ViewModels;
 
 namespace MovieReservation.Controllers
 {
@@ -9,22 +11,29 @@ namespace MovieReservation.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult> ListMovies()
+        private readonly MovieService _movieService;
+
+        public MovieController(MovieService movieService)
         {
-            throw new NotImplementedException();
+            _movieService = movieService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<MovieVM>> ListMovies([FromQuery] MovieSearch searchParams)
+        {
+            return Ok(await _movieService.GetMovies(searchParams));
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult> AddNewMovie()
+        public async Task<ActionResult> AddNewMovie([FromForm] MovieUploadVM movie)
         {
             throw new NotImplementedException();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}")]
-        public async Task<ActionResult> EditMovie(int id)
+        [HttpPut]
+        public async Task<ActionResult> EditMovie()
         {
             throw new NotImplementedException();
         }

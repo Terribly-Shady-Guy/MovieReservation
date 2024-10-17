@@ -144,6 +144,7 @@ namespace MovieReservation.Models
                 .HasColumnName("genre");
 
                 entity.HasIndex(e => e.Genre);
+                entity.HasIndex(e => e.Title);
             });
 
             modelBuilder.Entity<Showing>(entity =>
