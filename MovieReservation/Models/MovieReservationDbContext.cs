@@ -5,7 +5,10 @@ namespace MovieReservation.Models
 {
     public class MovieReservationDbContext : DbContext 
     {
-        public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) : base(options) { }
+        public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) : base(options)
+        {
+
+        }
 
         public virtual DbSet<AppUser> AppUsers { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
@@ -18,6 +21,8 @@ namespace MovieReservation.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var dataSeeder = new DataSeeder();
+
             modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.HasKey(e => e.UserId)
@@ -62,7 +67,7 @@ namespace MovieReservation.Models
 
                 entity.ToTable(nameof(AppUser) + "s");
 
-                entity.HasData(new DataSeeder().SeededAdmin);
+                entity.HasData(dataSeeder.SeededAdmin);
             });
 
             modelBuilder.Entity<Reservation>(entity =>
