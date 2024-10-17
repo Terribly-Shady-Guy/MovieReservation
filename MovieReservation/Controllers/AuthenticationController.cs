@@ -70,10 +70,10 @@ namespace MovieReservation.Controllers
                 return NotFound(new { Message = "The user does not exist." });
             }
 
-            if (user.RefreshToken != refreshToken || user.ExpirationDate >= DateTime.UtcNow)
+            if (user.RefreshToken != refreshToken || user.ExpirationDate <= DateTime.UtcNow)
             {
                 return Unauthorized(new { Message = "the refresh token is not valid." });
-            }
+            } 
 
             Token token = _manager.GenerateTokens(user);
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
