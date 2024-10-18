@@ -19,9 +19,9 @@ namespace MovieReservation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<MovieVM>> ListMovies([FromQuery] MovieSearch searchParams)
+        public async Task<ActionResult<MovieVM>> ListMovies([FromQuery] string? genre)
         {
-            return Ok(await _movieService.GetMovies(searchParams));
+            return Ok(await _movieService.GetMovies(genre));
         }
 
         [Authorize(Roles = "Admin")]

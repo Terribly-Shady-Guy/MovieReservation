@@ -14,18 +14,13 @@ namespace MovieReservation.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<MovieVM>> GetMovies(MovieSearch searchParams)
+        public async Task<List<MovieVM>> GetMovies(string? genre)
         {
             var movies = _dbContext.Movies.AsQueryable<Movie>();
 
-            if (searchParams.Genre is not null)
+            if (genre is not null)
             {
-                movies = movies.Where(m => m.Genre.StartsWith(searchParams.Genre));
-            }
-
-            if (searchParams.Title is not null)
-            {
-                movies = movies.Where(m => m.Title.StartsWith(searchParams.Title));
+                movies = movies.Where(m => m.Genre.StartsWith(genre));
             }
 
             return await movies.Select(m => new MovieVM
