@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieReservation.Database;
 using MovieReservation.Models;
 using MovieReservation.ViewModels;
 

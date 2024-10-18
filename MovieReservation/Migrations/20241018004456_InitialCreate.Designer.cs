@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MovieReservation.Models;
+using MovieReservation.Database;
 
 #nullable disable
 
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241017030242_InitialCreate")]
+    [Migration("20241018004456_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,7 +86,7 @@ namespace MovieReservation.Migrations
                             Email = "someEmail@localhost.com",
                             FirstName = "root",
                             LastName = "root",
-                            Password = "AQAAAAIAAYagAAAAEDrYO7vkHGvqATLnyqcmJe3N7oCdcWB/tvCfPH45ZwDj2a9MJqS7TpG42kFN3mlVIw==",
+                            Password = "AQAAAAIAAYagAAAAECd+ipDa5dWNoWXBRkr4keVSJXJ6UcfogQqeA/kLupF0Y2/kCEy2w1DHAqgg/iGWEA==",
                             Role = "Admin",
                             Username = "root"
                         });

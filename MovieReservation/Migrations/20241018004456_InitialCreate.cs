@@ -198,7 +198,7 @@ namespace MovieReservation.Migrations
             migrationBuilder.InsertData(
                 table: "AppUsers",
                 columns: new[] { "user_id", "email", "expiration_date", "first_name", "last_name", "password", "refresh_token", "role", "username" },
-                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAEDrYO7vkHGvqATLnyqcmJe3N7oCdcWB/tvCfPH45ZwDj2a9MJqS7TpG42kFN3mlVIw==", null, "Admin", "root" });
+                values: new object[] { 1, "someEmail@localhost.com", null, "root", "root", "AQAAAAIAAYagAAAAECd+ipDa5dWNoWXBRkr4keVSJXJ6UcfogQqeA/kLupF0Y2/kCEy2w1DHAqgg/iGWEA==", null, "Admin", "root" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auditoriums_location_id",

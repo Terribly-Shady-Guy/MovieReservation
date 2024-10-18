@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MovieReservation.Models;
+using MovieReservation.Database;
 using MovieReservation.Services;
 using System.Security.Cryptography;
 
