@@ -63,6 +63,7 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<AuthenticationTokenManager>();
 
 builder.Services.AddTransient<MovieService>();
+builder.Services.AddTransient<IFileHandler, LocalFileHandler>();
 
 var app = builder.Build();
 
