@@ -8,10 +8,12 @@ namespace MovieReservation.Services
     public class MovieService
     {
         private readonly MovieReservationDbContext _dbContext;
+        private readonly IFileHandler _fileHandler;
 
-        public MovieService(MovieReservationDbContext dbContext)
+        public MovieService(MovieReservationDbContext dbContext, IFileHandler fileHandler)
         {
             _dbContext = dbContext;
+            _fileHandler = fileHandler;
         }
 
         public async Task<List<MovieVM>> GetMovies(string? genre)
@@ -36,7 +38,7 @@ namespace MovieReservation.Services
         }
 
         public async Task AddMovie(MovieUploadVM movie)
-        {
+        { 
             var newMovie = new Movie
             {
                 Title = movie.Title,
@@ -44,9 +46,28 @@ namespace MovieReservation.Services
                 Description = movie.Description,
                 PosterImageName = movie.PosterImage.FileName
             };
-
+            
             _dbContext.Movies.Add(newMovie);
             await _dbContext.SaveChangesAsync();
+
+            await _fileHandler.CreateFile(movie.PosterImage);
+        }
+
+        public async Task<bool> DeleteMovie(int id)
+        {
+            Movie? movieToDelete = await _dbContext.Movies.FindAsync(id);
+
+            if (movieToDelete is  null)
+            {
+                return false;
+            }
+
+            _dbContext.Movies.Remove(movieToDelete);
+            await _dbContext.SaveChangesAsync();
+
+            _fileHandler.DeleteFile(movieToDelete.PosterImageName);
+
+            return true;
         }
     }
 }
