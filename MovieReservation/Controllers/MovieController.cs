@@ -27,23 +27,6 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult> AddNewMovie([FromForm] MovieFormDataBody movie)
         {
-            string extension = Path.GetExtension(movie.PosterImage.FileName).ToLowerInvariant();
-
-            string[] validExtensions = [".jpg", ".png", ".jpeg"];
-
-            if (!validExtensions.Any(ext => ext == extension))
-            {
-                return BadRequest(new { Message = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", validExtensions)}." });
-            }
-
-            long imageSizeInMB = movie.PosterImage.Length / (1024 * 1024);
-            const int FileSizeLimitInMB = 10;
-
-            if (imageSizeInMB > FileSizeLimitInMB)
-            {
-                return BadRequest(new { Message = $"The uploaded file must be {FileSizeLimitInMB}mb or smaller." });
-            }
-
             await _movieService.AddMovie(movie);
 
             return CreatedAtAction("AddNewMovie", new { Message = "New movie added" });
