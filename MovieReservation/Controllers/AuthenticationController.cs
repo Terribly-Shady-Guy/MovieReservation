@@ -58,14 +58,7 @@ namespace MovieReservation.Controllers
                 return Unauthorized(new { Message = "This is not a valid refresh token" });
             }
 
-            int id = 0;
-            foreach (var claim in result.ClaimsIdentity.Claims)
-            {
-                if (claim.Type == ClaimTypes.NameIdentifier)
-                {
-                    id = int.Parse(claim.Value);
-                }
-            }
+            int id = GetUserIdFromClaims(result.ClaimsIdentity);
 
             AppUser? user = await _userService.GetUserAsync(id);
 
@@ -110,14 +103,7 @@ namespace MovieReservation.Controllers
                 return Unauthorized();
             }
 
-            int id = 0;
-            foreach (var claim in result.ClaimsIdentity.Claims)
-            {
-                if (claim.Type == ClaimTypes.NameIdentifier)
-                {
-                    id = int.Parse(claim.Value);
-                }
-            }
+            int id = GetUserIdFromClaims(result.ClaimsIdentity);
 
             await _userService.UpdateRefreshToken(null, null, id);
             Response.Cookies.Delete("refresh-token");
@@ -137,6 +123,20 @@ namespace MovieReservation.Controllers
             };
 
             Response.Cookies.Append("refresh-token", token, options);
+        }
+
+        private int GetUserIdFromClaims(ClaimsIdentity identity)
+        {
+            int id = 0;
+            foreach (var claim in identity.Claims)
+            {
+                if (claim.Type == ClaimTypes.NameIdentifier)
+                {
+                    id = int.Parse(claim.Value);
+                }
+            }
+
+            return id;
         }
     }
 }
