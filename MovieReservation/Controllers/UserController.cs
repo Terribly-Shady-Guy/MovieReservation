@@ -19,11 +19,6 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult> AddNewUser(NewUserVM user)
         {
-            if (!Regex.IsMatch(user.Email, "[a-zA-Z0-9]+@[a-z]+[.]com"))
-            {
-                return BadRequest(new {Message = "email is not a valid format."});
-            }
-
             int id = await _userService.AddNewUserAsync(user);
 
             return Created(id.ToString(), new { Mesaage = "Account created sucessfully." });
