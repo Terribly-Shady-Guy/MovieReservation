@@ -1,5 +1,4 @@
-﻿using MovieReservation.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MovieReservation.ViewModels
 {
