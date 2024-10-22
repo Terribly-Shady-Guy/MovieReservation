@@ -1,6 +1,6 @@
 ﻿namespace MovieReservation.ViewModels
 {
-    public class MovieUploadVM
+    public class MovieFormDataBody
     {
         public required string Title { get; set; }
         public required string Description { get; set; }

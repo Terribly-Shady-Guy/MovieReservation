@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Models;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
+using System.Security.Claims;
 
 namespace MovieReservation.Controllers
 {
@@ -57,10 +58,14 @@ namespace MovieReservation.Controllers
                 return Unauthorized(new { Message = "This is not a valid refresh token" });
             }
 
-            int id = result.ClaimsIdentity.Claims
-                .Where(c => c.Type == "id")
-                .Select(c => int.Parse(c.Value))
-                .FirstOrDefault();
+            int id = 0;
+            foreach (var claim in result.ClaimsIdentity.Claims)
+            {
+                if (claim.Type == ClaimTypes.NameIdentifier)
+                {
+                    id = int.Parse(claim.Value);
+                }
+            }
 
             AppUser? user = await _userService.GetUserAsync(id);
 
@@ -105,10 +110,14 @@ namespace MovieReservation.Controllers
                 return Unauthorized();
             }
 
-            int id = result.ClaimsIdentity.Claims
-                .Where(c => c.Type == "id")
-                .Select(c => int.Parse(c.Value))
-                .FirstOrDefault();
+            int id = 0;
+            foreach (var claim in result.ClaimsIdentity.Claims)
+            {
+                if (claim.Type == ClaimTypes.NameIdentifier)
+                {
+                    id = int.Parse(claim.Value);
+                }
+            }
 
             await _userService.UpdateRefreshToken(null, null, id);
             Response.Cookies.Delete("refresh-token");

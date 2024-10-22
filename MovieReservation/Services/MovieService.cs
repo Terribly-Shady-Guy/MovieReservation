@@ -37,7 +37,7 @@ namespace MovieReservation.Services
                 .ToListAsync();
         }
 
-        public async Task AddMovie(MovieUploadVM movie)
+        public async Task AddMovie(MovieFormDataBody movie)
         { 
             var newMovie = new Movie
             {

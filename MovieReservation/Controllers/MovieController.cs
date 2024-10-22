@@ -25,7 +25,7 @@ namespace MovieReservation.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult> AddNewMovie([FromForm] MovieUploadVM movie)
+        public async Task<ActionResult> AddNewMovie([FromForm] MovieFormDataBody movie)
         {
             string extension = Path.GetExtension(movie.PosterImage.FileName).ToLowerInvariant();
 
@@ -46,7 +46,7 @@ namespace MovieReservation.Controllers
 
             await _movieService.AddMovie(movie);
 
-            return CreatedAtAction("AddnewMovie", "New movie added");
+            return CreatedAtAction("AddNewMovie", new { Message = "New movie added" });
         }
 
         [Authorize(Roles = "Admin")]
