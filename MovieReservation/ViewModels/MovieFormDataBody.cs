@@ -6,12 +6,13 @@ namespace MovieReservation.ViewModels
     {
         public required string Title { get; set; }
         public required string Description { get; set; }
-        [ImageFileValidation]
+        [MoviePosterFile]
         public required IFormFile PosterImage { get; set; }
         public required string Genre { get; set; }
     }
 
-    public sealed class ImageFileValidationAttribute : ValidationAttribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class MoviePosterFileAttribute : ValidationAttribute
     {
         private static readonly string[] _validExtensions = [".jpg", ".png", ".jpeg"];
         private const int _fileSizeLimitInMB = 10;
