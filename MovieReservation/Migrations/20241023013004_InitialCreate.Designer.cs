@@ -12,7 +12,7 @@ using MovieReservation.Database;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241018004456_InitialCreate")]
+    [Migration("20241023013004_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,7 +86,7 @@ namespace MovieReservation.Migrations
                             Email = "someEmail@localhost.com",
                             FirstName = "root",
                             LastName = "root",
-                            Password = "AQAAAAIAAYagAAAAECd+ipDa5dWNoWXBRkr4keVSJXJ6UcfogQqeA/kLupF0Y2/kCEy2w1DHAqgg/iGWEA==",
+                            Password = "AQAAAAIAAYagAAAAEH4Hq7S4nNcZf5JBoPXrGTUzQPiePZinmJ19FGVIcnH0+JjL/NW1DAgScwalMEb9uQ==",
                             Role = "Admin",
                             Username = "root"
                         });
