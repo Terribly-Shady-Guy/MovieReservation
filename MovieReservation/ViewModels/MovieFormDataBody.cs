@@ -22,7 +22,8 @@ namespace MovieReservation.ViewModels
             var file = (IFormFile?)value;
             if (file == null) return false;
 
-            string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            string extension = Path.GetExtension(file.FileName)
+                .ToLowerInvariant();
 
             if (!_validExtensions.Any(ext => ext == extension))
             {

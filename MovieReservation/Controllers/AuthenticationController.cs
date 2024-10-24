@@ -71,7 +71,7 @@ namespace MovieReservation.Controllers
             {
                 return Unauthorized(new { Message = "the refresh token is not valid." });
             } 
-
+            
             Token token = _manager.GenerateTokens(user);
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
 
