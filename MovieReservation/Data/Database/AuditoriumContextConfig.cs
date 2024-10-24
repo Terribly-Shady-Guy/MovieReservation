@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieReservation.Models;
+using MovieReservation.Infrastructure.Models;
 
-namespace MovieReservation.Database
+namespace MovieReservation.Data.Database
 {
-    public static class AuditoriumContextConfig
+    internal static class AuditoriumContextConfig
     {
         public static ModelBuilder AddAuditoriumModel(this ModelBuilder modelBuilder)
         {

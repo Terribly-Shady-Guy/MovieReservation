@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MovieReservation.Models;
+using MovieReservation.Infrastructure.Models;
 
-namespace MovieReservation.Database
+namespace MovieReservation.Data.Database
 {
-    public static class AppUserContextConfig
+    internal static class AppUserContextConfig
     {
         public static ModelBuilder AddAppUserModel(this ModelBuilder modelBuilder)
         {

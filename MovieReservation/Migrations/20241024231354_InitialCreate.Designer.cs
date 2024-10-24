@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MovieReservation.Database;
+using MovieReservation.Data.DbContexts;
 
 #nullable disable
 
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241023013004_InitialCreate")]
+    [Migration("20241024231354_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace MovieReservation.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MovieReservation.Models.AppUser", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.AppUser", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -86,13 +86,13 @@ namespace MovieReservation.Migrations
                             Email = "someEmail@localhost.com",
                             FirstName = "root",
                             LastName = "root",
-                            Password = "AQAAAAIAAYagAAAAEH4Hq7S4nNcZf5JBoPXrGTUzQPiePZinmJ19FGVIcnH0+JjL/NW1DAgScwalMEb9uQ==",
+                            Password = "AQAAAAIAAYagAAAAEAY1R2rYFTuAfnJQtaN1KlahqJMGauvaXaBW5cv0Qw3nmcGdIFKoo6HWXtLvQ2JiAg==",
                             Role = "Admin",
                             Username = "root"
                         });
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Auditorium", b =>
                 {
                     b.Property<string>("AuditoriumNumber")
                         .IsUnicode(false)
@@ -118,7 +118,7 @@ namespace MovieReservation.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Location", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Location", b =>
                 {
                     b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd()
@@ -159,7 +159,7 @@ namespace MovieReservation.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Movie", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Movie", b =>
                 {
                     b.Property<int>("MovieId")
                         .ValueGeneratedOnAdd()
@@ -203,7 +203,7 @@ namespace MovieReservation.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Reservation", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Reservation", b =>
                 {
                     b.Property<int>("ReservationId")
                         .ValueGeneratedOnAdd()
@@ -236,7 +236,7 @@ namespace MovieReservation.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Seat", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Seat", b =>
                 {
                     b.Property<int>("SeatId")
                         .ValueGeneratedOnAdd()
@@ -262,7 +262,7 @@ namespace MovieReservation.Migrations
                     b.ToTable("Seats");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Showing", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Showing", b =>
                 {
                     b.Property<int>("ShowingId")
                         .ValueGeneratedOnAdd()
@@ -287,7 +287,7 @@ namespace MovieReservation.Migrations
                     b.ToTable("Showings");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.ShowingSeat", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.ShowingSeat", b =>
                 {
                     b.Property<int>("ShowingSeatId")
                         .ValueGeneratedOnAdd()
@@ -332,9 +332,9 @@ namespace MovieReservation.Migrations
                     b.ToTable("ReservedSeats");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Auditorium", b =>
                 {
-                    b.HasOne("MovieReservation.Models.Location", "Location")
+                    b.HasOne("MovieReservation.Infrastructure.Models.Location", "Location")
                         .WithMany("Auditoriums")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -344,9 +344,9 @@ namespace MovieReservation.Migrations
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Reservation", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Reservation", b =>
                 {
-                    b.HasOne("MovieReservation.Models.AppUser", "User")
+                    b.HasOne("MovieReservation.Infrastructure.Models.AppUser", "User")
                         .WithMany("Reservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -356,9 +356,9 @@ namespace MovieReservation.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Seat", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Seat", b =>
                 {
-                    b.HasOne("MovieReservation.Models.Auditorium", "Auditorium")
+                    b.HasOne("MovieReservation.Infrastructure.Models.Auditorium", "Auditorium")
                         .WithMany("Seats")
                         .HasForeignKey("AuditoriumNumber")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -368,9 +368,9 @@ namespace MovieReservation.Migrations
                     b.Navigation("Auditorium");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Showing", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Showing", b =>
                 {
-                    b.HasOne("MovieReservation.Models.Movie", "Movie")
+                    b.HasOne("MovieReservation.Infrastructure.Models.Movie", "Movie")
                         .WithMany("Showings")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -380,16 +380,16 @@ namespace MovieReservation.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.ShowingSeat", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.ShowingSeat", b =>
                 {
-                    b.HasOne("MovieReservation.Models.Seat", "Seat")
+                    b.HasOne("MovieReservation.Infrastructure.Models.Seat", "Seat")
                         .WithMany("ShowingSeats")
                         .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_showing_seat_seat");
 
-                    b.HasOne("MovieReservation.Models.Showing", "Showing")
+                    b.HasOne("MovieReservation.Infrastructure.Models.Showing", "Showing")
                         .WithMany("ShowingSeats")
                         .HasForeignKey("ShowingId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -403,45 +403,45 @@ namespace MovieReservation.Migrations
 
             modelBuilder.Entity("ReservedSeats", b =>
                 {
-                    b.HasOne("MovieReservation.Models.Reservation", null)
+                    b.HasOne("MovieReservation.Infrastructure.Models.Reservation", null)
                         .WithMany()
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieReservation.Models.ShowingSeat", null)
+                    b.HasOne("MovieReservation.Infrastructure.Models.ShowingSeat", null)
                         .WithMany()
                         .HasForeignKey("ShowingSeatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.AppUser", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.AppUser", b =>
                 {
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Auditorium", b =>
                 {
                     b.Navigation("Seats");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Location", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Location", b =>
                 {
                     b.Navigation("Auditoriums");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Movie", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Movie", b =>
                 {
                     b.Navigation("Showings");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Seat", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Seat", b =>
                 {
                     b.Navigation("ShowingSeats");
                 });
 
-            modelBuilder.Entity("MovieReservation.Models.Showing", b =>
+            modelBuilder.Entity("MovieReservation.Infrastructure.Models.Showing", b =>
                 {
                     b.Navigation("ShowingSeats");
                 });

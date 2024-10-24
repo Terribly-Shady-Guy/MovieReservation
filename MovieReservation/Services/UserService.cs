@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MovieReservation.Database;
-using MovieReservation.Models;
+using MovieReservation.Data.DbContexts;
+using MovieReservation.Infrastructure.Models;
 using MovieReservation.ViewModels;
 
 namespace MovieReservation.Services
@@ -89,7 +89,7 @@ namespace MovieReservation.Services
 
         public async Task UpdateRefreshToken(string? token, DateTime? expiration, int id)
         {
-            AppUser? user = await _context.AppUsers.FindAsync(id);
+            AppUser? user = await GetUserAsync(id);
             if (user == null) { return; }
 
             await UpdateRefreshToken(token, expiration, user);

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieReservation", "MovieReservation\MovieReservation.csproj", "{EC9DC393-33F5-4FBC-A263-27DB3FCBCFEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieReservation.Test", "MovieReservation.Test\MovieReservation.Test.csproj", "{30E579D6-F453-48FD-9381-EB325300243E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieReservation.Test", "MovieReservation.Test\MovieReservation.Test.csproj", "{30E579D6-F453-48FD-9381-EB325300243E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

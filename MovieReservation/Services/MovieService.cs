@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieReservation.Database;
-using MovieReservation.Models;
+using MovieReservation.Data.DbContexts;
+using MovieReservation.Infrastructure.Models;
 using MovieReservation.ViewModels;
 
 namespace MovieReservation.Services

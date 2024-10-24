@@ -1,4 +1,4 @@
-﻿namespace MovieReservation.Models
+﻿namespace MovieReservation.Infrastructure.Models
 {
     public class ShowingSeat
     {

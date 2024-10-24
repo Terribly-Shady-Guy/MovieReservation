@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieReservation.Models;
+using MovieReservation.Infrastructure.Models;
 
-namespace MovieReservation.Database
+namespace MovieReservation.Data.Database
 {
-    public static class ShowingContextConfig
+    internal static class ShowingContextConfig
     {
         public static ModelBuilder AddShowingModel(this ModelBuilder modelBuilder)
         {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MovieReservation.Models;
+using MovieReservation.Infrastructure.Models;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
 using System.Security.Claims;
