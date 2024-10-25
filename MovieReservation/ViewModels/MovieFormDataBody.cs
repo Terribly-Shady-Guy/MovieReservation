@@ -19,8 +19,10 @@ namespace MovieReservation.ViewModels
 
         public override bool IsValid(object? value)
         {
-            var file = (IFormFile?)value;
-            if (file == null) return false;
+            if (value is null || value is not IFormFile file)
+            {
+                return false;
+            }
 
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();

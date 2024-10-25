@@ -65,6 +65,8 @@ builder.Services.AddTransient<AuthenticationTokenManager>();
 builder.Services.AddTransient<MovieService>();
 builder.Services.AddTransient<IFileHandler, LocalFileHandler>();
 
+builder.Services.AddTransient<LocationService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

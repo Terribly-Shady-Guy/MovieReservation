@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.Services;
+using MovieReservation.ViewModels;
 
 namespace MovieReservation.Controllers
 {
@@ -8,16 +10,25 @@ namespace MovieReservation.Controllers
     [ApiController]
     public class LocationController : ControllerBase
     {
-        [HttpPost]
-        public async Task<ActionResult> AddLocation()
+        private readonly LocationService _locationService;
+
+        public LocationController(LocationService locationService)
         {
-            throw new NotImplementedException();
+            _locationService = locationService;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddLocation(LocationVM location)
+        {
+            await _locationService.AddLocation(location);
+            return CreatedAtAction("AddLocation", new { Message = "New location added. " });
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteLocation(int id)
         {
-            throw new NotImplementedException();
+            await _locationService.DeleteLocation(id);
+            return NoContent();
         }
     }
 }
