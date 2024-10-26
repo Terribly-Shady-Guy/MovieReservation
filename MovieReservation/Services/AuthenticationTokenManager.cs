@@ -22,7 +22,7 @@ namespace MovieReservation.Services
         {
             Claim[] claims =
             [
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(ClaimTypes.Role, user.Role),
             ];
 
@@ -38,6 +38,7 @@ namespace MovieReservation.Services
 
         public async Task<TokenValidationResult> ValidateExpiredJwtToken(string expiredToken)
         {
+            var jwtConfig = _configuration.GetSection("Jwt");
             var tokenParams = new TokenValidationParameters
             {
                 ValidateLifetime = false,
@@ -47,8 +48,8 @@ namespace MovieReservation.Services
                     SecurityAlgorithms.RsaSha256
                 ],
                 IssuerSigningKey = _securityKey,
-                ValidAudience = _configuration.GetSection("Jwt").GetValue<string>("Audience"),
-                ValidIssuer = _configuration.GetSection("Jwt").GetValue<string>("Issuer")
+                ValidAudience = jwtConfig.GetValue<string>("Audience"),
+                ValidIssuer = jwtConfig.GetValue<string>("Issuer")
             };
 
             var handler = new JsonWebTokenHandler();
@@ -61,14 +62,15 @@ namespace MovieReservation.Services
         private string GenerateAccessToken(Claim[] claims)
         {
             var signingCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.RsaSha256);
+            var jwtConfig = _configuration.GetSection("Jwt");
 
             var descriptor = new SecurityTokenDescriptor()
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(10),
                 Subject = new ClaimsIdentity(claims),
-                Issuer = _configuration.GetSection("Jwt").GetValue<string>("Issuer"),
-                Audience = _configuration.GetSection("Jwt").GetValue<string>("Audience")
+                Issuer = jwtConfig.GetValue<string>("Issuer"),
+                Audience = jwtConfig.GetValue<string>("Audience")
             };
 
             return new JsonWebTokenHandler().CreateToken(descriptor);

@@ -17,8 +17,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MovieReservation.Test\MovieReservation.Test.csproj" />
-  </ItemGroup>
-
 </Project>

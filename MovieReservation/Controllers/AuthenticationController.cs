@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Infrastructure.Models;
 using MovieReservation.Services;
@@ -55,12 +55,17 @@ namespace MovieReservation.Controllers
 
             if (!result.IsValid)
             {
-                return Unauthorized(new { Message = "This is not a valid refresh token" });
+                return Unauthorized(new { Message = "This is not a valid access token" });
+            }
+            
+            Claim? idClaim = result.ClaimsIdentity.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+
+            if (idClaim is null)
+            {
+                return Unauthorized();
             }
 
-            int id = GetUserIdFromClaims(result.ClaimsIdentity);
-
-            AppUser? user = await _userService.GetUserAsync(id);
+            AppUser? user = await _userService.GetUserAsync(int.Parse(idClaim.Value));
 
             if (user is null)
             {
@@ -73,6 +78,8 @@ namespace MovieReservation.Controllers
             } 
             
             Token token = _manager.GenerateTokens(user);
+
+            await _userService.UpdateRefreshToken(token.RefreshToken, token.RefreshExpiration, user);
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
 
             return Ok(new { Token = token.AccessToken });
@@ -82,12 +89,15 @@ namespace MovieReservation.Controllers
         [Authorize]
         public async Task<ActionResult> Logout()
         {
-            string? accessToken = await HttpContext.GetTokenAsync("access_token");
+            Claim? idClaim = HttpContext.User?.Claims?
+                .FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
 
-            if (accessToken is null)
+            if (idClaim is null)
             {
                 return NotFound();
             }
+
+            int id = int.Parse(idClaim.Value);
 
             string? refreshToken = Request.Cookies["refresh-token"];
 
@@ -95,15 +105,6 @@ namespace MovieReservation.Controllers
             {
                 return Unauthorized();
             }
-
-            TokenValidationResult result = await _manager.ValidateExpiredJwtToken(accessToken);
-
-            if (!result.IsValid)
-            {
-                return Unauthorized();
-            }
-
-            int id = GetUserIdFromClaims(result.ClaimsIdentity);
 
             await _userService.UpdateRefreshToken(null, null, id);
             Response.Cookies.Delete("refresh-token");
@@ -123,20 +124,6 @@ namespace MovieReservation.Controllers
             };
 
             Response.Cookies.Append("refresh-token", token, options);
-        }
-
-        private int GetUserIdFromClaims(ClaimsIdentity identity)
-        {
-            int id = 0;
-            foreach (var claim in identity.Claims)
-            {
-                if (claim.Type == ClaimTypes.NameIdentifier)
-                {
-                    id = int.Parse(claim.Value);
-                }
-            }
-
-            return id;
         }
     }
 }
