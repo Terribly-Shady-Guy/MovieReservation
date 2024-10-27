@@ -21,7 +21,7 @@ namespace MovieReservation.Tests
                 name: "posterImage", 
                 fileName: fileName, 
                 length: fileSize);
-
+            
             MoviePosterFileAttribute attribute = new();
             bool result = attribute.IsValid(file);
 
