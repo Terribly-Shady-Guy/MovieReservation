@@ -14,7 +14,9 @@ namespace MovieReservation.Tests
         public void TestWithFormFile(string fileName, int fileSize, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
-            IFormFile file = new FormFile(baseStream: new MemoryStream(fileBytes), 
+            using MemoryStream fileStream = new(fileBytes);
+
+            IFormFile file = new FormFile(baseStream: fileStream, 
                 baseStreamOffset: 0, 
                 name: "posterImage", 
                 fileName: fileName, 
