@@ -4,14 +4,14 @@ using System.Text;
 
 namespace MovieReservation.Tests
 {
-    public class MoviePosterFileValidationTests
+    public class MoviePosterFileAttribute_IsValid
     {
         [Theory]
         [InlineData("valid-test-file-1.jpeg", 30 * 1024, true)]
         [InlineData("valid-test-file-2.png", 30 * 1024, true)]
         [InlineData("invalid-test-file-1.txt", 30 * 1024, false)]
         [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), false)]
-        public void IsValid_WithFormFile_ReturnsExpectedValidationResult(string fileName, int fileSize, bool expected)
+        public void IsValid_WithFormFile_ReturnsExpected(string fileName, int fileSize, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
             using MemoryStream mockFileStream = new(fileBytes);
@@ -29,7 +29,7 @@ namespace MovieReservation.Tests
         }
         
         [Fact]
-        public void IsValid_WithInvalidType_ReturnsValidationFailed()
+        public void IsValid_WithInvalidType_ReturnsFalse()
         {
             int test = 0;
             MoviePosterFileAttribute attribute = new();
@@ -40,7 +40,7 @@ namespace MovieReservation.Tests
         }
 
         [Fact]
-        public void IsValid_WithNull_ReturnsValidationFailed()
+        public void IsValid_WithNull_ReturnsFalse()
         {
             MoviePosterFileAttribute attribute = new();
             bool result = attribute.IsValid(null);
