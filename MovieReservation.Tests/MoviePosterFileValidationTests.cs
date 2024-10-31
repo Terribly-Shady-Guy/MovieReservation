@@ -14,20 +14,20 @@ namespace MovieReservation.Tests
         public void TestWithFormFile(string fileName, int fileSize, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
-            using MemoryStream fileStream = new(fileBytes);
+            using MemoryStream mockFileStream = new(fileBytes);
 
-            IFormFile file = new FormFile(baseStream: fileStream, 
+            IFormFile file = new FormFile(baseStream: mockFileStream, 
                 baseStreamOffset: 0, 
                 name: "posterImage", 
                 fileName: fileName, 
-                length: fileSize);
+                length: fileSize); 
             
             MoviePosterFileAttribute attribute = new();
             bool result = attribute.IsValid(file);
 
             Assert.Equal(expected, result);
         }
-
+        
         [Fact]
         public void TestWithInvalidType()
         {
