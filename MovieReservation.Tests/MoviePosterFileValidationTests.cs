@@ -11,7 +11,7 @@ namespace MovieReservation.Tests
         [InlineData("valid-test-file-2.png", 30 * 1024, true)]
         [InlineData("invalid-test-file-1.txt", 30 * 1024, false)]
         [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), false)]
-        public void TestWithFormFile(string fileName, int fileSize, bool expected)
+        public void IsValid_WithFormFile_ReturnsExpectedValidationResult(string fileName, int fileSize, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
             using MemoryStream mockFileStream = new(fileBytes);
@@ -29,7 +29,7 @@ namespace MovieReservation.Tests
         }
         
         [Fact]
-        public void TestWithInvalidType()
+        public void IsValid_WithInvalidType_ReturnsValidationFailed()
         {
             int test = 0;
             MoviePosterFileAttribute attribute = new();
@@ -40,7 +40,7 @@ namespace MovieReservation.Tests
         }
 
         [Fact]
-        public void TestWithNull()
+        public void IsValid_WithNull_ReturnsValidationFailed()
         {
             MoviePosterFileAttribute attribute = new();
             bool result = attribute.IsValid(null);
