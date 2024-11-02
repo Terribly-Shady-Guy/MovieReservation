@@ -33,8 +33,10 @@ builder.Services.AddSingleton((provider) =>
 });
 
 builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-    .Configure<RsaSecurityKey>((options, signingKey) =>
+    .Configure<RsaSecurityKey, IConfiguration>((options, signingKey, config) =>
     {
+        var jwtConfig = config.GetSection("Jwt");
+
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -42,8 +44,8 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
             ValidateAudience = true,
             ValidAlgorithms = [SecurityAlgorithms.RsaSha256],
             IssuerSigningKey = signingKey,
-            ValidAudience = builder.Configuration.GetSection("Jwt").GetValue<string>("Audience"),
-            ValidIssuer = builder.Configuration.GetSection("Jwt").GetValue<string>("Issuer")
+            ValidAudience = jwtConfig.GetValue<string>("Audience"),
+            ValidIssuer = jwtConfig.GetValue<string>("Issuer")
         };
     });
 

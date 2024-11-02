@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
-using System.Text.RegularExpressions;
 
 namespace MovieReservation.Controllers
 {
