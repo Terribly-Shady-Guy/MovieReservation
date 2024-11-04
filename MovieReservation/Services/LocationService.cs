@@ -1,5 +1,5 @@
 ﻿using MovieReservation.Data.DbContexts;
-using MovieReservation.Infrastructure.Models;
+using MovieReservation.Models;
 using MovieReservation.ViewModels;
 
 namespace MovieReservation.Services

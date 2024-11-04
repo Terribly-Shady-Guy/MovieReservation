@@ -16,17 +16,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton((provider) =>
 {
-    var rsaKeyPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
+    string rsaKeyPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
+    string rsaKeyFile = Path.Combine(rsaKeyPath, "key.xml");
+
     var rsa = RSA.Create();
 
     if (!Directory.Exists(rsaKeyPath))
     {
         Directory.CreateDirectory(rsaKeyPath);
-        File.WriteAllText(Path.Combine(rsaKeyPath, "key.xml"), rsa.ToXmlString(true));
+        File.WriteAllText(rsaKeyFile, rsa.ToXmlString(true));
     }
     else
     {
-        rsa.FromXmlString(File.ReadAllText(Path.Combine(rsaKeyPath, "key.xml")));
+        string key = File.ReadAllText(rsaKeyFile);
+        rsa.FromXmlString(key);
     }
 
     return new RsaSecurityKey(rsa);

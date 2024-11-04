@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using MovieReservation.Infrastructure.Models;
+using MovieReservation.Models;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
 using System.Security.Claims;
@@ -22,6 +22,8 @@ namespace MovieReservation.Controllers
             _manager = manager;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
         public async Task<ActionResult> Login(UserLoginVM userLogin)
         {

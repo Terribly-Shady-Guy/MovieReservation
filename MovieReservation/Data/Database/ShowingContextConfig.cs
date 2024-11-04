@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieReservation.Infrastructure.Models;
+using MovieReservation.Models;
 
 namespace MovieReservation.Data.Database
 {

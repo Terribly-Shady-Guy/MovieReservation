@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieReservation.Data.Database;
-using MovieReservation.Infrastructure.Models;
+using MovieReservation.Models;
 
 namespace MovieReservation.Data.DbContexts
 {
