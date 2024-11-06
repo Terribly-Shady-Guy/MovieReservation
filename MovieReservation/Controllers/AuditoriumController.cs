@@ -8,7 +8,7 @@ namespace MovieReservation.Controllers
     public class AuditoriumController : ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult> AddSeatToAuditorium(int auditoriumId)
+        public async Task<ActionResult> AddNewAuditoriumToLocation()
         {
             throw new NotImplementedException();
         }

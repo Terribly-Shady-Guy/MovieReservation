@@ -17,12 +17,14 @@ namespace MovieReservation.Controllers
             _movieService = movieService;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<MovieVM>> ListMovies([FromQuery] string? genre)
         {
             return Ok(await _movieService.GetMovies(genre));
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddNewMovie([FromForm] MovieFormDataBody movie)
@@ -39,6 +41,8 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovie(int id)

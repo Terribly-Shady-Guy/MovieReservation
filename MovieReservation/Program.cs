@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MovieReservation.Data.DbContexts;
 using MovieReservation.Services;
+using System.Reflection;
 using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,42 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Movie Reservation API",
+        Description = "An API for customers to view and reserve movies."
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Jwt bearer token for authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Name = "Authorization"
+    });
+
+    var requirementScheme = new OpenApiSecurityScheme
+    {
+        Reference = new OpenApiReference
+        {
+            Id = "Bearer",
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        { requirementScheme, Array.Empty<string>() }
+    });
+
+    string xmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+    string path = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    options.IncludeXmlComments(path);
+});
 
 builder.Services.AddSingleton((provider) =>
 {
@@ -39,7 +76,7 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
     .Configure<RsaSecurityKey, IConfiguration>((options, signingKey, config) =>
     {
         var jwtConfig = config.GetSection("Jwt");
-
+        
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -64,6 +101,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
 
+builder.Services.AddProblemDetails();
+
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<AuthenticationTokenManager>();
 
@@ -80,6 +119,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler();
+
+//app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 

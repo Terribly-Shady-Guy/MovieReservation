@@ -15,6 +15,7 @@ namespace MovieReservation.Controllers
             _userService = userService;
         }
 
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<ActionResult> AddNewUser(NewUserVM user)
         {
@@ -23,6 +24,8 @@ namespace MovieReservation.Controllers
             return Created(id.ToString(), new { Mesaage = "Account created sucessfully." });
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> PromoteUser(int id)

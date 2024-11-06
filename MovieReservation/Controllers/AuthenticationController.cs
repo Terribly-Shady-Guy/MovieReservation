@@ -22,16 +22,26 @@ namespace MovieReservation.Controllers
             _manager = manager;
         }
 
+        ///<summary>Endpoint for user login</summary>
+        ///<param name="userLogin">Object containing username and password for login</param>
+        ///<returns>An object containing the jwt access token</returns>
+        ///<remarks>
+        ///This endpoint also sets a cookie containing a refresh token.
+        /// </remarks>
+        /// <response code="200">Returns the token in a json object</response>
+        /// <response code="401">If the user does not exist or password is incorrect</response>
+         
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Produces("application/json")]
         [HttpPost]
-        public async Task<ActionResult> Login(UserLoginVM userLogin)
+        public async Task<ActionResult<AccessTokenResponse>> Login(UserLoginVM userLogin)
         {
             AppUser? user = await _userService.GetUserAsync(userLogin);
 
             if (user == null)
             {
-                return Unauthorized(new {Message = $"User {userLogin.Username} does not exist."});
+                return Unauthorized($"User {userLogin.Username} does not exist.");
             }
 
             Token token = _manager.GenerateTokens(user);
@@ -40,11 +50,17 @@ namespace MovieReservation.Controllers
 
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
 
-            return Ok(new { Token = token.AccessToken });
+            return Ok(new AccessTokenResponse
+            {
+                Token = token.AccessToken 
+            });
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut]
-        public async Task<ActionResult> RefreshTokens(string expiredToken)
+        public async Task<ActionResult<AccessTokenResponse>> RefreshTokens(string expiredToken)
         {
             string? refreshToken = Request.Cookies["refresh-token"];
 
@@ -60,7 +76,8 @@ namespace MovieReservation.Controllers
                 return Unauthorized(new { Message = "This is not a valid access token" });
             }
             
-            Claim? idClaim = result.ClaimsIdentity.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+            Claim? idClaim = result.ClaimsIdentity.Claims
+                .FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
 
             if (idClaim is null)
             {
@@ -84,9 +101,15 @@ namespace MovieReservation.Controllers
             await _userService.UpdateRefreshToken(token.RefreshToken, token.RefreshExpiration, user);
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
 
-            return Ok(new { Token = token.AccessToken });
+            return Ok(new AccessTokenResponse
+            {
+                Token = token.AccessToken
+            });
         }
 
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult> Logout()
