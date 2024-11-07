@@ -30,7 +30,6 @@ namespace MovieReservation.Controllers
         /// </remarks>
         /// <response code="200">Returns the token in a json object</response>
         /// <response code="401">If the user does not exist or password is incorrect</response>
-         
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces("application/json")]
@@ -56,9 +55,18 @@ namespace MovieReservation.Controllers
             });
         }
 
+        /// <summary>
+        /// Endpoint for refreshing access token.
+        /// </summary>
+        /// <param name="expiredToken">The expired access token</param>
+        /// <returns>A new access token</returns>
+        /// <response code="200">The token was successfully refreshed</response>
+        /// <response code="401">Refresh or access token is invalid</response>
+        /// <response code="404">The user associated with the token does not exist</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Produces("application/json")]
         [HttpPut]
         public async Task<ActionResult<AccessTokenResponse>> RefreshTokens(string expiredToken)
         {
@@ -107,6 +115,13 @@ namespace MovieReservation.Controllers
             });
         }
 
+        /// <summary>
+        /// Endpoint for handling logout.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="204">User successfully logged out</response>
+        /// <response code="401">access or refresh token is missing</response>
+        /// <response code="404">user does not exist</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

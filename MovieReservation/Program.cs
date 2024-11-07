@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "v1",
+        Version = "V1",
         Title = "Movie Reservation API",
         Description = "An API for customers to view and reserve movies."
     });
@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey,
         Name = "Authorization"
     });
-
+    
     var requirementScheme = new OpenApiSecurityScheme
     {
         Reference = new OpenApiReference
@@ -45,10 +45,9 @@ builder.Services.AddSwaggerGen(options =>
         { requirementScheme, Array.Empty<string>() }
     });
 
-    string xmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
-    string path = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    string docXmlFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
 
-    options.IncludeXmlComments(path);
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, docXmlFileName));
 });
 
 builder.Services.AddSingleton((provider) =>
@@ -121,8 +120,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler();
-
-//app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 
