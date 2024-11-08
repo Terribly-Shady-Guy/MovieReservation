@@ -14,11 +14,10 @@ namespace MovieReservation.SwaggerOperationFilters
                 .GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>();
 
-            var combinedScopes = context.MethodInfo?.DeclaringType
+            var combinedScopes = context.MethodInfo.DeclaringType
                 ?.GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
                 .Union(methodScopes) ?? methodScopes;
-
 
             if (combinedScopes.Any())
             {
