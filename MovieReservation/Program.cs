@@ -52,31 +52,19 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, docXmlFileName));
 });
 
-builder.Services.AddSingleton((provider) =>
-{
-    string rsaKeyPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
-    string rsaKeyFile = Path.Combine(rsaKeyPath, "key.xml");
-
-    var rsa = RSA.Create();
-
-    if (!Directory.Exists(rsaKeyPath))
-    {
-        Directory.CreateDirectory(rsaKeyPath);
-        File.WriteAllText(rsaKeyFile, rsa.ToXmlString(true));
-    }
-    else
-    {
-        string key = File.ReadAllText(rsaKeyFile);
-        rsa.FromXmlString(key);
-    }
-
-    return new RsaSecurityKey(rsa);
-});
+builder.Services.AddTransient<IRsaKeyHandler, LocalRsaKeyHandler>();
 
 builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-    .Configure<RsaSecurityKey, IConfiguration>((options, signingKey, config) =>
+    .Configure<IRsaKeyHandler, IConfiguration>(async (options, keyHandler, config) =>
     {
         var jwtConfig = config.GetSection("Jwt");
+
+        if (!keyHandler.KeyExists())
+        {
+            keyHandler.SaveKey();
+        }
+
+        RsaSecurityKey signingKey = await keyHandler.LoadPublicAsync();
         
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters

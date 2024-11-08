@@ -10,25 +10,25 @@ namespace MovieReservation.Services
     public class AuthenticationTokenManager
     {
         private readonly IConfiguration _configuration;
-        private readonly RsaSecurityKey _securityKey;
+        private readonly IRsaKeyHandler _securityKeyHandler;
 
-        public AuthenticationTokenManager(IConfiguration configuration, RsaSecurityKey securityKey)
+        public AuthenticationTokenManager(IConfiguration configuration, IRsaKeyHandler securityKeyHandler)
         {
             _configuration = configuration;
-            _securityKey = securityKey;
+            _securityKeyHandler = securityKeyHandler;
         }
 
-        public Token GenerateTokens(AppUser user)
+        public async Task<Token> GenerateTokens(AppUser user)
         {
             Claim[] claims =
             [
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Role, user.Role),
             ];
 
             var tokenModel = new Token
             {
-                AccessToken = GenerateAccessToken(claims)
+                AccessToken = await GenerateAccessToken(claims)
             };
 
             tokenModel = GenerateRefreshToken(tokenModel);
@@ -39,6 +39,8 @@ namespace MovieReservation.Services
         public async Task<TokenValidationResult> ValidateExpiredJwtToken(string expiredToken)
         {
             var jwtConfig = _configuration.GetSection("Jwt");
+            RsaSecurityKey securityKey = await _securityKeyHandler.LoadPublicAsync();
+
             var tokenParams = new TokenValidationParameters
             {
                 ValidateLifetime = false,
@@ -47,7 +49,7 @@ namespace MovieReservation.Services
                 ValidAlgorithms = [
                     SecurityAlgorithms.RsaSha256
                 ],
-                IssuerSigningKey = _securityKey,
+                IssuerSigningKey = securityKey,
                 ValidAudience = jwtConfig.GetValue<string>("Audience"),
                 ValidIssuer = jwtConfig.GetValue<string>("Issuer")
             };
@@ -59,9 +61,11 @@ namespace MovieReservation.Services
             return result;
         }
 
-        private string GenerateAccessToken(Claim[] claims)
+        private async Task<string> GenerateAccessToken(Claim[] claims)
         {
-            var signingCredentials = new SigningCredentials(_securityKey, SecurityAlgorithms.RsaSha256);
+            RsaSecurityKey securityKey = await _securityKeyHandler.LoadPrivateAsync();
+
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
             var jwtConfig = _configuration.GetSection("Jwt");
 
             var descriptor = new SecurityTokenDescriptor()
