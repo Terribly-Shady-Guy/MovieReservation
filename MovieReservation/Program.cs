@@ -35,7 +35,9 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<JwtSecurityRequirementOperationFilter>();
 
-    string docXmlFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+    string docXmlFileName = Assembly.GetExecutingAssembly()
+        .GetName()
+        .Name + ".xml";
 
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, docXmlFileName));
 });
@@ -43,7 +45,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddTransient<IRsaKeyHandler, LocalRsaKeyHandler>();
 
 builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-    .Configure<IRsaKeyHandler, IConfiguration>(async (options, keyHandler, config) =>
+    .Configure<IRsaKeyHandler, IConfiguration>((options, keyHandler, config) =>
     {
         var jwtConfig = config.GetSection("Jwt");
 
@@ -52,7 +54,9 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
             keyHandler.SaveKey();
         }
 
-        RsaSecurityKey signingKey = await keyHandler.LoadPublicAsync();
+        RsaSecurityKey signingKey = keyHandler.LoadPublicAsync()
+            .GetAwaiter()
+            .GetResult();
         
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
