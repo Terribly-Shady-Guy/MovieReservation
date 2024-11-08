@@ -15,6 +15,12 @@ namespace MovieReservation.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Endpoint to add a new user in the database.
+        /// </summary>
+        /// <param name="user">An object representing the new user.</param>
+        /// <returns></returns>
+        /// <response code="201">The new user account was sucessfully created.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost]
         public async Task<ActionResult> AddNewUser(NewUserVM user)
@@ -24,6 +30,13 @@ namespace MovieReservation.Controllers
             return Created(id.ToString(), new { Mesaage = "Account created sucessfully." });
         }
 
+        /// <summary>
+        /// An endpoint for admin users to promote other users to admin role.
+        /// </summary>
+        /// <param name="id">The id for the promoted user</param>
+        /// <returns></returns>
+        /// <response code="200">The user was sucessfully promoted to admin.</response>
+        /// <response code="404">The user with specified id does not exist.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Admin")]

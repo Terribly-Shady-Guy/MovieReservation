@@ -5,7 +5,6 @@ using Microsoft.OpenApi.Models;
 using MovieReservation.Data.DbContexts;
 using MovieReservation.Services;
 using System.Reflection;
-using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
