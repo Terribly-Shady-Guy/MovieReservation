@@ -21,11 +21,11 @@ namespace MovieReservation.Controllers
             _manager = manager;
         }
 
-        ///<summary>Endpoint for user login</summary>
-        ///<param name="userLogin">Object containing username and password for login</param>
-        ///<returns>An object containing the jwt access token</returns>
-        ///<remarks>
-        ///This endpoint also sets a cookie containing a refresh token.
+        /// <summary>Endpoint for user login</summary>
+        /// <param name="userLogin">Object containing username and password for login</param>
+        /// <returns>An object containing the jwt access token</returns>
+        /// <remarks>
+        /// This endpoint also sets a cookie containing a refresh token.
         /// </remarks>
         /// <response code="200">Returns the token in a json object</response>
         /// <response code="401">If the user does not exist or password is incorrect</response>

@@ -24,6 +24,7 @@ namespace MovieReservation.Controllers
         /// <returns>The list of available movies.</returns>
         /// <response code="200">Sucessfully retrieves list of movies.</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/json")]
         [HttpGet]
         public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery] string? genre)
         {
