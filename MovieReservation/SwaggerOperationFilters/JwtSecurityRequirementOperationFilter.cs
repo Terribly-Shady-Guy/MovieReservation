@@ -11,12 +11,10 @@ namespace MovieReservation.SwaggerOperationFilters
             var methodScopes = context.MethodInfo
                 .GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
-                .Distinct();
 
             var combinedScopes = context.MethodInfo?.DeclaringType
                 ?.GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
-                .Distinct()
                 .Union(methodScopes) ?? methodScopes;
 
 
