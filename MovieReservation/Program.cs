@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieReservation.Data.DbContexts;
 using MovieReservation.Services;
+using MovieReservation.SwaggerOperationFilters;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,20 +32,8 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http,
         Name = "Authorization"
     });
-    
-    var requirementScheme = new OpenApiSecurityScheme
-    {
-        Reference = new OpenApiReference
-        {
-            Id = "Bearer",
-            Type = ReferenceType.SecurityScheme
-        }
-    };
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
-        { requirementScheme, Array.Empty<string>() }
-    });
+    options.OperationFilter<JwtSecurityRequirementOperationFilter>();
 
     string docXmlFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
 
