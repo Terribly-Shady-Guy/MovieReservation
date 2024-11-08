@@ -8,6 +8,8 @@ namespace MovieReservation.SwaggerOperationFilters
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            const string SecurityDefinitionId = "Bearer";
+
             var methodScopes = context.MethodInfo
                 .GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>();
@@ -24,7 +26,7 @@ namespace MovieReservation.SwaggerOperationFilters
                 {
                     Reference = new OpenApiReference
                     {
-                        Id = "Bearer",
+                        Id = SecurityDefinitionId,
                         Type = ReferenceType.SecurityScheme
                     }
                 };
