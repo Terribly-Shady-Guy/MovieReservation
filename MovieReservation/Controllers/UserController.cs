@@ -40,7 +40,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult> PromoteUser(int id)
         {
             bool isSucessful = await _userService.PromoteToAdmin(id);

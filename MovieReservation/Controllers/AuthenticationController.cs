@@ -66,8 +66,8 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Produces("application/json")]
-        [HttpPut]
-        public async Task<ActionResult<AccessTokenResponse>> RefreshTokens(string expiredToken)
+        [HttpPatch]
+        public async Task<ActionResult<AccessTokenResponse>> RefreshTokens(AccessTokenResponse expiredToken)
         {
             string? refreshToken = Request.Cookies["refresh-token"];
 
@@ -76,7 +76,7 @@ namespace MovieReservation.Controllers
                 return Unauthorized(new { Message = "A refresh token is not available" });
             }
 
-            TokenValidationResult result = await _manager.ValidateExpiredJwtToken(expiredToken);
+            TokenValidationResult result = await _manager.ValidateExpiredJwtToken(expiredToken.Token);
 
             if (!result.IsValid)
             {
