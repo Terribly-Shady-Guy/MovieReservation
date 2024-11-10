@@ -21,7 +21,7 @@ namespace MovieReservation.Controllers
             _manager = manager;
         }
 
-        /// <summary>Endpoint for user login</summary>
+        /// <summary>An endpoint for user login</summary>
         /// <param name="userLogin">Object containing username and password for login</param>
         /// <returns>An object containing the jwt access token</returns>
         /// <remarks>
@@ -55,7 +55,7 @@ namespace MovieReservation.Controllers
         }
 
         /// <summary>
-        /// Endpoint for refreshing access token.
+        /// An endpoint for refreshing access token.
         /// </summary>
         /// <param name="expiredToken">The expired access token</param>
         /// <returns>A new access token</returns>
@@ -115,7 +115,7 @@ namespace MovieReservation.Controllers
         }
 
         /// <summary>
-        /// Endpoint for handling logout.
+        /// An endpoint for handling logout.
         /// </summary>
         /// <returns></returns>
         /// <response code="204">User successfully logged out</response>

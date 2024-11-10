@@ -16,7 +16,7 @@ namespace MovieReservation.Controllers
         }
 
         /// <summary>
-        /// Endpoint to add a new user in the database.
+        /// An endpoint to add a new user in the database.
         /// </summary>
         /// <param name="user">An object representing the new user.</param>
         /// <returns></returns>
