@@ -83,22 +83,26 @@ namespace MovieReservation.Controllers
                 return Unauthorized(new { Message = "This is not a valid access token" });
             }
             
-            Claim? idClaim = result.ClaimsIdentity.Claims
+            Claim? userIdClaim = result.ClaimsIdentity.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-            if (idClaim is null)
+            int userId;
+            if (userIdClaim is null)
             {
                 return Unauthorized();
             }
+            else if (!int.TryParse(userIdClaim.Value, out userId))
+            {
+                return BadRequest();
+            }
 
-            AppUser? user = await _userService.GetUserAsync(int.Parse(idClaim.Value));
+            AppUser? user = await _userService.GetUserAsync(userId);
 
             if (user is null)
             {
                 return NotFound(new { Message = "The user does not exist." });
             }
-
-            if (user.RefreshToken != refreshToken || user.ExpirationDate <= DateTime.UtcNow)
+            else if (user.RefreshToken != refreshToken || user.ExpirationDate <= DateTime.UtcNow)
             {
                 return Unauthorized(new { Message = "the refresh token is not valid." });
             } 
@@ -128,15 +132,18 @@ namespace MovieReservation.Controllers
         [Authorize]
         public async Task<ActionResult> Logout()
         {
-            Claim? idClaim = HttpContext.User.Claims
+            Claim? userIdClaim = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-            if (idClaim is null)
+            if (userIdClaim is null)
             {
                 return NotFound();
             }
 
-            int id = int.Parse(idClaim.Value);
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return BadRequest();
+            }
 
             string? refreshToken = Request.Cookies["refresh-token"];
 
@@ -145,7 +152,7 @@ namespace MovieReservation.Controllers
                 return Unauthorized();
             }
 
-            await _userService.UpdateRefreshToken(null, null, id);
+            await _userService.UpdateRefreshToken(null, null, userId);
             Response.Cookies.Delete("refresh-token");
 
             return NoContent();

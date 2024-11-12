@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "V1",
         Title = "Movie Reservation API",
-        Description = "An API for customers to view and reserve movies."
+        Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
     });
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

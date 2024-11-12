@@ -30,13 +30,10 @@ namespace MovieReservation.SwaggerOperationFilters
                     }
                 };
 
-                operation.Security =
-                [
-                    new OpenApiSecurityRequirement
-                    {
-                         { requirementScheme, Array.Empty<string>() }
-                    }
-                ];
+                operation.Security.Add(new OpenApiSecurityRequirement
+                {
+                    { requirementScheme, Array.Empty<string>() }
+                });
             }
         }
     }
