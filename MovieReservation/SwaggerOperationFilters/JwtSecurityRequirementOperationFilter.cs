@@ -10,16 +10,16 @@ namespace MovieReservation.SwaggerOperationFilters
         {
             const string SecurityDefinitionId = "Bearer";
 
-            var methodScopes = context.MethodInfo
+            var methodAuthAttributes = context.MethodInfo
                 .GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>();
 
-            var combinedScopes = context.MethodInfo.DeclaringType
+            var endpointAuthAttributes = context.MethodInfo.DeclaringType
                 ?.GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
-                .Union(methodScopes) ?? methodScopes;
+                .Union(methodAuthAttributes) ?? methodAuthAttributes;
 
-            if (combinedScopes.Any())
+            if (endpointAuthAttributes.Any())
             {
                 var requirementScheme = new OpenApiSecurityScheme
                 {
@@ -36,5 +36,6 @@ namespace MovieReservation.SwaggerOperationFilters
                 });
             }
         }
+    
     }
 }
