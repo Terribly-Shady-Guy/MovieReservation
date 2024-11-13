@@ -19,23 +19,34 @@ namespace MovieReservation.SwaggerOperationFilters
                 .OfType<AuthorizeAttribute>()
                 .Union(methodAuthAttributes) ?? methodAuthAttributes;
 
-            if (endpointAuthAttributes.Any())
+            if (!endpointAuthAttributes.Any())
             {
-                var requirementScheme = new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Id = SecurityDefinitionId,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-                
-                operation.Security.Add(new OpenApiSecurityRequirement
-                {
-                    { requirementScheme, Array.Empty<string>() }
-                });
+                return;
             }
+
+            operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
+            {
+                Description = "User does not have required role or token is invalid."
+            });
+
+            operation.Responses.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
+            {
+                Description = "The access token has not been provided in Authorization header."
+            });
+
+            var requirementScheme = new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = SecurityDefinitionId,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                { requirementScheme, Array.Empty<string>() }
+            });
         }
-    
     }
 }
