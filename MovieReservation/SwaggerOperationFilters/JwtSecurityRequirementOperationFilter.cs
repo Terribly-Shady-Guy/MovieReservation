@@ -17,7 +17,7 @@ namespace MovieReservation.SwaggerOperationFilters
             var endpointAuthAttributes = context.MethodInfo.DeclaringType
                 ?.GetCustomAttributes(true)
                 .OfType<AuthorizeAttribute>()
-                .Union(methodAuthAttributes) ?? methodAuthAttributes;
+                .Concat(methodAuthAttributes) ?? methodAuthAttributes;
 
             if (!endpointAuthAttributes.Any())
             {
