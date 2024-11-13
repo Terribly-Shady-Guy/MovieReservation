@@ -29,7 +29,7 @@ namespace MovieReservation.SwaggerOperationFilters
                         Type = ReferenceType.SecurityScheme
                     }
                 };
-
+                
                 operation.Security.Add(new OpenApiSecurityRequirement
                 {
                     { requirementScheme, Array.Empty<string>() }
