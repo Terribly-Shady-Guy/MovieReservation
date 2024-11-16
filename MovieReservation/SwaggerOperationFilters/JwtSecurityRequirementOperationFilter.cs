@@ -23,7 +23,7 @@ namespace MovieReservation.SwaggerOperationFilters
             {
                 return;
             }
-
+            
             operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {
                 Description = "User does not have required role or token is invalid."
