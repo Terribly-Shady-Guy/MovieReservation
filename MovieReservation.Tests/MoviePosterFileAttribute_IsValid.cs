@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MovieReservation.ViewModels;
+using MovieReservation.ValidationAttributes;
 using System.Text;
 
 namespace MovieReservation.Tests
