@@ -31,7 +31,7 @@ namespace MovieReservation.SwaggerOperationFilters
 
             operation.Responses.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
             {
-                Description = "The access token has not been provided in Authorization header."
+                Description = "The access token has not been provided in \"Authorization header\"."
             });
 
             var requirementScheme = new OpenApiSecurityScheme
