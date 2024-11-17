@@ -93,9 +93,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
     options.UseSeeding((context, _) =>
     {
-        string id = Guid.NewGuid().ToString();
-
-        var user = context.Set<AppUser>().Find(id);
+        var user = context.Set<AppUser>()
+            .FirstOrDefault(a => a.UserName == "root" && a.Email == "root@example.com");
 
         if (user is not null)
         {
@@ -106,7 +105,7 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
         AppUser seededAdmin = new AppUser
         {
-            Id = id,
+            Id = Guid.NewGuid().ToString(),
             UserName = "root",
             AccessFailedCount = 0,
             Email = "root@example.com",
@@ -122,9 +121,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
     options.UseAsyncSeeding(async(context, _, cancellationToken) =>
     {
-        string id = Guid.NewGuid().ToString();
-
-        var user = await context.Set<AppUser>().FindAsync(id);
+        var user = await context.Set<AppUser>()
+            .FirstOrDefaultAsync(a => a.UserName == "root" && a.Email == "root@example.com", cancellationToken: cancellationToken);
 
         if (user is not null)
         {
@@ -135,7 +133,7 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
         AppUser seededAdmin = new AppUser
         {
-            Id = id,
+            Id = Guid.NewGuid().ToString(),
             UserName = "root",
             AccessFailedCount = 0,
             Email = "root@example.com",
