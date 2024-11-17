@@ -145,8 +145,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
         seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
 
-        context.Add(seededAdmin);
-        await context.SaveChangesAsync();
+        await context.AddAsync(seededAdmin, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
     });
 });
