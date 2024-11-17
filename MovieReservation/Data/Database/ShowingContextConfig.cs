@@ -20,6 +20,11 @@ namespace MovieReservation.Data.Database
             .IsRequired()
             .HasColumnType("DATETIME");
 
+            entity.Property(e => e.Price)
+            .IsRequired()
+            .HasColumnName("price")
+            .HasColumnType("MONEY");
+
             entity.Property(e => e.MovieId)
             .IsRequired()
             .HasColumnName("movie_id");

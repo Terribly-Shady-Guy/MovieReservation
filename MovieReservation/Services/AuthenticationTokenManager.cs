@@ -22,8 +22,8 @@ namespace MovieReservation.Services
         {
             Claim[] claims =
             [
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                //new Claim(ClaimTypes.Role, user.Role),
             ];
 
             var tokenModel = new Token

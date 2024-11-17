@@ -15,11 +15,6 @@ namespace MovieReservation.Data.Database
             entity.Property(e => e.SeatId)
             .HasColumnName("seat_id");
 
-            entity.Property(e => e.Price)
-            .IsRequired()
-            .HasColumnName("price")
-            .HasColumnType("MONEY");
-
             entity.Property(e => e.AuditoriumNumber)
             .IsRequired(true)
             .HasColumnName("auditorium_number");

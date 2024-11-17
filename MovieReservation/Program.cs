@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieReservation.Data.DbContexts;
+using MovieReservation.Models;
 using MovieReservation.Services;
 using MovieReservation.SwaggerOperationFilters;
 using System.Reflection;
@@ -57,7 +59,7 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
         RsaSecurityKey signingKey = keyHandler.LoadPublicAsync()
             .GetAwaiter()
             .GetResult();
-        
+
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -77,9 +79,76 @@ builder.Services.AddAuthentication(configureOptions =>
 })
     .AddJwtBearer();
 
+builder.Services.AddIdentityCore<AppUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<MovieReservationDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("default"), config =>
+    {
+        config.EnableRetryOnFailure();
+    });
+
+    options.UseSeeding((context, _) =>
+    {
+        string id = Guid.NewGuid().ToString();
+
+        var user = context.Set<AppUser>().Find(id);
+
+        if (user is not null)
+        {
+            return;
+        }
+
+        var hasher = new PasswordHasher<AppUser>();
+
+        AppUser seededAdmin = new AppUser
+        {
+            Id = id,
+            UserName = "root",
+            AccessFailedCount = 0,
+            Email = "root@example.com",
+            FirstName = "root",
+            LastName = "root",
+        };
+
+        seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
+
+        context.Add(seededAdmin);
+        context.SaveChanges();
+    });
+
+    options.UseAsyncSeeding(async(context, _, cancellationToken) =>
+    {
+        string id = Guid.NewGuid().ToString();
+
+        var user = await context.Set<AppUser>().FindAsync(id);
+
+        if (user is not null)
+        {
+            return;
+        }
+
+        var hasher = new PasswordHasher<AppUser>();
+
+        AppUser seededAdmin = new AppUser
+        {
+            Id = id,
+            UserName = "root",
+            AccessFailedCount = 0,
+            Email = "root@example.com",
+            FirstName = "root",
+            LastName = "root",
+        };
+
+        seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
+
+        context.Add(seededAdmin);
+        await context.SaveChangesAsync();
+
+    });
 });
 
 builder.Services.AddProblemDetails();

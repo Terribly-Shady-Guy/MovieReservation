@@ -3,7 +3,7 @@
     public class Reservation
     {
         public int ReservationId { get; set; }
-        public required int UserId { get; set; }
+        public required string UserId { get; set; }
         public required DateTime DateReserved { get; set; }
         public required decimal Total { get; set; }
         public DateTime? DateCancelled { get; set; }

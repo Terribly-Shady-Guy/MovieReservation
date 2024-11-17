@@ -25,7 +25,12 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult> AddNewUser(NewUserVM user)
         {
-            int id = await _userService.AddNewUserAsync(user);
+            string? id = await _userService.AddNewUserAsync(user);
+
+            if (id is null)
+            {
+                return BadRequest();
+            }
 
             return Created(id.ToString(), new { Mesaage = "Account created sucessfully." });
         }
@@ -41,7 +46,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Admin")]
         [HttpPatch("{id}")]
-        public async Task<ActionResult> PromoteUser(int id)
+        public async Task<ActionResult> PromoteUser(string id)
         {
             bool isSucessful = await _userService.PromoteToAdmin(id);
 

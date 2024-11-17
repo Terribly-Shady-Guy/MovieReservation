@@ -15,40 +15,39 @@ namespace MovieReservation.Services
             _context = context;
         }
 
-        public async Task<int> AddNewUserAsync(NewUserVM newUser)
+        public async Task<string?> AddNewUserAsync(NewUserVM newUser)
         {
             var hasher = new PasswordHasher<AppUser>();
 
             var user = new AppUser() 
             { 
                 Email = newUser.Email,
+                UserName = newUser.Username,
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
-                Username = newUser.Username,
-                Password = newUser.Password,
-                Role = "User"
+                //Role = "User"
             };
 
-            user.Password = hasher.HashPassword(user, user.Password);
+            user.PasswordHash = hasher.HashPassword(user, newUser.Password);
 
             _context.Add(user);
             await _context.SaveChangesAsync();
 
-            return await _context.AppUsers.Where(e => e.Username == user.Username && e.Email == user.Email)
-                .Select(e => e.UserId)
+            return await _context.Users.Where(e => e.UserName == user.UserName && e.Email == user.Email)
+                .Select(e => e.Id)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> PromoteToAdmin(int id)
+        public async Task<bool> PromoteToAdmin(string id)
         {
-            AppUser? user = await _context.AppUsers.FindAsync(id);
+            AppUser? user = await _context.Users.FindAsync(id);
 
             if (user == null)
             {
                 return false;
             }
 
-            user.Role = "Admin";
+            //user.Role = "Admin";
 
             _context.Update(user);
             await _context.SaveChangesAsync();
@@ -58,12 +57,12 @@ namespace MovieReservation.Services
 
         public async Task<AppUser?> GetUserAsync(UserLoginVM loginUser)
         {
-            List<AppUser> users = await _context.AppUsers.Where(e => e.Username == loginUser.Username).ToListAsync();
+            List<AppUser> users = await _context.Users.Where(e => e.UserName == loginUser.Username).ToListAsync();
             var hasher = new PasswordHasher<AppUser>();
 
             foreach (var user in users)
             {
-                var result = hasher.VerifyHashedPassword(user, user.Password, loginUser.Password);
+                var result = hasher.VerifyHashedPassword(user, user.PasswordHash, loginUser.Password);
                 if (result == PasswordVerificationResult.Success)
                 {
                     return user;
@@ -75,7 +74,7 @@ namespace MovieReservation.Services
 
         public async Task<AppUser?> GetUserAsync(int id)
         {
-            return await _context.AppUsers.FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task UpdateRefreshToken(string? token, DateTime? expiration, AppUser user)
