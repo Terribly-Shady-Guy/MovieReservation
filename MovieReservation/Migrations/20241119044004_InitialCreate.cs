@@ -247,6 +247,7 @@ namespace MovieReservation.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_showing_id", x => x.showing_id);
+                    table.CheckConstraint("CK_min_price", "price > 0");
                     table.ForeignKey(
                         name: "FK_movie_showing",
                         column: x => x.movie_id,

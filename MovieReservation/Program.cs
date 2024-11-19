@@ -119,7 +119,7 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
         context.SaveChanges();
     });
 
-    options.UseAsyncSeeding(async(context, _, cancellationToken) =>
+    options.UseAsyncSeeding(async (context, _, cancellationToken) =>
     {
         var user = await context.Set<AppUser>()
             .FirstOrDefaultAsync(a => a.UserName == "root" && a.Email == "root@example.com", cancellationToken: cancellationToken);
@@ -131,7 +131,7 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
         var hasher = new PasswordHasher<AppUser>();
 
-        AppUser seededAdmin = new AppUser
+        AppUser seededAdmin = new()
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "root",
@@ -145,7 +145,6 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
 
         await context.AddAsync(seededAdmin, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
-
     });
 });
 

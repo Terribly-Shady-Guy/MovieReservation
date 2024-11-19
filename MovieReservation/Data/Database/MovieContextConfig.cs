@@ -13,28 +13,28 @@ namespace MovieReservation.Data.Database
                 .HasName("PK_movie_id");
 
             entity.Property(e => e.MovieId)
-            .HasColumnName("movie_id");
+                .HasColumnName("movie_id");
 
             entity.Property(e => e.Title)
-            .HasColumnName("title")
-            .IsRequired()
-            .IsUnicode(false);
+                .HasColumnName("title")
+                .IsRequired()
+                .IsUnicode(false);
 
             entity.Property(e => e.PosterImageName)
-            .IsRequired()
-            .IsUnicode(false)
-            .HasColumnName("poster_image_name");
+                .IsRequired()
+                .IsUnicode(false)
+                .HasColumnName("poster_image_name");
 
             entity.Property(e => e.Description)
-            .IsRequired()
-            .IsUnicode(false)
-            .HasColumnName("description")
-            .HasMaxLength(300);
+                .IsRequired()
+                .IsUnicode(false)
+                .HasColumnName("description")
+                .HasMaxLength(300);
 
             entity.Property(e => e.Genre)
-            .IsRequired()
-            .IsUnicode(false)
-            .HasColumnName("genre");
+                .IsRequired()
+                .IsUnicode(false)
+                .HasColumnName("genre");
 
             entity.HasIndex(e => e.Genre);
             entity.HasIndex(e => e.Title);

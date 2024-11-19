@@ -431,7 +431,10 @@ namespace MovieReservation.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Showings");
+                    b.ToTable("Showings", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_min_price", "price > 0");
+                        });
                 });
 
             modelBuilder.Entity("MovieReservation.Models.ShowingSeat", b =>

@@ -12,7 +12,7 @@ using MovieReservation.Data.DbContexts;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241117004943_InitialCreate")]
+    [Migration("20241119044004_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -434,7 +434,10 @@ namespace MovieReservation.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Showings");
+                    b.ToTable("Showings", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_min_price", "price > 0");
+                        });
                 });
 
             modelBuilder.Entity("MovieReservation.Models.ShowingSeat", b =>

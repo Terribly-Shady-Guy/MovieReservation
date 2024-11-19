@@ -10,16 +10,17 @@ namespace MovieReservation.Data.Database
         {
             var entity = modelBuilder.Entity<AppUser>();
 
-            entity.HasKey(x => x.Id).HasName("pk_user_id");
+            entity.HasKey(x => x.Id)
+                .HasName("pk_user_id");
 
             entity.Property(e => e.RefreshToken)
-            .IsUnicode(false)
-            .HasColumnName("refresh_token")
-            .HasColumnType("varchar(200)");
+                .IsUnicode(false)
+                .HasColumnName("refresh_token")
+                .HasColumnType("varchar(200)");
 
             entity.Property(e => e.ExpirationDate)
-            .HasColumnType("DATETIME")
-            .HasColumnName("expiration_date");
+                .HasColumnType("DATETIME")
+                .HasColumnName("expiration_date");
 
             entity.ToTable(nameof(AppUser) + "s");
 

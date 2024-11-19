@@ -13,26 +13,31 @@ namespace MovieReservation.Data.Database
                 .HasName("PK_showing_id");
 
             entity.Property(e => e.ShowingId)
-            .HasColumnName("showing_id");
+                .HasColumnName("showing_id");
 
             entity.Property(e => e.Date)
-            .HasColumnName("date")
-            .IsRequired()
-            .HasColumnType("DATETIME");
+                .HasColumnName("date")
+                .IsRequired()
+                .HasColumnType("DATETIME");
 
             entity.Property(e => e.Price)
-            .IsRequired()
-            .HasColumnName("price")
-            .HasColumnType("MONEY");
+                .IsRequired()
+                .HasColumnName("price")
+                .HasColumnType("MONEY");
 
             entity.Property(e => e.MovieId)
-            .IsRequired()
-            .HasColumnName("movie_id");
+                .IsRequired()
+                .HasColumnName("movie_id");
 
             entity.HasOne(e => e.Movie)
-            .WithMany(e => e.Showings)
-            .HasForeignKey(e => e.MovieId)
-            .HasConstraintName("FK_movie_showing");
+                .WithMany(e => e.Showings)
+                .HasForeignKey(e => e.MovieId)
+                .HasConstraintName("FK_movie_showing");
+
+            entity.ToTable("Showings", schema =>
+            {
+                schema.HasCheckConstraint("CK_min_price", "price > 0");
+            });
 
             return modelBuilder;
         }

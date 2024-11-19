@@ -7,8 +7,8 @@ namespace MovieReservation.Data.DbContexts
 {
     public class MovieReservationDbContext : IdentityDbContext<AppUser>
     {
-        //disabled nullability warnings on dbset props as they are handled by efcore.
-        //Identity doesn't suppress it for some reason.
+        // Disabled nullability warnings on DbSet props as they are handled by efcore.
+        // Identity doesn't suppress it for some reason.
 #pragma warning disable CS8618
         public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) : base(options)
         {
@@ -16,13 +16,13 @@ namespace MovieReservation.Data.DbContexts
         }
 #pragma warning restore CS8618
 
-        public virtual DbSet<Movie> Movies { get; set; }
-        public virtual DbSet<Showing> Showings { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<Auditorium> Auditoriums { get; set; }
-        public virtual DbSet<Seat> Seats { get; set; }
-        public virtual DbSet<ShowingSeat> ShowingSeats { get; set; }
-        public virtual DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Showing> Showings { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Auditorium> Auditoriums { get; set; }
+        public DbSet<Seat> Seats { get; set; }
+        public DbSet<ShowingSeat> ShowingSeats { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

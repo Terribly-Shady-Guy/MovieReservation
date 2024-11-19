@@ -13,47 +13,47 @@ namespace MovieReservation.Data.Database
                 .HasName("PK_reservation_id");
 
             entity.Property(e => e.ReservationId)
-            .HasColumnName("reservation_id");
+                .HasColumnName("reservation_id");
 
             entity.Property(e => e.DateReserved)
-            .IsRequired()
-            .HasColumnType("DATETIME")
-            .HasColumnName("date_reserved");
+                .IsRequired()
+                .HasColumnType("DATETIME")
+                .HasColumnName("date_reserved");
 
             entity.Property(e => e.Total)
-            .IsRequired()
-            .HasColumnName("total")
-            .HasColumnType("MONEY");
+                .IsRequired()
+                .HasColumnName("total")
+                .HasColumnType("MONEY");
 
             entity.Property(e => e.DateCancelled)
-            .IsRequired(false)
-            .HasColumnType("DATETIME")
-            .HasColumnName("date_cancelled");
+                .IsRequired(false)
+                .HasColumnType("DATETIME")
+                .HasColumnName("date_cancelled");
 
             entity.Property(e => e.UserId)
-            .IsRequired()
-            .HasColumnName("user_id");
+                .IsRequired()
+                .HasColumnName("user_id");
 
             entity.HasOne(e => e.User)
-            .WithMany(e => e.Reservations)
-            .HasForeignKey(e => e.UserId)
-            .HasConstraintName("FK_app_user_reservation");
+                .WithMany(e => e.Reservations)
+                .HasForeignKey(e => e.UserId)
+                .HasConstraintName("FK_app_user_reservation");
 
             entity.HasMany(e => e.ShowingSeats)
-            .WithMany(e => e.Reservations)
-            .UsingEntity("ReservedSeats", joinEntity =>
-            {
-                joinEntity.Property<int>("ShowingSeatId")
-                .HasColumnName("showing_seat_id")
-                .HasColumnType("INTEGER");
+                .WithMany(e => e.Reservations)
+                .UsingEntity("ReservedSeats", joinEntity =>
+                {
+                    joinEntity.Property<int>("ShowingSeatId")
+                        .HasColumnName("showing_seat_id")
+                        .HasColumnType("INTEGER");
 
-                joinEntity.Property<int>("ReservationId")
-                .HasColumnName("reservation_id")
-                .HasColumnType("INTEGER");
+                    joinEntity.Property<int>("ReservationId")
+                        .HasColumnName("reservation_id")
+                        .HasColumnType("INTEGER");
 
-                joinEntity.HasKey("ShowingSeatId", "ReservationId")
-                .HasName("PK_showingseat_reservation");
-            });
+                    joinEntity.HasKey("ShowingSeatId", "ReservationId")
+                        .HasName("PK_showingseat_reservation");
+                });
 
             return modelBuilder;
         }

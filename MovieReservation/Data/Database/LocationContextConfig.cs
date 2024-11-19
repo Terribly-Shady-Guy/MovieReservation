@@ -13,29 +13,29 @@ namespace MovieReservation.Data.Database
                 .HasName("PK_location_id");
 
             entity.Property(e => e.LocationId)
-            .HasColumnName("location_id");
+                .HasColumnName("location_id");
 
             entity.Property(e => e.Street)
-            .IsRequired()
-            .IsUnicode(false)
-            .HasColumnName("street");
+                .IsRequired()
+                .IsUnicode(false)
+                .HasColumnName("street");
 
             entity.Property(e => e.City)
-            .IsRequired()
-            .IsUnicode(false)
-            .HasColumnName("city");
+                .IsRequired()
+                .IsUnicode(false)
+                .HasColumnName("city");
 
             entity.Property(e => e.State)
-            .IsRequired()
-            .HasColumnName("state")
-            .IsUnicode(false);
+                .IsRequired()
+                .HasColumnName("state")
+                .IsUnicode(false);
 
             entity.Property(e => e.Zip)
-            .IsRequired()
-            .IsUnicode(false)
-            .HasColumnName("zip")
-            .HasMaxLength(5)
-            .IsFixedLength();
+                .IsRequired()
+                .IsUnicode(false)
+                .HasColumnName("zip")
+                .HasMaxLength(5)
+                .IsFixedLength();
 
             return modelBuilder;
         }

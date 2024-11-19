@@ -13,23 +13,23 @@ namespace MovieReservation.Data.Database
                 .HasName("PK_auditorium_number");
 
             entity.Property(e => e.AuditoriumNumber)
-            .IsRequired()
-            .HasColumnName("auditorium_number")
-            .HasColumnType("VARCHAR(10)")
-            .IsUnicode(false);
+                .IsRequired()
+                .HasColumnName("auditorium_number")
+                .HasColumnType("VARCHAR(10)")
+                .IsUnicode(false);
 
             entity.Property(e => e.MaxCapacity)
-            .IsRequired()
-            .HasColumnName("max_capacity");
+                .IsRequired()
+                .HasColumnName("max_capacity");
 
             entity.Property(e => e.LocationId)
-            .HasColumnName("location_id")
-            .IsRequired();
+                .HasColumnName("location_id")
+                .IsRequired();
 
             entity.HasOne(e => e.Location)
-            .WithMany(e => e.Auditoriums)
-            .HasForeignKey(e => e.LocationId)
-            .HasConstraintName("FK_auditorium_location");
+                .WithMany(e => e.Auditoriums)
+                .HasForeignKey(e => e.LocationId)
+                .HasConstraintName("FK_auditorium_location");
 
             entity.ToTable("Auditoriums", table =>
             {

@@ -13,16 +13,16 @@ namespace MovieReservation.Data.Database
                 .HasName("PK_seat_id");
 
             entity.Property(e => e.SeatId)
-            .HasColumnName("seat_id");
+                .HasColumnName("seat_id");
 
             entity.Property(e => e.AuditoriumNumber)
-            .IsRequired(true)
-            .HasColumnName("auditorium_number");
+                .IsRequired(true)
+                .HasColumnName("auditorium_number");
 
             entity.HasOne(e => e.Auditorium)
-            .WithMany(e => e.Seats)
-            .HasForeignKey(e => e.AuditoriumNumber)
-            .HasConstraintName("FK_seat_auditorium");
+                .WithMany(e => e.Seats)
+                .HasForeignKey(e => e.AuditoriumNumber)
+                .HasConstraintName("FK_seat_auditorium");
 
             return modelBuilder;
         }
