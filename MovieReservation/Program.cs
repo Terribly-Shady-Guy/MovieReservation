@@ -8,6 +8,7 @@ using MovieReservation.Models;
 using MovieReservation.Services;
 using MovieReservation.SwaggerOperationFilters;
 using System.Reflection;
+using System.Threading;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,21 +102,72 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
             return;
         }
 
+        var roles = context.Set<IdentityRole>()
+            .Where(r => r.Name == "User" || r.Name == "Admin")
+            .ToList();
+
+        if (roles.Count > 0)
+        {
+            return;
+        }
+
+        List<IdentityRole> newRoles =
+        [
+            new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "User",
+                NormalizedName = "User"
+            },
+            new IdentityRole{
+                Id = Guid.NewGuid().ToString(),
+                Name = "Admin",
+                NormalizedName = "Admin"
+            }
+        ];
+
+        foreach (var role in newRoles)
+        {
+            if (!roles.Any(r => r.Name == role.Name))
+            {
+                context.Add(role);
+            }
+        }
+
+
         var hasher = new PasswordHasher<AppUser>();
 
-        AppUser seededAdmin = new AppUser
+        AppUser seededAdmin = new()
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "root",
             AccessFailedCount = 0,
             Email = "root@example.com",
+            NormalizedEmail = "root@example.com",
+            EmailConfirmed = true,
+            NormalizedUserName = "root",
+            TwoFactorEnabled = false,
+            ExpirationDate = null,
+            RefreshToken = null,
             FirstName = "root",
             LastName = "root",
         };
 
         seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
 
+        string adminRoleId = newRoles.Where(r => r.Name == "Admin")
+            .Select(r => r.Id)
+            .First();
+
+        var seededAdminRole = new IdentityUserRole<string>
+        {
+            RoleId = adminRoleId,
+            UserId = seededAdmin.Id
+        };
+
+        context.Add(seededAdminRole);
         context.Add(seededAdmin);
+
         context.SaveChanges();
     });
 
@@ -129,6 +181,38 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
             return;
         }
 
+        var roles = await context.Set<IdentityRole>()
+            .Where(r => r.Name == "User" || r.Name == "Admin")
+            .ToListAsync(cancellationToken);
+
+        if (roles.Count > 0)
+        {
+            return;
+        }
+
+        List<IdentityRole> newRoles = 
+        [
+            new IdentityRole 
+            { 
+                Id = Guid.NewGuid().ToString(),
+                Name = "User",
+                NormalizedName = "User"
+            },
+            new IdentityRole{
+                Id = Guid.NewGuid().ToString(),
+                Name = "Admin",
+                NormalizedName = "Admin"
+            }
+        ];
+
+        foreach (var role in newRoles)
+        {
+            if (!roles.Any(r => r.Name == role.Name))
+            {
+                context.Add(role);
+            }    
+        }
+
         var hasher = new PasswordHasher<AppUser>();
 
         AppUser seededAdmin = new()
@@ -137,18 +221,38 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
             UserName = "root",
             AccessFailedCount = 0,
             Email = "root@example.com",
+            NormalizedEmail = "root@example.com",
+            EmailConfirmed = true,
+            NormalizedUserName = "root",
+            TwoFactorEnabled = false,
+            ExpirationDate = null,
+            RefreshToken = null,
             FirstName = "root",
             LastName = "root",
         };
 
         seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
 
-        await context.AddAsync(seededAdmin, cancellationToken);
+        string adminRoleId = newRoles.Where(r => r.Name == "Admin")
+            .Select(r => r.Id)
+            .First();
+
+        var seededAdminRole = new IdentityUserRole<string> 
+        {
+            RoleId = adminRoleId,
+            UserId = seededAdmin.Id
+        };
+
+        context.Add(seededAdminRole);
+        context.Add(seededAdmin);
+
         await context.SaveChangesAsync(cancellationToken);
     });
 });
 
 builder.Services.AddProblemDetails();
+
+builder.Services.AddHealthChecks();
 
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<AuthenticationTokenManager>();
@@ -174,6 +278,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 

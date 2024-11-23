@@ -7,7 +7,7 @@ namespace MovieReservation.Data.DbContexts
 {
     public class MovieReservationDbContext : IdentityDbContext<AppUser>
     {
-        // Disabled nullability warnings on DbSet props as they are handled by efcore.
+        // Disabled nullability warnings for DbSet props as they are handled by efcore.
         // Identity doesn't suppress it for some reason.
 #pragma warning disable CS8618
         public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) : base(options)
