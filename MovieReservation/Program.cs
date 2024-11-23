@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieReservation.Data.DbContexts;
@@ -91,6 +92,42 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
         config.EnableRetryOnFailure();
     });
 
+    List<IdentityRole> newRoles =
+    [
+        new IdentityRole
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "User",
+            NormalizedName = "User"
+         },
+         new IdentityRole
+         {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Admin",
+            NormalizedName = "Admin"
+         }
+    ];
+
+    var hasher = new PasswordHasher<AppUser>();
+
+    AppUser seededAdmin = new()
+    {
+        Id = Guid.NewGuid().ToString(),
+        UserName = "root",
+        AccessFailedCount = 0,
+        Email = "root@example.com",
+        NormalizedEmail = "root@example.com",
+        EmailConfirmed = true,
+        NormalizedUserName = "root",
+        TwoFactorEnabled = false,
+        ExpirationDate = null,
+        RefreshToken = null,
+        FirstName = "root",
+        LastName = "root",
+    };
+
+    seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
+
     options.UseSeeding((context, _) =>
     {
         var user = context.Set<AppUser>()
@@ -110,22 +147,6 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
             return;
         }
 
-        List<IdentityRole> newRoles =
-        [
-            new IdentityRole
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "User",
-                NormalizedName = "User"
-            },
-            new IdentityRole
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Admin",
-                NormalizedName = "Admin"
-            }
-        ];
-
         foreach (var role in newRoles)
         {
             if (!roles.Any(r => r.Name == role.Name))
@@ -133,27 +154,6 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
                 context.Add(role);
             }
         }
-
-
-        var hasher = new PasswordHasher<AppUser>();
-
-        AppUser seededAdmin = new()
-        {
-            Id = Guid.NewGuid().ToString(),
-            UserName = "root",
-            AccessFailedCount = 0,
-            Email = "root@example.com",
-            NormalizedEmail = "root@example.com",
-            EmailConfirmed = true,
-            NormalizedUserName = "root",
-            TwoFactorEnabled = false,
-            ExpirationDate = null,
-            RefreshToken = null,
-            FirstName = "root",
-            LastName = "root",
-        };
-
-        seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
 
         string adminRoleId = newRoles.Where(r => r.Name == "Admin")
             .Select(r => r.Id)
@@ -190,55 +190,19 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
             return;
         }
 
-        List<IdentityRole> newRoles = 
-        [
-            new IdentityRole 
-            { 
-                Id = Guid.NewGuid().ToString(),
-                Name = "User",
-                NormalizedName = "User"
-            },
-            new IdentityRole
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Admin",
-                NormalizedName = "Admin"
-            }
-        ];
-
         foreach (var role in newRoles)
         {
             if (!roles.Any(r => r.Name == role.Name))
             {
                 context.Add(role);
-            }    
+            }
         }
-
-        var hasher = new PasswordHasher<AppUser>();
-
-        AppUser seededAdmin = new()
-        {
-            Id = Guid.NewGuid().ToString(),
-            UserName = "root",
-            AccessFailedCount = 0,
-            Email = "root@example.com",
-            NormalizedEmail = "root@example.com",
-            EmailConfirmed = true,
-            NormalizedUserName = "root",
-            TwoFactorEnabled = false,
-            ExpirationDate = null,
-            RefreshToken = null,
-            FirstName = "root",
-            LastName = "root",
-        };
-
-        seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
 
         string adminRoleId = newRoles.Where(r => r.Name == "Admin")
             .Select(r => r.Id)
             .First();
 
-        var seededAdminRole = new IdentityUserRole<string> 
+        var seededAdminRole = new IdentityUserRole<string>
         {
             RoleId = adminRoleId,
             UserId = seededAdmin.Id
