@@ -8,7 +8,6 @@ using MovieReservation.Models;
 using MovieReservation.Services;
 using MovieReservation.SwaggerOperationFilters;
 using System.Reflection;
-using System.Threading;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -119,7 +118,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
                 Name = "User",
                 NormalizedName = "User"
             },
-            new IdentityRole{
+            new IdentityRole
+            {
                 Id = Guid.NewGuid().ToString(),
                 Name = "Admin",
                 NormalizedName = "Admin"
@@ -198,7 +198,8 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
                 Name = "User",
                 NormalizedName = "User"
             },
-            new IdentityRole{
+            new IdentityRole
+            {
                 Id = Guid.NewGuid().ToString(),
                 Name = "Admin",
                 NormalizedName = "Admin"
