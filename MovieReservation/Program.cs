@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieReservation.Data.DbContexts;
@@ -38,11 +37,9 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<JwtSecurityRequirementOperationFilter>();
 
-    string docXmlFileName = Assembly.GetExecutingAssembly()
-        .GetName()
-        .Name + ".xml";
+    string xmlCommentFilePath = Path.Combine(AppContext.BaseDirectory, Assembly.GetExecutingAssembly().GetName().Name + ".xml");
 
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, docXmlFileName));
+    options.IncludeXmlComments(xmlCommentFilePath);
 });
 
 builder.Services.AddTransient<IRsaKeyHandler, LocalRsaKeyHandler>();
@@ -99,13 +96,13 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
             Id = Guid.NewGuid().ToString(),
             Name = "User",
             NormalizedName = "User"
-         },
-         new IdentityRole
-         {
+        },
+        new IdentityRole
+        {
             Id = Guid.NewGuid().ToString(),
             Name = "Admin",
             NormalizedName = "Admin"
-         }
+        }
     ];
 
     var hasher = new PasswordHasher<AppUser>();
