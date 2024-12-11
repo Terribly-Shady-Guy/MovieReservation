@@ -7,24 +7,29 @@ namespace MovieReservation.Tests
     public class MoviePosterFileAttribute_IsValid
     {
         [Theory]
-        [InlineData("valid-test-file-1.jpeg", 30 * 1024, true)]
-        [InlineData("valid-test-file-2.png", 30 * 1024, true)]
-        [InlineData("invalid-test-file-1.txt", 30 * 1024, false)]
-        [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), false)]
-        public void IsValid_WithFormFile_ReturnsExpected(string fileName, int fileSize, bool expected)
+        [InlineData("valid-test-file-1.jpeg", 30 * 1024, "image/jpeg", true)]
+        [InlineData("valid-test-file-2.png", 30 * 1024, "image/png", true)]
+        [InlineData("invalid-test-file-1.txt", 30 * 1024, "text/plain", false)]
+        [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), "text/jpeg", false)]
+        [InlineData("invalid-test-file-mime.jpg", 11 * 1024, "text/plain", false)]
+        public void IsValid_WithFormFile_ReturnsExpected(string fileName, int fileSize, string contentType, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
             using MemoryStream fakeFileStream = new(fileBytes);
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
-            IFormFile fakeUploadedFile = new FormFile(baseStream: fakeFileStream, 
-                baseStreamOffset: StreamOffset, 
-                name: FormInputName, 
-                fileName: fileName, 
-                length: fileSize); 
-            
-            MoviePosterFileAttribute attribute = new();
+            FormFile fakeUploadedFile = new(baseStream: fakeFileStream,
+                baseStreamOffset: StreamOffset,
+                name: FormInputName,
+                fileName: fileName,
+                length: fileSize)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+
+            var attribute = new MoviePosterFileAttribute();
             bool result = attribute.IsValid(fakeUploadedFile);
 
             Assert.Equal(expected, result);
