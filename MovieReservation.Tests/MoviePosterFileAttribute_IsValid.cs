@@ -10,7 +10,7 @@ namespace MovieReservation.Tests
         [InlineData("valid-test-file-1.jpeg", 30 * 1024, "image/jpeg", true)]
         [InlineData("valid-test-file-2.png", 30 * 1024, "image/png", true)]
         [InlineData("invalid-test-file-1.txt", 30 * 1024, "text/plain", false)]
-        [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), "text/jpeg", false)]
+        [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), "image/jpeg", false)]
         [InlineData("invalid-test-file-mime.jpg", 11 * 1024, "text/plain", false)]
         public void IsValid_WithFormFile_ReturnsExpected(string fileName, int fileSize, string contentType, bool expected)
         {
