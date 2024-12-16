@@ -15,7 +15,7 @@ namespace MovieReservation.Tests
         public void IsValid_WithFormFile_ReturnsExpected(string fileName, int fileSize, string contentType, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
-            using MemoryStream fakeFileStream = new(fileBytes);
+            using var fakeFileStream = new MemoryStream(fileBytes);
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
@@ -40,7 +40,7 @@ namespace MovieReservation.Tests
         public void IsValid_WithInvalidType_ReturnsFalse()
         {
             int invalidTypeTestValue = 0;
-            MoviePosterFileAttribute attribute = new();
+            var attribute = new MoviePosterFileAttribute();
 
             bool result = attribute.IsValid(invalidTypeTestValue);
 
@@ -52,7 +52,7 @@ namespace MovieReservation.Tests
         {
             IFormFile? fakeUploadedFile = null;
 
-            MoviePosterFileAttribute attribute = new();
+            var attribute = new MoviePosterFileAttribute();
             bool result = attribute.IsValid(fakeUploadedFile);
 
             Assert.False(result);

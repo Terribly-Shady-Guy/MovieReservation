@@ -57,7 +57,7 @@ namespace MovieReservation.Services
         {
             Movie? movieToDelete = await _dbContext.Movies.FindAsync(id);
 
-            if (movieToDelete is  null)
+            if (movieToDelete is null)
             {
                 return false;
             }

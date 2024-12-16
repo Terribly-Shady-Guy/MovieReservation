@@ -16,7 +16,7 @@ namespace MovieReservation.ValidationAttributes
                 return false;
             }
 
-            string extension = Path.GetExtension(file.FileName)
+            string extension = Path.GetExtension(Path.GetFileName(file.FileName))
                 .ToLowerInvariant();
 
             if (!_validExtensions.Any(ext => ext == extension) || !_validMimeTypes.Any(mime => mime == file.ContentType))

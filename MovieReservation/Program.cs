@@ -80,6 +80,7 @@ builder.Services.AddAuthentication(configureOptions =>
 
 builder.Services.AddIdentityCore<AppUser>()
     .AddRoles<IdentityRole>()
+    .AddSignInManager()
     .AddEntityFrameworkStores<MovieReservationDbContext>()
     .AddDefaultTokenProviders();
 
