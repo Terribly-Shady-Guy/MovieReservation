@@ -34,7 +34,7 @@ namespace MovieReservation.SwaggerOperationFilters
                 Description = "The access token has not been provided in \"Authorization\" header."
             });
 
-            var requirementScheme = new OpenApiSecurityScheme
+            var requirementSecurityScheme = new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference
                 {
@@ -45,7 +45,7 @@ namespace MovieReservation.SwaggerOperationFilters
             
             operation.Security.Add(new OpenApiSecurityRequirement
             {
-                { requirementScheme, Array.Empty<string>() }
+                { requirementSecurityScheme, Array.Empty<string>() }
             });
         }
     }
