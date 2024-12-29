@@ -19,7 +19,8 @@ namespace MovieReservation.Tests
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
-            IFormFile fakeUploadedFile = new FormFile(baseStream: fakeFileStream,
+            IFormFile fakeUploadedFile = new FormFile(
+                baseStream: fakeFileStream,
                 baseStreamOffset: StreamOffset,
                 name: FormInputName,
                 fileName: fileName,

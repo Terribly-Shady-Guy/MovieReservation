@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlCommentFilePath);
 });
 
-builder.Services.AddTransient<IRsaKeyHandler, LocalRsaKeyHandler>();
+builder.Services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
 
 builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
     .Configure<IRsaKeyHandler, IConfiguration>((options, keyHandler, config) =>
