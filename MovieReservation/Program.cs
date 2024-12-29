@@ -91,7 +91,7 @@ builder.Services.AddDbContext<MovieReservationDbContext>(options =>
         config.EnableRetryOnFailure();
     });
 
-    options.AddDataSeeding();
+    options.UseDataSeeding();
 });
 
 builder.Services.AddProblemDetails();

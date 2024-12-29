@@ -6,7 +6,7 @@ namespace MovieReservation
 {
     public static class DbContextOptionsBuilderExtensions
     {
-        public static void AddDataSeeding(this DbContextOptionsBuilder options)
+        public static void UseDataSeeding(this DbContextOptionsBuilder options)
         {
             List<IdentityRole> newRoles =
             [
