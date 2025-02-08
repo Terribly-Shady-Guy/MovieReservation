@@ -78,7 +78,17 @@ builder.Services.AddAuthentication(configureOptions =>
 })
     .AddJwtBearer();
 
-builder.Services.AddIdentityCore<AppUser>()
+builder.Services.AddIdentityCore<AppUser>(config =>
+{
+    config.Password.RequireNonAlphanumeric = true;
+    config.Password.RequiredLength = 8;
+    config.Password.RequireUppercase = true;
+    config.Password.RequireLowercase = true;
+    config.Password.RequireDigit = true;
+
+    config.SignIn.RequireConfirmedEmail = true;
+    config.SignIn.RequireConfirmedAccount = true;
+})
     .AddRoles<IdentityRole>()
     .AddSignInManager()
     .AddEntityFrameworkStores<MovieReservationDbContext>()
@@ -109,7 +119,7 @@ builder.Services.AddTransient<LocationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
