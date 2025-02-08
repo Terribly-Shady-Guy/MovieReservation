@@ -78,16 +78,16 @@ builder.Services.AddAuthentication(configureOptions =>
 })
     .AddJwtBearer();
 
-builder.Services.AddIdentityCore<AppUser>(config =>
+builder.Services.AddIdentityCore<AppUser>(options =>
 {
-    config.Password.RequireNonAlphanumeric = true;
-    config.Password.RequiredLength = 8;
-    config.Password.RequireUppercase = true;
-    config.Password.RequireLowercase = true;
-    config.Password.RequireDigit = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireDigit = true;
 
-    config.SignIn.RequireConfirmedEmail = true;
-    config.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedEmail = true;
+    options.SignIn.RequireConfirmedAccount = true;
 })
     .AddRoles<IdentityRole>()
     .AddSignInManager()
