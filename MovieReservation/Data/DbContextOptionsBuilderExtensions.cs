@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieReservation.Models;
 
-namespace MovieReservation
+namespace MovieReservation.Data
 {
     public static class DbContextOptionsBuilderExtensions
     {

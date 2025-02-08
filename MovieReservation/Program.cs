@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MovieReservation;
+using MovieReservation.Data;
 using MovieReservation.Data.DbContexts;
 using MovieReservation.Models;
 using MovieReservation.Services;
