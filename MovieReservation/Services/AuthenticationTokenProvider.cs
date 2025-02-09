@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.JsonWebTokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Models;
 using MovieReservation.ViewModels;
@@ -7,14 +8,19 @@ using System.Security.Cryptography;
 
 namespace MovieReservation.Services
 {
+    public class JwtOptions
+    {
+        public string Issuer { get; set; } = string.Empty;
+        public string Audience { get; set; } = string.Empty;
+    }
     public class AuthenticationTokenProvider
     {
-        private readonly IConfiguration _configuration;
+        private readonly IOptionsMonitor<JwtOptions> _options;
         private readonly IRsaKeyHandler _securityKeyHandler;
 
-        public AuthenticationTokenProvider(IConfiguration configuration, IRsaKeyHandler securityKeyHandler)
+        public AuthenticationTokenProvider(IOptionsMonitor<JwtOptions> options, IRsaKeyHandler securityKeyHandler)
         {
-            _configuration = configuration;
+            _options = options;
             _securityKeyHandler = securityKeyHandler;
         }
 
@@ -32,7 +38,6 @@ namespace MovieReservation.Services
 
         public async Task<TokenValidationResult> ValidateExpiredJwtToken(string expiredToken)
         {
-            var jwtConfig = _configuration.GetSection("Jwt");
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPublicAsync();
 
             var tokenParams = new TokenValidationParameters
@@ -44,12 +49,11 @@ namespace MovieReservation.Services
                     SecurityAlgorithms.RsaSha256
                 ],
                 IssuerSigningKey = securityKey,
-                ValidAudience = jwtConfig.GetValue<string>("Audience"),
-                ValidIssuer = jwtConfig.GetValue<string>("Issuer")
+                ValidAudience = _options.CurrentValue.Audience,
+                ValidIssuer = _options.CurrentValue.Issuer,
             };
 
             var handler = new JsonWebTokenHandler();
-
             var result = await handler.ValidateTokenAsync(expiredToken, tokenParams);
 
             return result;
@@ -60,17 +64,16 @@ namespace MovieReservation.Services
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPrivateAsync();
 
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
-            var jwtConfig = _configuration.GetSection("Jwt");
 
             var descriptor = new SecurityTokenDescriptor()
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(10),
                 Subject = identity,
-                Issuer = jwtConfig.GetValue<string>("Issuer"),
-                Audience = jwtConfig.GetValue<string>("Audience")
+                Issuer = _options.CurrentValue.Issuer,
+                Audience = _options.CurrentValue.Audience,
             };
-
+            
             return new JsonWebTokenHandler().CreateToken(descriptor);
 
         }

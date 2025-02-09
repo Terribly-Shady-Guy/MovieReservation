@@ -78,7 +78,7 @@ namespace MovieReservation.Services
             {
                 return null;
             }
-
+            
             var identity = new ClaimsIdentity(accessToken.Claims);
             Token newToken = await _tokenProvider.GenerateTokens(user, identity);
 

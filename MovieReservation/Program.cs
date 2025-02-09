@@ -108,6 +108,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddHealthChecks();
 
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddTransient<AuthenticationService>();
 builder.Services.AddTransient<AuthenticationTokenProvider>();
 
