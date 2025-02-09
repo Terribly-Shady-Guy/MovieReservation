@@ -13,7 +13,7 @@ namespace MovieReservation.Services
         public string Issuer { get; set; } = string.Empty;
         public string Audience { get; set; } = string.Empty;
     }
-    public class AuthenticationTokenProvider
+    public class AuthenticationTokenProvider : IAuthenticationTokenProvider
     {
         private readonly IOptionsMonitor<JwtOptions> _options;
         private readonly IRsaKeyHandler _securityKeyHandler;
@@ -36,7 +36,7 @@ namespace MovieReservation.Services
             return tokenModel;
         }
 
-        public async Task<TokenValidationResult> ValidateExpiredJwtToken(string expiredToken)
+        public async Task<TokenValidationResult> ValidateExpiredToken(string expiredToken)
         {
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPublicAsync();
 
@@ -73,7 +73,7 @@ namespace MovieReservation.Services
                 Issuer = _options.CurrentValue.Issuer,
                 Audience = _options.CurrentValue.Audience,
             };
-            
+
             return new JsonWebTokenHandler().CreateToken(descriptor);
 
         }

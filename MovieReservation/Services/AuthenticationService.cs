@@ -10,9 +10,9 @@ namespace MovieReservation.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly AuthenticationTokenProvider _tokenProvider;
+        private readonly IAuthenticationTokenProvider _tokenProvider;
 
-        public AuthenticationService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, AuthenticationTokenProvider tokenProvider)
+        public AuthenticationService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthenticationTokenProvider tokenProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -54,7 +54,7 @@ namespace MovieReservation.Services
 
         public async Task<Token?> RefreshTokens(string access, string refresh)
         {
-            var result = await _tokenProvider.ValidateExpiredJwtToken(access);
+            var result = await _tokenProvider.ValidateExpiredToken(access);
             if (!result.IsValid || result.SecurityToken is not JsonWebToken accessToken)
             {
                 return null;
