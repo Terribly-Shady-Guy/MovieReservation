@@ -108,8 +108,8 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddHealthChecks();
 
-builder.Services.AddTransient<UserService>();
-builder.Services.AddTransient<AuthenticationTokenManager>();
+builder.Services.AddTransient<AuthenticationService>();
+builder.Services.AddTransient<AuthenticationTokenProvider>();
 
 builder.Services.AddTransient<MovieService>();
 builder.Services.AddTransient<IFileHandler, LocalFileHandler>();

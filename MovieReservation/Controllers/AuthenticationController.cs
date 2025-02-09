@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using MovieReservation.Models;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
 using System.Security.Claims;
@@ -12,13 +10,11 @@ namespace MovieReservation.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UserService _userService;
-        private readonly AuthenticationTokenManager _manager;
+        private readonly AuthenticationService _authentication;
 
-        public AuthenticationController(UserService userService, AuthenticationTokenManager manager)
+        public AuthenticationController(AuthenticationService authentication)
         {
-            _userService = userService;
-            _manager = manager;
+            _authentication = authentication;
         }
 
         /// <summary>An endpoint for user login</summary>
@@ -36,23 +32,15 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult<AccessTokenResponse>> Login(UserLoginVM userLogin)
         {
-            AppUser? user = await _userService.GetUserAsync(userLogin);
+            Token? token = await _authentication.Login(userLogin);
 
-            if (user == null)
+            if (token == null)
             {
-                return Unauthorized($"User {userLogin.Username} does not exist.");
+                return Unauthorized();
             }
 
-            Token token = await _manager.GenerateTokens(user);
-
-            await _userService.UpdateRefreshToken(token.RefreshToken, token.RefreshExpiration, user);
-
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
-
-            return Ok(new AccessTokenResponse
-            {
-                Token = token.AccessToken 
-            });
+            return Ok(new AccessTokenResponse { Token = token.AccessToken });
         }
 
         /// <summary>
@@ -71,53 +59,21 @@ namespace MovieReservation.Controllers
         [HttpPatch]
         public async Task<ActionResult<AccessTokenResponse>> RefreshTokens(AccessTokenResponse expiredToken)
         {
-            string? refreshToken = Request.Cookies["refresh-token"];
-
-            if (refreshToken is null)
-            {
-                return Unauthorized(new { Message = "A refresh token is not available" });
-            }
-
-            TokenValidationResult result = await _manager.ValidateExpiredJwtToken(expiredToken.Token);
-
-            if (!result.IsValid)
-            {
-                return Unauthorized(new { Message = "This is not a valid access token" });
-            }
-            
-            Claim? userIdClaim = result.ClaimsIdentity.Claims
-                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            int userId;
-            if (userIdClaim is null)
+            string? refresh = Request.Cookies["refresh-token"];
+            if (refresh == null)
             {
                 return Unauthorized();
             }
-            else if (!int.TryParse(userIdClaim.Value, out userId))
+
+            Token? token = await _authentication.RefreshTokens(expiredToken.Token, refresh);
+
+            if (token == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
-            AppUser? user = await _userService.GetUserAsync(userId);
-
-            if (user is null)
-            {
-                return NotFound(new { Message = "The user does not exist." });
-            }
-            else if (user.RefreshToken != refreshToken || user.ExpirationDate <= DateTime.UtcNow)
-            {
-                return Unauthorized(new { Message = "the refresh token is not valid." });
-            } 
-            
-            Token token = await _manager.GenerateTokens(user);
-
-            await _userService.UpdateRefreshToken(token.RefreshToken, token.RefreshExpiration, user);
             SetResfreshTokenCookie(token.RefreshToken, token.RefreshExpiration);
-
-            return Ok(new AccessTokenResponse
-            {
-                Token = token.AccessToken
-            });
+            return new AccessTokenResponse { Token = token.AccessToken };
         }
 
         /// <summary>
@@ -143,11 +99,6 @@ namespace MovieReservation.Controllers
                 return NotFound();
             }
 
-            if (!int.TryParse(userIdClaim.Value, out int userId))
-            {
-                return BadRequest();
-            }
-
             string? refreshToken = Request.Cookies["refresh-token"];
 
             if (refreshToken is null)
@@ -155,7 +106,7 @@ namespace MovieReservation.Controllers
                 return Unauthorized();
             }
 
-            await _userService.UpdateRefreshToken(null, null, userId);
+           await _authentication.Logout(userIdClaim.Value);
             Response.Cookies.Delete("refresh-token");
 
             return NoContent();

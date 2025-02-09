@@ -7,28 +7,22 @@ using System.Security.Cryptography;
 
 namespace MovieReservation.Services
 {
-    public class AuthenticationTokenManager
+    public class AuthenticationTokenProvider
     {
         private readonly IConfiguration _configuration;
         private readonly IRsaKeyHandler _securityKeyHandler;
 
-        public AuthenticationTokenManager(IConfiguration configuration, IRsaKeyHandler securityKeyHandler)
+        public AuthenticationTokenProvider(IConfiguration configuration, IRsaKeyHandler securityKeyHandler)
         {
             _configuration = configuration;
             _securityKeyHandler = securityKeyHandler;
         }
 
-        public async Task<Token> GenerateTokens(AppUser user)
+        public async Task<Token> GenerateTokens(AppUser user, ClaimsIdentity identity)
         {
-            Claim[] claims =
-            [
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                //new Claim(ClaimTypes.Role, user.Role),
-            ];
-
             var tokenModel = new Token
             {
-                AccessToken = await GenerateAccessToken(claims)
+                AccessToken = await GenerateAccessToken(identity)
             };
 
             tokenModel = GenerateRefreshToken(tokenModel);
@@ -61,7 +55,7 @@ namespace MovieReservation.Services
             return result;
         }
 
-        private async Task<string> GenerateAccessToken(Claim[] claims)
+        private async Task<string> GenerateAccessToken(ClaimsIdentity identity)
         {
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPrivateAsync();
 
@@ -72,7 +66,7 @@ namespace MovieReservation.Services
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(10),
-                Subject = new ClaimsIdentity(claims),
+                Subject = identity,
                 Issuer = jwtConfig.GetValue<string>("Issuer"),
                 Audience = jwtConfig.GetValue<string>("Audience")
             };
