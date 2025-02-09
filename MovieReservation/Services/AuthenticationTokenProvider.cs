@@ -13,6 +13,7 @@ namespace MovieReservation.Services
         public string Issuer { get; set; } = string.Empty;
         public string Audience { get; set; } = string.Empty;
     }
+
     public class AuthenticationTokenProvider : IAuthenticationTokenProvider
     {
         private readonly IOptionsMonitor<JwtOptions> _options;
@@ -65,7 +66,7 @@ namespace MovieReservation.Services
 
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
 
-            var descriptor = new SecurityTokenDescriptor()
+            var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(10),
@@ -74,11 +75,11 @@ namespace MovieReservation.Services
                 Audience = _options.CurrentValue.Audience,
             };
 
-            return new JsonWebTokenHandler().CreateToken(descriptor);
+            return new JsonWebTokenHandler().CreateToken(tokenDescriptor);
 
         }
 
-        private Token GenerateRefreshToken(Token tokenModel)
+        private static Token GenerateRefreshToken(Token tokenModel)
         {
             tokenModel.RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
             tokenModel.RefreshExpiration = DateTime.UtcNow.AddDays(4);
