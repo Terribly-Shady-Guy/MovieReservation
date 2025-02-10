@@ -25,9 +25,9 @@ namespace MovieReservation.Services
             _securityKeyHandler = securityKeyHandler;
         }
 
-        public async Task<Token> GenerateTokens(AppUser user, ClaimsIdentity identity)
+        public async Task<AuthenticationToken> GenerateTokens(AppUser user, ClaimsIdentity identity)
         {
-            var tokenModel = new Token
+            var tokenModel = new AuthenticationToken
             {
                 AccessToken = await GenerateAccessToken(identity)
             };
@@ -79,7 +79,7 @@ namespace MovieReservation.Services
 
         }
 
-        private static Token GenerateRefreshToken(Token tokenModel)
+        private static AuthenticationToken GenerateRefreshToken(AuthenticationToken tokenModel)
         {
             tokenModel.RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
             tokenModel.RefreshExpiration = DateTime.UtcNow.AddDays(4);

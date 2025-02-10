@@ -32,7 +32,7 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult<AccessTokenResponse>> Login(UserLoginVM userLogin)
         {
-            Token? token = await _authentication.Login(userLogin);
+            AuthenticationToken? token = await _authentication.Login(userLogin);
 
             if (token == null)
             {
@@ -65,7 +65,7 @@ namespace MovieReservation.Controllers
                 return Unauthorized();
             }
 
-            Token? token = await _authentication.RefreshTokens(expiredToken.Token, refresh);
+            AuthenticationToken? token = await _authentication.RefreshTokens(expiredToken.Token, refresh);
 
             if (token == null)
             {

@@ -19,7 +19,7 @@ namespace MovieReservation.Services
             _tokenProvider = tokenProvider;
         }
 
-        public async Task<Token?> Login(UserLoginVM userCredentials)
+        public async Task<AuthenticationToken?> Login(UserLoginVM userCredentials)
         {
             AppUser? user = await _userManager.FindByNameAsync(userCredentials.Username);
             if (user == null) { return null; }
@@ -42,7 +42,7 @@ namespace MovieReservation.Services
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            Token token = await _tokenProvider.GenerateTokens(user, new ClaimsIdentity(claims));
+            AuthenticationToken token = await _tokenProvider.GenerateTokens(user, new ClaimsIdentity(claims));
 
             user.RefreshToken = token.RefreshToken;
             user.ExpirationDate = token.RefreshExpiration;
@@ -52,7 +52,7 @@ namespace MovieReservation.Services
             return token;
         }
 
-        public async Task<Token?> RefreshTokens(string access, string refresh)
+        public async Task<AuthenticationToken?> RefreshTokens(string access, string refresh)
         {
             var result = await _tokenProvider.ValidateExpiredToken(access);
             if (!result.IsValid || result.SecurityToken is not JsonWebToken accessToken)
@@ -80,7 +80,7 @@ namespace MovieReservation.Services
             }
             
             var identity = new ClaimsIdentity(accessToken.Claims);
-            Token newToken = await _tokenProvider.GenerateTokens(user, identity);
+            AuthenticationToken newToken = await _tokenProvider.GenerateTokens(user, identity);
 
             user.RefreshToken = newToken.RefreshToken;
             user.ExpirationDate = newToken.RefreshExpiration;

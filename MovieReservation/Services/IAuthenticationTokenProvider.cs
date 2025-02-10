@@ -7,7 +7,7 @@ namespace MovieReservation.Services
 {
     public interface IAuthenticationTokenProvider
     {
-        Task<Token> GenerateTokens(AppUser user, ClaimsIdentity identity);
+        Task<AuthenticationToken> GenerateTokens(AppUser user, ClaimsIdentity identity);
         Task<TokenValidationResult> ValidateExpiredToken(string expiredToken);
     }
 }
