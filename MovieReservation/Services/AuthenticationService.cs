@@ -31,18 +31,17 @@ namespace MovieReservation.Services
                 return null;
             }
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
 
-            List<Claim> claims = [
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-                ];
-
+            var accessTokenIdentity = new ClaimsIdentity();
+            accessTokenIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            
             foreach (string role in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                accessTokenIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
             }
 
-            AuthenticationToken token = await _tokenProvider.GenerateTokens(new ClaimsIdentity(claims));
+            AuthenticationToken token = await _tokenProvider.GenerateTokens(accessTokenIdentity);
 
             user.RefreshToken = token.RefreshToken;
             user.ExpirationDate = token.RefreshExpiration;
