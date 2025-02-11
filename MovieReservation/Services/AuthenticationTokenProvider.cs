@@ -15,10 +15,11 @@ namespace MovieReservation.Services
 
     public class AuthenticationTokenProvider : IAuthenticationTokenProvider
     {
-        private readonly IOptionsMonitor<JwtOptions> _options;
+        private readonly IOptions<JwtOptions> _options;
         private readonly IRsaKeyHandler _securityKeyHandler;
+        private readonly JsonWebTokenHandler _jwtHandler = new JsonWebTokenHandler();
 
-        public AuthenticationTokenProvider(IOptionsMonitor<JwtOptions> options, IRsaKeyHandler securityKeyHandler)
+        public AuthenticationTokenProvider(IOptions<JwtOptions> options, IRsaKeyHandler securityKeyHandler)
         {
             _options = options;
             _securityKeyHandler = securityKeyHandler;
@@ -49,12 +50,12 @@ namespace MovieReservation.Services
                     SecurityAlgorithms.RsaSha256
                 ],
                 IssuerSigningKey = securityKey,
-                ValidAudience = _options.CurrentValue.Audience,
-                ValidIssuer = _options.CurrentValue.Issuer,
+                ValidAudience = _options.Value.Audience,
+                ValidIssuer = _options.Value.Issuer,
+                ClockSkew = TimeSpan.FromSeconds(30),
             };
 
-            var handler = new JsonWebTokenHandler();
-            var result = await handler.ValidateTokenAsync(expiredToken, tokenParams);
+            var result = await _jwtHandler.ValidateTokenAsync(expiredToken, tokenParams);
 
             return result;
         }
@@ -70,11 +71,12 @@ namespace MovieReservation.Services
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(10),
                 Subject = identity,
-                Issuer = _options.CurrentValue.Issuer,
-                Audience = _options.CurrentValue.Audience,
+                Issuer = _options.Value.Issuer,
+                Audience = _options.Value.Audience,
+                IssuedAt = DateTime.UtcNow,
             };
 
-            return new JsonWebTokenHandler().CreateToken(tokenDescriptor);
+            return _jwtHandler.CreateToken(tokenDescriptor);
 
         }
 

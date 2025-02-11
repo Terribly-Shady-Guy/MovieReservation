@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace MovieReservation.Controllers

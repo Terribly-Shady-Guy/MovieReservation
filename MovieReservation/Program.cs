@@ -67,7 +67,8 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
             ValidAlgorithms = [SecurityAlgorithms.RsaSha256],
             IssuerSigningKey = signingKey,
             ValidAudience = jwtConfig.GetValue<string>("Audience"),
-            ValidIssuer = jwtConfig.GetValue<string>("Issuer")
+            ValidIssuer = jwtConfig.GetValue<string>("Issuer"),
+            ClockSkew = TimeSpan.FromSeconds(30)
         };
     });
 

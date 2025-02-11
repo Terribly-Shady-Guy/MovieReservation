@@ -25,7 +25,7 @@ namespace MovieReservation.Services
             if (user == null) { return null; }
 
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, userCredentials.Password, true);
-
+            
             if (!result.Succeeded)
             {
                 return null;
@@ -34,7 +34,7 @@ namespace MovieReservation.Services
             IList<string> userRoles = await _userManager.GetRolesAsync(user);
 
             var accessTokenIdentity = new ClaimsIdentity();
-            accessTokenIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
             
             foreach (string role in userRoles)
             {
@@ -59,7 +59,7 @@ namespace MovieReservation.Services
                 return null;
             }
 
-             bool claimResult = accessToken.TryGetClaim(ClaimTypes.NameIdentifier, out Claim userIdClaim);
+             bool claimResult = accessToken.TryGetClaim(JwtRegisteredClaimNames.Sub, out Claim userIdClaim);
 
             if (!claimResult)
             {
