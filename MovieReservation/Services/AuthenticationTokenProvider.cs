@@ -25,7 +25,7 @@ namespace MovieReservation.Services
             _securityKeyHandler = securityKeyHandler;
         }
 
-        public async Task<AuthenticationToken> GenerateTokens(AppUser user, ClaimsIdentity identity)
+        public async Task<AuthenticationToken> GenerateTokens(ClaimsIdentity identity)
         {
             var tokenModel = new AuthenticationToken
             {

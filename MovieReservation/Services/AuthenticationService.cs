@@ -42,7 +42,7 @@ namespace MovieReservation.Services
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            AuthenticationToken token = await _tokenProvider.GenerateTokens(user, new ClaimsIdentity(claims));
+            AuthenticationToken token = await _tokenProvider.GenerateTokens(new ClaimsIdentity(claims));
 
             user.RefreshToken = token.RefreshToken;
             user.ExpirationDate = token.RefreshExpiration;
@@ -80,7 +80,7 @@ namespace MovieReservation.Services
             }
             
             var identity = new ClaimsIdentity(accessToken.Claims);
-            AuthenticationToken newToken = await _tokenProvider.GenerateTokens(user, identity);
+            AuthenticationToken newToken = await _tokenProvider.GenerateTokens(identity);
 
             user.RefreshToken = newToken.RefreshToken;
             user.ExpirationDate = newToken.RefreshExpiration;
