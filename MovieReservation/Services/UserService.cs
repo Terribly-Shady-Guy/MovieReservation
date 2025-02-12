@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MovieReservation.Data.DbContexts;
 using MovieReservation.Models;
 using MovieReservation.ViewModels;
 
@@ -8,90 +6,53 @@ namespace MovieReservation.Services
 {
     public class UserService
     {
-        private readonly MovieReservationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserService(MovieReservationDbContext context)
+        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<string?> AddNewUserAsync(NewUserVM newUser)
         {
-            var hasher = new PasswordHasher<AppUser>();
-
-            var user = new AppUser() 
-            { 
-                Email = newUser.Email,
-                UserName = newUser.Username,
+            var user = new AppUser()
+            {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
-                //Role = "User"
+                Email = newUser.Email,
+                UserName = newUser.Username,
             };
 
-            user.PasswordHash = hasher.HashPassword(user, newUser.Password);
+            var result = await _userManager.CreateAsync(user, newUser.Password);
+            if (!result.Succeeded)
+            {
+                return null;
+            }
 
-            _context.Add(user);
-            await _context.SaveChangesAsync();
+            result = await _userManager.AddToRoleAsync(user, "User");
+            if (!result.Succeeded) { return null; }
 
-            return await _context.Users.Where(e => e.UserName == user.UserName && e.Email == user.Email)
-                .Select(e => e.Id)
-                .FirstOrDefaultAsync();
+            return user.Id;
         }
 
         public async Task<bool> PromoteToAdmin(string id)
         {
-            AppUser? user = await _context.Users.FindAsync(id);
-
+            AppUser? user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return false;
             }
 
-            //user.Role = "Admin";
+            IdentityResult result = await _userManager.AddToRoleAsync(user, "Admin");
 
-            _context.Update(user);
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<AppUser?> GetUserAsync(UserLoginVM loginUser)
-        {
-            List<AppUser> users = await _context.Users.Where(e => e.UserName == loginUser.Username).ToListAsync();
-            var hasher = new PasswordHasher<AppUser>();
-
-            foreach (var user in users)
+            if (!result.Succeeded)
             {
-                var result = hasher.VerifyHashedPassword(user, user.PasswordHash, loginUser.Password);
-                if (result == PasswordVerificationResult.Success)
-                {
-                    return user;
-                }
+                return false;
             }
 
-            return null;
-        }
-
-        public async Task<AppUser?> GetUserAsync(int id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
-
-        public async Task UpdateRefreshToken(string? token, DateTime? expiration, AppUser user)
-        {
-            user.RefreshToken = token;
-            user.ExpirationDate = expiration;
-
-            _context.Update(user);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateRefreshToken(string? token, DateTime? expiration, int id)
-        {
-            AppUser? user = await GetUserAsync(id);
-            if (user == null) { return; }
-
-            await UpdateRefreshToken(token, expiration, user);
+            return true;
         }
     }
 }

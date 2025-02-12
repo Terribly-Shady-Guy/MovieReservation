@@ -32,7 +32,7 @@ namespace MovieReservation.Controllers
                 return BadRequest();
             }
 
-            return Created(id.ToString(), new { Mesaage = "Account created sucessfully." });
+            return Created(id, new { Message = "Account created sucessfully." });
         }
 
         /// <summary>

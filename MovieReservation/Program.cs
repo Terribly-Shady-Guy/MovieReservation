@@ -112,6 +112,7 @@ builder.Services.AddHealthChecks();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddTransient<AuthenticationService>();
 builder.Services.AddTransient<IAuthenticationTokenProvider, AuthenticationTokenProvider>();
+builder.Services.AddTransient<UserService>();
 
 builder.Services.AddTransient<MovieService>();
 builder.Services.AddTransient<IFileHandler, LocalFileHandler>();
