@@ -46,22 +46,9 @@ namespace MovieReservation.Data
 
             options.UseSeeding((context, _) =>
             {
-                var user = context.Set<AppUser>()
-                    .FirstOrDefault(a => a.UserName == "root" && a.Email == "root@example.com");
-
-                if (user is not null)
-                {
-                    return;
-                }
-
                 var roles = context.Set<IdentityRole>()
                     .Where(r => r.Name == "User" || r.Name == "Admin")
                     .ToList();
-
-                if (roles.Count > 0)
-                {
-                    return;
-                }
 
                 foreach (var role in newRoles)
                 {
@@ -71,40 +58,33 @@ namespace MovieReservation.Data
                     }
                 }
 
-                string adminRoleId = newRoles.Where(r => r.Name == "Admin")
+                var user = context.Set<AppUser>()
+                    .FirstOrDefault(a => a.UserName == "root" && a.Email == "root@example.com");
+
+                if (user is null)
+                {
+                    string adminRoleId = newRoles.Where(r => r.Name == "Admin")
                     .Select(r => r.Id)
                     .First();
 
-                var seededAdminRole = new IdentityUserRole<string>
-                {
-                    RoleId = adminRoleId,
-                    UserId = seededAdmin.Id
-                };
+                    var seededAdminRole = new IdentityUserRole<string>
+                    {
+                        RoleId = adminRoleId,
+                        UserId = seededAdmin.Id
+                    };
 
-                context.Add(seededAdminRole);
-                context.Add(seededAdmin);
+                    context.Add(seededAdmin);
+                    context.Add(seededAdminRole);
+                }
 
                 context.SaveChanges();
             });
 
             options.UseAsyncSeeding(async (context, _, cancellationToken) =>
             {
-                var user = await context.Set<AppUser>()
-                    .FirstOrDefaultAsync(a => a.UserName == "root" && a.Email == "root@example.com", cancellationToken: cancellationToken);
-
-                if (user is not null)
-                {
-                    return;
-                }
-
                 var roles = await context.Set<IdentityRole>()
                     .Where(r => r.Name == "User" || r.Name == "Admin")
                     .ToListAsync(cancellationToken);
-
-                if (roles.Count > 0)
-                {
-                    return;
-                }
 
                 foreach (var role in newRoles)
                 {
@@ -114,18 +94,24 @@ namespace MovieReservation.Data
                     }
                 }
 
-                string adminRoleId = newRoles.Where(r => r.Name == "Admin")
+                var user = await context.Set<AppUser>()
+                    .FirstOrDefaultAsync(a => a.UserName == "root" && a.Email == "root@example.com", cancellationToken: cancellationToken);
+
+                if (user is null)
+                {
+                    string adminRoleId = newRoles.Where(r => r.Name == "Admin")
                     .Select(r => r.Id)
                     .First();
 
-                var seededAdminRole = new IdentityUserRole<string>
-                {
-                    RoleId = adminRoleId,
-                    UserId = seededAdmin.Id
-                };
+                    var seededAdminRole = new IdentityUserRole<string>
+                    {
+                        RoleId = adminRoleId,
+                        UserId = seededAdmin.Id
+                    };
 
-                context.Add(seededAdminRole);
-                context.Add(seededAdmin);
+                    context.Add(seededAdminRole);
+                    context.Add(seededAdmin);
+                }
 
                 await context.SaveChangesAsync(cancellationToken);
             });
