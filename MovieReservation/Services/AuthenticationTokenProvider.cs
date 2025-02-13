@@ -63,7 +63,6 @@ namespace MovieReservation.Services
         private async Task<string> GenerateAccessToken(ClaimsIdentity identity)
         {
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPrivateAsync();
-
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
             
             var tokenDescriptor = new SecurityTokenDescriptor()
@@ -81,7 +80,8 @@ namespace MovieReservation.Services
 
         private static AuthenticationToken GenerateRefreshToken(AuthenticationToken tokenModel)
         {
-            tokenModel.RefreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            byte[] refreshTokenBytes = RandomNumberGenerator.GetBytes(64);
+            tokenModel.RefreshToken = Convert.ToBase64String(refreshTokenBytes);
             tokenModel.RefreshExpiration = DateTime.UtcNow.AddDays(4);
 
             return tokenModel;
