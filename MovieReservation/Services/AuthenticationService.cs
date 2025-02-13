@@ -54,17 +54,8 @@ namespace MovieReservation.Services
                     Result = SignInResult.TwoFactorRequired
                 };
             }
-                
-            IList<string> userRoles = await _userManager.GetRolesAsync(user);
 
-            var accessTokenIdentity = new ClaimsIdentity();
-            accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
-            
-            foreach (string role in userRoles)
-            {
-                accessTokenIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
-            }
-
+            ClaimsIdentity accessTokenIdentity = await CreateClaimsIdentity(user);
             AuthenticationToken token = await _tokenProvider.GenerateTokens(accessTokenIdentity);
 
             user.RefreshToken = token.RefreshToken;
@@ -124,6 +115,21 @@ namespace MovieReservation.Services
             user.ExpirationDate = null;
             user.RefreshToken = null;
             await _userManager.UpdateAsync(user);
+        }
+
+        private async Task<ClaimsIdentity> CreateClaimsIdentity(AppUser user)
+        {
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
+
+            var accessTokenIdentity = new ClaimsIdentity();
+            accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
+
+            foreach (string role in userRoles)
+            {
+                accessTokenIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
+            return accessTokenIdentity;
         }
 
         private async Task<string> CheckAndGenerateTwoFactorCode(AppUser user)
