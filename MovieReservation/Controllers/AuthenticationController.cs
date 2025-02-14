@@ -25,7 +25,7 @@ namespace MovieReservation.Controllers
         /// The refresh token and its expiration date and time will be stored in the database.
         /// </remarks>
         /// <response code="200">Authentication was successful</response>
-        /// <response code="202">Authentication was successful but 2fa is required</response>
+        /// <response code="202">Authentication was successful, but 2fa is required</response>
         /// <response code="401">The user does not exist or password is incorrect</response>
         [ProducesResponseType<AuthenticationToken>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -41,7 +41,10 @@ namespace MovieReservation.Controllers
             }
             else if (login.Result.RequiresTwoFactor)
             {
-                return Accepted(new { Message = "Two factor is required. Please check your email for code" });
+                return Accepted(new { 
+                    Message = "Two factor authentication is required. Please check your email for code",
+                    login.UserId
+                });
             }
 
             return Ok(login.AuthToken);

@@ -10,6 +10,7 @@ namespace MovieReservation.Services
     {
         public required SignInResult Result { get; set; }
         public AuthenticationToken? AuthToken { get; set; } = null;
+        public string? UserId { get; set; } = null;
     }
 
     public class AuthenticationService
@@ -46,12 +47,15 @@ namespace MovieReservation.Services
                 };
             }
 
-            string twoFactorCode = await CheckAndGenerateTwoFactorCode(user);
-            if (twoFactorCode != string.Empty)
+            bool is2faEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
+            if (is2faEnabled)
             {
+                string twoFactorCode = await GenerateTwoFactorCode(user);
+
                 return new LoginDto
                 {
-                    Result = SignInResult.TwoFactorRequired
+                    Result = SignInResult.TwoFactorRequired,
+                    UserId = user.Id
                 };
             }
 
@@ -123,7 +127,7 @@ namespace MovieReservation.Services
 
             var accessTokenIdentity = new ClaimsIdentity();
             accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
-
+            
             foreach (string role in userRoles)
             {
                 accessTokenIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
@@ -132,21 +136,17 @@ namespace MovieReservation.Services
             return accessTokenIdentity;
         }
 
-        private async Task<string> CheckAndGenerateTwoFactorCode(AppUser user)
+        private async Task<string> GenerateTwoFactorCode(AppUser user)
         {
-            bool is2faEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
-            if (!is2faEnabled)
-            {
-                return string.Empty;
-            }
+            const string EmailProviderName = "Email";
 
             var providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
-            if (!providers.Any(p => p == "Email"))
+            if (!providers.Any(p => p == EmailProviderName))
             {
                 return string.Empty;
             }
             
-            return await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            return await _userManager.GenerateTwoFactorTokenAsync(user, EmailProviderName);
         }
     }
 }
