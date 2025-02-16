@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MovieReservation.Data.Database;
+using MovieReservation.Data.EfConfig;
 using MovieReservation.Models;
 
 namespace MovieReservation.Data.DbContexts

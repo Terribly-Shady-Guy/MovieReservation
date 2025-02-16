@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieReservation.Models;
 
-namespace MovieReservation.Data.Database
+namespace MovieReservation.Data.EfConfig
 {
     public  class InternalLoginConfig : IEntityTypeConfiguration<InternalLogin>
     {
