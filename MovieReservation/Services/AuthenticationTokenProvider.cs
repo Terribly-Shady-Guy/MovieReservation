@@ -80,7 +80,7 @@ namespace MovieReservation.Services
 
         private static AuthenticationToken GenerateRefreshToken(AuthenticationToken tokenModel)
         {
-            byte[] refreshTokenBytes = RandomNumberGenerator.GetBytes(64);
+            byte[] refreshTokenBytes = RandomNumberGenerator.GetBytes(200);
             tokenModel.RefreshToken = Convert.ToBase64String(refreshTokenBytes);
             tokenModel.RefreshExpiration = DateTime.UtcNow.AddDays(4);
 

@@ -12,7 +12,7 @@ using MovieReservation.Data.DbContexts;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20241119044004_InitialCreate")]
+    [Migration("20250216033355_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace MovieReservation.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -214,7 +214,7 @@ namespace MovieReservation.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsUnicode(false)
-                        .HasColumnType("varchar(200)")
+                        .HasColumnType("varchar(400)")
                         .HasColumnName("refresh_token");
 
                     b.Property<string>("SecurityStamp")

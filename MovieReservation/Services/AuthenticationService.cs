@@ -51,6 +51,7 @@ namespace MovieReservation.Services
             if (is2faEnabled)
             {
                 string twoFactorCode = await GenerateTwoFactorCode(user);
+                Console.WriteLine(twoFactorCode);
 
                 return new LoginDto
                 {

@@ -16,7 +16,7 @@ namespace MovieReservation.Data.Database
             entity.Property(e => e.RefreshToken)
                 .IsUnicode(false)
                 .HasColumnName("refresh_token")
-                .HasColumnType("varchar(200)");
+                .HasColumnType("varchar(400)");
 
             entity.Property(e => e.ExpirationDate)
                 .HasColumnType("DATETIME")

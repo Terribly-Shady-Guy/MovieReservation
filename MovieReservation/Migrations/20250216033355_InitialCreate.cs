@@ -18,7 +18,7 @@ namespace MovieReservation.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    refresh_token = table.Column<string>(type: "varchar(200)", unicode: false, nullable: true),
+                    refresh_token = table.Column<string>(type: "varchar(400)", unicode: false, nullable: true),
                     expiration_date = table.Column<DateTime>(type: "DATETIME", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

@@ -21,7 +21,7 @@ namespace MovieReservation.Controllers
         /// <param name="userLogin">Object containing username and password for login</param>
         /// <returns>An object containing the jwt access token</returns>
         /// <remarks>
-        /// This endpoint handles authentication using a jwt as an access token and sets a cookie containing the refresh token.
+        /// This endpoint handles authentication using a jwt as an access token and uses a basic refresh token.
         /// The refresh token and its expiration date and time will be stored in the database.
         /// </remarks>
         /// <response code="200">Authentication was successful</response>
@@ -31,7 +31,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces("application/json")]
         [HttpPost]
-        public async Task<ActionResult<AuthenticationToken>> Login(UserLoginVM userLogin)
+        public async Task<ActionResult> Login(UserLoginVM userLogin)
         {
             LoginDto login = await _authentication.Login(userLogin);
 
@@ -80,7 +80,7 @@ namespace MovieReservation.Controllers
         /// An endpoint for handling logout.
         /// </summary>
         /// <returns></returns>
-        /// <remarks>This endpoint deletes the refresh token stored in the db and the cookie upon successful authorization.</remarks>
+        /// <remarks>This endpoint deletes the refresh token stored in the db upon successful authorization.</remarks>
         /// <response code="204">User successfully logged out</response>
         /// <response code="401">Access or refresh token is missing</response>
         /// <response code="404">User does not exist</response>
