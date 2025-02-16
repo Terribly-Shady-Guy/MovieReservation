@@ -29,8 +29,8 @@ namespace MovieReservation.Data.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            Assembly dbContextAssembly = typeof(MovieReservationDbContext).Assembly;
-            modelBuilder.ApplyConfigurationsFromAssembly(dbContextAssembly);
+            Type dbContextType = typeof(MovieReservationDbContext);
+            modelBuilder.ApplyConfigurationsFromAssembly(dbContextType.Assembly);
         }
     }
 }
