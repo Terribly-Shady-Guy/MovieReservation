@@ -4,7 +4,7 @@ using MovieReservation.Models;
 
 namespace MovieReservation.Data.EfConfig
 {
-    public  class InternalLoginConfig : IEntityTypeConfiguration<InternalLogin>
+    public class InternalLoginConfig : IEntityTypeConfiguration<InternalLogin>
     {
         public void Configure(EntityTypeBuilder<InternalLogin> builder)
         {
