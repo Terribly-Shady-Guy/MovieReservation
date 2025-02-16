@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MovieReservation.Data.EfConfig;
 using MovieReservation.Models;
+using System.Reflection;
 
 namespace MovieReservation.Data.DbContexts
 {
@@ -29,15 +29,12 @@ namespace MovieReservation.Data.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new InternalLoginConfig())
-                .ApplyConfiguration(new AppUserConfig())
-                .ApplyConfiguration(new AuditoriumConfig())
-                .ApplyConfiguration(new LocationConfig())
-                .ApplyConfiguration(new MovieConfig())
-                .ApplyConfiguration(new ReservationConfig())
-                .ApplyConfiguration(new SeatConfig())
-                .ApplyConfiguration(new ShowingConfig())
-                .ApplyConfiguration(new ShowingSeatConfig());
+            Assembly? dbContextAssembly = Assembly.GetAssembly(typeof(MovieReservationDbContext));
+
+            if (dbContextAssembly is not null)
+            {
+                modelBuilder.ApplyConfigurationsFromAssembly(dbContextAssembly);
+            }
         }
     }
 }
