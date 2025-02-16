@@ -174,10 +174,6 @@ namespace MovieReservation.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("expiration_date");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -208,11 +204,6 @@ namespace MovieReservation.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(400)")
-                        .HasColumnName("refresh_token");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -262,6 +253,37 @@ namespace MovieReservation.Migrations
                         {
                             t.HasCheckConstraint("CK_max_capacity", "max_capacity > 0");
                         });
+                });
+
+            modelBuilder.Entity("MovieReservation.Models.InternalLogin", b =>
+                {
+                    b.Property<string>("LoginId")
+                        .IsUnicode(false)
+                        .HasColumnType("VARCHAR(450)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("DATETIME")
+                        .HasColumnName("expiration_date");
+
+                    b.Property<DateTime>("LoginDate")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(400)")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("NVARCHAR(450)");
+
+                    b.HasKey("LoginId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Logins");
                 });
 
             modelBuilder.Entity("MovieReservation.Models.Location", b =>
@@ -545,6 +567,18 @@ namespace MovieReservation.Migrations
                     b.Navigation("Location");
                 });
 
+            modelBuilder.Entity("MovieReservation.Models.InternalLogin", b =>
+                {
+                    b.HasOne("MovieReservation.Models.AppUser", "LoggedInUser")
+                        .WithMany("UserLogins")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_AppUser_Logins");
+
+                    b.Navigation("LoggedInUser");
+                });
+
             modelBuilder.Entity("MovieReservation.Models.Reservation", b =>
                 {
                     b.HasOne("MovieReservation.Models.AppUser", "User")
@@ -620,6 +654,8 @@ namespace MovieReservation.Migrations
             modelBuilder.Entity("MovieReservation.Models.AppUser", b =>
                 {
                     b.Navigation("Reservations");
+
+                    b.Navigation("UserLogins");
                 });
 
             modelBuilder.Entity("MovieReservation.Models.Auditorium", b =>

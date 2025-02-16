@@ -18,8 +18,6 @@ namespace MovieReservation.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    refresh_token = table.Column<string>(type: "varchar(400)", unicode: false, nullable: true),
-                    expiration_date = table.Column<DateTime>(type: "DATETIME", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -141,6 +139,27 @@ namespace MovieReservation.Migrations
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Logins",
+                columns: table => new
+                {
+                    LoginId = table.Column<string>(type: "VARCHAR(450)", unicode: false, nullable: false),
+                    UserId = table.Column<string>(type: "NVARCHAR(450)", unicode: false, nullable: false),
+                    refresh_token = table.Column<string>(type: "varchar(400)", unicode: false, nullable: false),
+                    expiration_date = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    LoginDate = table.Column<DateTime>(type: "DATETIME", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logins", x => x.LoginId);
+                    table.ForeignKey(
+                        name: "FK_AppUser_Logins",
                         column: x => x.UserId,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
@@ -370,6 +389,11 @@ namespace MovieReservation.Migrations
                 column: "location_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Logins_UserId",
+                table: "Logins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Movies_genre",
                 table: "Movies",
                 column: "genre");
@@ -427,6 +451,9 @@ namespace MovieReservation.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Logins");
 
             migrationBuilder.DropTable(
                 name: "ReservedSeats");

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
+using MovieReservation.Data.DbContexts;
 using MovieReservation.Models;
 using MovieReservation.ViewModels;
 using System.Security.Claims;
@@ -18,12 +20,14 @@ namespace MovieReservation.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IAuthenticationTokenProvider _tokenProvider;
+        private readonly MovieReservationDbContext _dbContext;
 
-        public AuthenticationService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthenticationTokenProvider tokenProvider)
+        public AuthenticationService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthenticationTokenProvider tokenProvider, MovieReservationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenProvider = tokenProvider;
+            _dbContext = context;
         }
 
         public async Task<LoginDto> Login(UserLoginVM userCredentials)
@@ -63,10 +67,17 @@ namespace MovieReservation.Services
             ClaimsIdentity accessTokenIdentity = await CreateClaimsIdentity(user);
             AuthenticationToken token = await _tokenProvider.GenerateTokens(accessTokenIdentity);
 
-            user.RefreshToken = token.RefreshToken;
-            user.ExpirationDate = token.RefreshExpiration;
+            var newLogin = new InternalLogin
+            {
+                LoginId = Guid.NewGuid().ToString(),
+                RefreshToken = token.RefreshToken,
+                ExpirationDate = token.RefreshExpiration,
+                UserId = user.Id,
+                LoggedInUser = user
+            };
 
-            await _userManager.UpdateAsync(user);
+            _dbContext.Logins.Add(newLogin);
+            await _dbContext.SaveChangesAsync();
 
             return new LoginDto
             {
@@ -96,30 +107,44 @@ namespace MovieReservation.Services
                 return null; 
             }
 
+            InternalLogin? login = await _dbContext.Logins
+                .Where(l => l.UserId == user.Id && l.RefreshToken == refresh)
+                .FirstOrDefaultAsync();
+
             DateTime current = DateTime.UtcNow;
-            if (refresh != user.RefreshToken || current >= user.ExpirationDate)
+            if (login is null || current >= login.ExpirationDate)
             {
                 return null;
             }
-            
+
             var identity = new ClaimsIdentity(accessToken.Claims);
             AuthenticationToken newToken = await _tokenProvider.GenerateTokens(identity);
 
-            user.RefreshToken = newToken.RefreshToken;
-            user.ExpirationDate = newToken.RefreshExpiration;
-            await _userManager.UpdateAsync(user);
+            login.RefreshToken = newToken.RefreshToken;
+            login.ExpirationDate = newToken.RefreshExpiration;
+
+            _dbContext.Update(login);
+            await _dbContext.SaveChangesAsync();
 
             return newToken;
         }
 
-        public async Task Logout(string userId)
+        public async Task Logout(string userId, string refreshToken)
         {
             AppUser? user = await _userManager.FindByIdAsync(userId);
             if (user == null) { return; }
 
-            user.ExpirationDate = null;
-            user.RefreshToken = null;
-            await _userManager.UpdateAsync(user);
+            InternalLogin? login = await _dbContext.Logins
+                .Where(l => l.UserId == user.Id && l.RefreshToken == refreshToken)
+                .FirstOrDefaultAsync();
+
+            if (login is null)
+            {
+                return;
+            }
+
+            _dbContext.Logins.Remove(login);
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task<ClaimsIdentity> CreateClaimsIdentity(AppUser user)

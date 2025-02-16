@@ -36,8 +36,6 @@ namespace MovieReservation.Data
                 EmailConfirmed = true,
                 NormalizedUserName = "root",
                 TwoFactorEnabled = false,
-                ExpirationDate = null,
-                RefreshToken = null,
                 FirstName = "root",
                 LastName = "root",
             };

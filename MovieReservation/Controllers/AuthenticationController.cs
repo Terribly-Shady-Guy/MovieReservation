@@ -89,7 +89,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult> Logout()
+        public async Task<ActionResult> Logout(string refreshToken)
         {
             Claim? userIdClaim = HttpContext.User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -99,7 +99,7 @@ namespace MovieReservation.Controllers
                 return NotFound();
             }
 
-           await _authentication.Logout(userIdClaim.Value);
+           await _authentication.Logout(userIdClaim.Value, refreshToken);
 
             return NoContent();
         }

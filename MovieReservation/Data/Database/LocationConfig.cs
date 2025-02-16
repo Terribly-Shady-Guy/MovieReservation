@@ -1,43 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieReservation.Models;
 
 namespace MovieReservation.Data.Database
 {
-    internal static class LocationContextConfig
+    internal class LocationConfig : IEntityTypeConfiguration<Location>
     {
-        public static ModelBuilder AddLocationModel(this ModelBuilder modelBuilder)
+        public void Configure(EntityTypeBuilder<Location> builder)
         {
-            var entity = modelBuilder.Entity<Location>();
-
-            entity.HasKey(e => e.LocationId)
+            builder.HasKey(e => e.LocationId)
                 .HasName("PK_location_id");
 
-            entity.Property(e => e.LocationId)
+            builder.Property(e => e.LocationId)
                 .HasColumnName("location_id");
 
-            entity.Property(e => e.Street)
+            builder.Property(e => e.Street)
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("street");
 
-            entity.Property(e => e.City)
+            builder.Property(e => e.City)
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("city");
 
-            entity.Property(e => e.State)
+            builder.Property(e => e.State)
                 .IsRequired()
                 .HasColumnName("state")
                 .IsUnicode(false);
 
-            entity.Property(e => e.Zip)
+            builder.Property(e => e.Zip)
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("zip")
                 .HasMaxLength(5)
                 .IsFixedLength();
-
-            return modelBuilder;
         }
     }
 }

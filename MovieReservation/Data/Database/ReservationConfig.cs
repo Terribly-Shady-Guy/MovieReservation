@@ -1,45 +1,44 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieReservation.Models;
 
 namespace MovieReservation.Data.Database
 {
-    internal static class ReservationContextConfig
+    internal class ReservationConfig : IEntityTypeConfiguration<Reservation>
     {
-        public static ModelBuilder AddReservationModel(this ModelBuilder modelBuilder)
+        public void Configure(EntityTypeBuilder<Reservation> builder)
         {
-            var entity = modelBuilder.Entity<Reservation>();
-
-            entity.HasKey(e => e.ReservationId)
+            builder.HasKey(e => e.ReservationId)
                 .HasName("PK_reservation_id");
 
-            entity.Property(e => e.ReservationId)
+            builder.Property(e => e.ReservationId)
                 .HasColumnName("reservation_id");
 
-            entity.Property(e => e.DateReserved)
+            builder.Property(e => e.DateReserved)
                 .IsRequired()
                 .HasColumnType("DATETIME")
                 .HasColumnName("date_reserved");
 
-            entity.Property(e => e.Total)
+            builder.Property(e => e.Total)
                 .IsRequired()
                 .HasColumnName("total")
                 .HasColumnType("MONEY");
 
-            entity.Property(e => e.DateCancelled)
+            builder.Property(e => e.DateCancelled)
                 .IsRequired(false)
                 .HasColumnType("DATETIME")
                 .HasColumnName("date_cancelled");
 
-            entity.Property(e => e.UserId)
+            builder.Property(e => e.UserId)
                 .IsRequired()
                 .HasColumnName("user_id");
 
-            entity.HasOne(e => e.User)
+            builder.HasOne(e => e.User)
                 .WithMany(e => e.Reservations)
                 .HasForeignKey(e => e.UserId)
                 .HasConstraintName("FK_app_user_reservation");
 
-            entity.HasMany(e => e.ShowingSeats)
+            builder.HasMany(e => e.ShowingSeats)
                 .WithMany(e => e.Reservations)
                 .UsingEntity("ReservedSeats", joinEntity =>
                 {
@@ -54,8 +53,6 @@ namespace MovieReservation.Data.Database
                     joinEntity.HasKey("ShowingSeatId", "ReservationId")
                         .HasName("PK_showingseat_reservation");
                 });
-
-            return modelBuilder;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace MovieReservation.Data.DbContexts
         }
 #pragma warning restore CS8618
 
+        public DbSet<InternalLogin> Logins { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Showing> Showings { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -28,14 +29,15 @@ namespace MovieReservation.Data.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.AddAppUserModel()
-                .AddReservationModel()
-                .AddMovieModel()
-                .AddShowingModel()
-                .AddLocationModel()
-                .AddAuditoriumModel()
-                .AddSeatModel()
-                .AddShowingSeatModel();
+            modelBuilder.ApplyConfiguration(new InternalLoginConfig());
+            modelBuilder.ApplyConfiguration(new AppUserConfig());
+            modelBuilder.ApplyConfiguration(new AuditoriumConfig());
+            modelBuilder.ApplyConfiguration(new LocationConfig());
+            modelBuilder.ApplyConfiguration(new MovieConfig());
+            modelBuilder.ApplyConfiguration(new ReservationConfig());
+            modelBuilder.ApplyConfiguration(new SeatConfig());
+            modelBuilder.ApplyConfiguration(new ShowingConfig());
+            modelBuilder.ApplyConfiguration(new ShowingSeatConfig());
         }
     }
 }

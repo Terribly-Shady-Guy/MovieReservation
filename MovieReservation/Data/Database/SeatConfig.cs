@@ -1,30 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieReservation.Models;
 
 namespace MovieReservation.Data.Database
 {
-    internal static class SeatContextConfig
+    internal class SeatConfig : IEntityTypeConfiguration<Seat>
     {
-        public static ModelBuilder AddSeatModel(this ModelBuilder modelBuilder)
+        public void Configure(EntityTypeBuilder<Seat> builder)
         {
-            var entity = modelBuilder.Entity<Seat>();
-
-            entity.HasKey(e => e.SeatId)
+            builder.HasKey(e => e.SeatId)
                 .HasName("PK_seat_id");
 
-            entity.Property(e => e.SeatId)
+            builder.Property(e => e.SeatId)
                 .HasColumnName("seat_id");
 
-            entity.Property(e => e.AuditoriumNumber)
+            builder.Property(e => e.AuditoriumNumber)
                 .IsRequired(true)
                 .HasColumnName("auditorium_number");
 
-            entity.HasOne(e => e.Auditorium)
+            builder.HasOne(e => e.Auditorium)
                 .WithMany(e => e.Seats)
                 .HasForeignKey(e => e.AuditoriumNumber)
                 .HasConstraintName("FK_seat_auditorium");
-
-            return modelBuilder;
         }
     }
 }

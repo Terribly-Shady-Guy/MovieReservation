@@ -1,45 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieReservation.Models;
 
 namespace MovieReservation.Data.Database
 {
-    internal static class MovieContextConfig
+    internal class MovieConfig : IEntityTypeConfiguration<Movie>
     {
-        public static ModelBuilder AddMovieModel(this ModelBuilder modelBuilder)
+        public void Configure(EntityTypeBuilder<Movie> builder)
         {
-            var entity = modelBuilder.Entity<Movie>();
-
-            entity.HasKey(e => e.MovieId)
+            builder.HasKey(e => e.MovieId)
                 .HasName("PK_movie_id");
 
-            entity.Property(e => e.MovieId)
+            builder.Property(e => e.MovieId)
                 .HasColumnName("movie_id");
 
-            entity.Property(e => e.Title)
+            builder.Property(e => e.Title)
                 .HasColumnName("title")
                 .IsRequired()
                 .IsUnicode(false);
 
-            entity.Property(e => e.PosterImageName)
+            builder.Property(e => e.PosterImageName)
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("poster_image_name");
 
-            entity.Property(e => e.Description)
+            builder.Property(e => e.Description)
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("description")
                 .HasMaxLength(300);
 
-            entity.Property(e => e.Genre)
+            builder.Property(e => e.Genre)
                 .IsRequired()
                 .IsUnicode(false)
                 .HasColumnName("genre");
 
-            entity.HasIndex(e => e.Genre);
-            entity.HasIndex(e => e.Title);
-
-            return modelBuilder;
+            builder.HasIndex(e => e.Genre);
+            builder.HasIndex(e => e.Title);
         }
     }
 }
