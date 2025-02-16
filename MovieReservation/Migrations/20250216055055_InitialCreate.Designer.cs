@@ -12,7 +12,7 @@ using MovieReservation.Data.DbContexts;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250216052235_InitialCreate")]
+    [Migration("20250216055055_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -179,11 +179,11 @@ namespace MovieReservation.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
