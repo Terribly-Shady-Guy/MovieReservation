@@ -281,6 +281,8 @@ namespace MovieReservation.Migrations
 
                     b.HasKey("LoginId");
 
+                    b.HasIndex("RefreshToken");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Logins");

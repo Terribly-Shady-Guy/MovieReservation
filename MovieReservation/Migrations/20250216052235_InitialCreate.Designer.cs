@@ -12,7 +12,7 @@ using MovieReservation.Data.DbContexts;
 namespace MovieReservation.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250216045304_InitialCreate")]
+    [Migration("20250216052235_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -283,6 +283,8 @@ namespace MovieReservation.Migrations
                         .HasColumnType("NVARCHAR(450)");
 
                     b.HasKey("LoginId");
+
+                    b.HasIndex("RefreshToken");
 
                     b.HasIndex("UserId");
 

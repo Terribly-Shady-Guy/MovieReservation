@@ -389,6 +389,11 @@ namespace MovieReservation.Migrations
                 column: "location_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Logins_refresh_token",
+                table: "Logins",
+                column: "refresh_token");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Logins_UserId",
                 table: "Logins",
                 column: "UserId");

@@ -34,6 +34,8 @@ namespace MovieReservation.Data.Database
                 .WithMany(e => e.UserLogins)
                 .HasForeignKey(e => e.UserId)
                 .HasConstraintName("FK_AppUser_Logins");
+
+            builder.HasIndex(e => e.RefreshToken);
         }
     }
 }
