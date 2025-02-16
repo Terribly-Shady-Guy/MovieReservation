@@ -29,7 +29,7 @@ namespace MovieReservation.Data.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            Assembly? dbContextAssembly = typeof(MovieReservationDbContext).Assembly;
+            Assembly dbContextAssembly = typeof(MovieReservationDbContext).Assembly;
             modelBuilder.ApplyConfigurationsFromAssembly(dbContextAssembly);
         }
     }
