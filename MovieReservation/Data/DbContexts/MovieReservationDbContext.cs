@@ -29,15 +29,15 @@ namespace MovieReservation.Data.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new InternalLoginConfig());
-            modelBuilder.ApplyConfiguration(new AppUserConfig());
-            modelBuilder.ApplyConfiguration(new AuditoriumConfig());
-            modelBuilder.ApplyConfiguration(new LocationConfig());
-            modelBuilder.ApplyConfiguration(new MovieConfig());
-            modelBuilder.ApplyConfiguration(new ReservationConfig());
-            modelBuilder.ApplyConfiguration(new SeatConfig());
-            modelBuilder.ApplyConfiguration(new ShowingConfig());
-            modelBuilder.ApplyConfiguration(new ShowingSeatConfig());
+            modelBuilder.ApplyConfiguration(new InternalLoginConfig())
+                .ApplyConfiguration(new AppUserConfig())
+                .ApplyConfiguration(new AuditoriumConfig())
+                .ApplyConfiguration(new LocationConfig())
+                .ApplyConfiguration(new MovieConfig())
+                .ApplyConfiguration(new ReservationConfig())
+                .ApplyConfiguration(new SeatConfig())
+                .ApplyConfiguration(new ShowingConfig())
+                .ApplyConfiguration(new ShowingSeatConfig());
         }
     }
 }
