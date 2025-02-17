@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieReservation.Models;
-using System.Reflection;
 
 namespace MovieReservation.Data.DbContexts
 {
