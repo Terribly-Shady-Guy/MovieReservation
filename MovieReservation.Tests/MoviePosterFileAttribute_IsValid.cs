@@ -12,6 +12,7 @@ namespace MovieReservation.Tests
         [InlineData("invalid-test-file-1.txt", 30 * 1024, "text/plain", false)]
         [InlineData("invalid-test-file-2.jpg", 11 * (1024 * 1024), "image/jpeg", false)]
         [InlineData("invalid-test-file-mime.jpg", 11 * 1024, "text/plain", false)]
+        [InlineData("invalid-test-file.jpg.exe", 30 * 1024, "image/jpeg", false)]
         public void IsValid_WithFormFile_ReturnsExpected(string fileName, int fileSize, string contentType, bool expected)
         {
             byte[] fileBytes = Encoding.UTF8.GetBytes(fileName);
