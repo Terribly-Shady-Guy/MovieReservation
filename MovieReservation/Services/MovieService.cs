@@ -31,26 +31,29 @@ namespace MovieReservation.Services
                 Description = m.Description,
                 Title = m.Title,
                 Genre = m.Genre,
-                PosterImageName = m.PosterImageName
+                PosterImageName = _fileHandler.CreateImagePath(m.PosterImageName)
             })
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task AddMovie(MovieFormDataBody movie)
-        { 
+        {
+            string fileExtension = Path.GetExtension(movie.PosterImage.FileName);
+            string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), fileExtension);
+
             var newMovie = new Movie
             {
                 Title = movie.Title,
                 Genre = movie.Genre,
                 Description = movie.Description,
-                PosterImageName = movie.PosterImage.FileName
+                PosterImageName = newFileName
             };
             
             _dbContext.Movies.Add(newMovie);
             await _dbContext.SaveChangesAsync();
 
-            await _fileHandler.CreateFile(movie.PosterImage);
+            await _fileHandler.CreateFile(movie.PosterImage, newFileName);
         }
 
         public async Task<bool> DeleteMovie(int id)

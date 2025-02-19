@@ -5,9 +5,9 @@ namespace MovieReservation.Services
     {
         private readonly string _path = Path.Combine(Environment.CurrentDirectory, "..", "Images");
 
-        public async Task CreateFile(IFormFile file)
+        public async Task CreateFile(IFormFile file, string fileName)
         {
-            string trustedPath = Path.Combine(_path, file.FileName);
+            string trustedPath = Path.Combine(_path, fileName);
 
             using (var stream = File.Create(trustedPath))
             {
@@ -19,6 +19,11 @@ namespace MovieReservation.Services
         {
             string movieImagePath = Path.Combine(_path, fileName);
             File.Delete(movieImagePath);
+        }
+
+        public string CreateImagePath(string fileName)
+        {
+            return $"Images/{fileName}";
         }
     }
 }

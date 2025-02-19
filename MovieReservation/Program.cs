@@ -115,17 +115,25 @@ builder.Services.AddTransient<IAuthenticationTokenProvider, AuthenticationTokenP
 builder.Services.AddTransient<UserService>();
 
 builder.Services.AddTransient<MovieService>();
-builder.Services.AddTransient<IFileHandler, LocalFileHandler>();
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddTransient<IFileHandler, LocalFileHandler>();
+}
 
 builder.Services.AddTransient<LocationService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "..", "Images")),
+        RequestPath = "/Images"
+    });
 }
 
 app.UseExceptionHandler();
