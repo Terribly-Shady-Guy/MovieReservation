@@ -133,6 +133,11 @@ if (app.Environment.IsDevelopment())
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
     imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
 
+    if (!Directory.Exists(imagesDirectoryPath))
+    {
+        Directory.CreateDirectory(imagesDirectoryPath);
+    }
+
     app.UseStaticFiles(new StaticFileOptions
     {
         FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(imagesDirectoryPath),
