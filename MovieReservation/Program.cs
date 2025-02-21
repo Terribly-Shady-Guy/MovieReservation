@@ -129,8 +129,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
+    
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
+    imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
+
     app.UseStaticFiles(new StaticFileOptions
     {
         FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(imagesDirectoryPath),

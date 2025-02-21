@@ -3,7 +3,13 @@ namespace MovieReservation.Services
 {
     public class LocalFileHandler : IFileHandler
     {
-        private readonly string _path = Path.Combine(Environment.CurrentDirectory, "..", "Images");
+        private readonly string _path;
+
+        public LocalFileHandler()
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, "..", "Images");
+            _path = Path.GetFullPath(path);
+        }
 
         public async Task CreateFile(IFormFile file, string fileName)
         {
@@ -18,11 +24,20 @@ namespace MovieReservation.Services
         public void DeleteFile(string fileName)
         {
             string movieImagePath = Path.Combine(_path, fileName);
-            File.Delete(movieImagePath);
+            if (File.Exists(movieImagePath))
+            {
+                File.Delete(movieImagePath);
+            }
         }
 
         public string CreateImagePath(string fileName)
         {
+            string filePath = Path.Combine(_path, fileName);
+            if (!File.Exists(filePath))
+            {
+                return string.Empty;
+            }
+
             return $"Images/{fileName}";
         }
     }

@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -48,6 +48,12 @@ namespace MovieReservation.Controllers
             }
 
             return Ok(login.AuthToken);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> LoginWithTwoFactor(string twoFactorCode, string userId)
+        {
+            return Ok();
         }
 
         /// <summary>

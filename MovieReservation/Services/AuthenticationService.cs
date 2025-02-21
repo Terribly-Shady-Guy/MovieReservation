@@ -67,17 +67,40 @@ namespace MovieReservation.Services
             ClaimsIdentity accessTokenIdentity = await CreateClaimsIdentity(user);
             AuthenticationToken token = await _tokenProvider.GenerateTokens(accessTokenIdentity);
 
-            var newLogin = new InternalLogin
-            {
-                LoginId = Guid.NewGuid().ToString(),
-                RefreshToken = token.RefreshToken,
-                ExpirationDate = token.RefreshExpiration,
-                UserId = user.Id,
-                LoggedInUser = user
-            };
+            await CreateLogin(user, token);
 
-            _dbContext.Logins.Add(newLogin);
-            await _dbContext.SaveChangesAsync();
+            return new LoginDto
+            {
+                Result = SignInResult.Success,
+                AuthToken = token
+            };
+        }
+
+        public async Task<LoginDto> LoginWithTwoFactorCode(string twoFactorCode, string userId)
+        {
+            AppUser? user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+            {
+                return new LoginDto
+                {
+                    Result = SignInResult.Failed
+                };
+            }
+            
+            bool result = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", twoFactorCode);
+            if (!result)
+            {
+                await _userManager.AccessFailedAsync(user);
+                return new LoginDto
+                {
+                    Result = SignInResult.Failed
+                };
+            }
+            
+            ClaimsIdentity identity = await CreateClaimsIdentity(user);
+            AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
+
+            await CreateLogin(user, token);
 
             return new LoginDto
             {
@@ -107,9 +130,7 @@ namespace MovieReservation.Services
                 return null; 
             }
 
-            InternalLogin? login = await _dbContext.Logins
-                .Where(l => l.UserId == user.Id && l.RefreshToken == refresh)
-                .FirstOrDefaultAsync();
+            InternalLogin? login = await GetLoginSession(user, refresh);
 
             DateTime current = DateTime.UtcNow;
             if (login is null || current >= login.ExpirationDate)
@@ -134,9 +155,7 @@ namespace MovieReservation.Services
             AppUser? user = await _userManager.FindByIdAsync(userId);
             if (user == null) { return; }
 
-            InternalLogin? login = await _dbContext.Logins
-                .Where(l => l.UserId == user.Id && l.RefreshToken == refreshToken)
-                .FirstOrDefaultAsync();
+            InternalLogin? login = await GetLoginSession(user, refreshToken);
 
             if (login is null)
             {
@@ -173,6 +192,28 @@ namespace MovieReservation.Services
             }
             
             return await _userManager.GenerateTwoFactorTokenAsync(user, EmailProviderName);
+        }
+
+        private async Task CreateLogin(AppUser user, AuthenticationToken token)
+        {
+            var newLogin = new InternalLogin
+            {
+                LoginId = Guid.NewGuid().ToString(),
+                RefreshToken = token.RefreshToken,
+                ExpirationDate = token.RefreshExpiration,
+                UserId = user.Id,
+                LoggedInUser = user
+            };
+
+            _dbContext.Logins.Add(newLogin);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task<InternalLogin?> GetLoginSession(AppUser user, string refreshToken)
+        {
+            return await _dbContext.Logins
+                .Where(l => l.UserId == user.Id && l.RefreshToken == refreshToken)
+                .FirstOrDefaultAsync();
         }
     }
 }
