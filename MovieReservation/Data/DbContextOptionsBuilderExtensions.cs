@@ -14,13 +14,13 @@ namespace MovieReservation.Data
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = "User",
-                    NormalizedName = "User"
+                    NormalizedName = "User".ToUpper()
                 },
                 new IdentityRole
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = "Admin",
-                    NormalizedName = "Admin"
+                    NormalizedName = "Admin".ToUpper()
                 }
             ];
 
@@ -32,9 +32,9 @@ namespace MovieReservation.Data
                 UserName = "root",
                 AccessFailedCount = 0,
                 Email = "root@example.com",
-                NormalizedEmail = "root@example.com",
+                NormalizedEmail = "root@example.com".ToUpper(),
                 EmailConfirmed = true,
-                NormalizedUserName = "root",
+                NormalizedUserName = "root".ToUpper(),
                 TwoFactorEnabled = false,
                 FirstName = "root",
                 LastName = "root",
