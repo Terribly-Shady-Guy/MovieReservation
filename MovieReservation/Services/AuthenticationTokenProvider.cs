@@ -32,9 +32,7 @@ namespace MovieReservation.Services
                 AccessToken = await GenerateAccessToken(identity)
             };
 
-            tokenModel = GenerateRefreshToken(tokenModel);
-
-            return tokenModel;
+            return GenerateRefreshToken(tokenModel);
         }
 
         public async Task<TokenValidationResult> ValidateExpiredToken(string expiredToken)
