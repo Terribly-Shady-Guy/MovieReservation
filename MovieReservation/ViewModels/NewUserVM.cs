@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MovieReservation.ViewModels
+namespace DbInfrastructure.ViewModels
 {
     public class NewUserVM
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
-namespace MovieReservation.Services
+namespace DbInfrastructure.Services
 {
     public class LocalRsaKeyHandler : IRsaKeyHandler
     {

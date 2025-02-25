@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieReservation.Services;
-using MovieReservation.ViewModels;
+using DbInfrastructure.Services;
+using DbInfrastructure.ViewModels;
 using System.Security.Claims;
 
-namespace MovieReservation.Controllers
+namespace DbInfrastructure.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

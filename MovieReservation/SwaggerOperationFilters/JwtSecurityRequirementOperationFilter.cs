@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace MovieReservation.SwaggerOperationFilters
+namespace DbInfrastructure.SwaggerOperationFilters
 {
     public class JwtSecurityRequirementOperationFilter : IOperationFilter
     {

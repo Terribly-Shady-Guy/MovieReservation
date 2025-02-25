@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MovieReservation.ValidationAttributes;
+using DbInfrastructure.ValidationAttributes;
 using System.Text;
 
-namespace MovieReservation.Tests
+namespace DbInfrastructure.Tests
 {
     public class MoviePosterFileAttribute_IsValid
     {

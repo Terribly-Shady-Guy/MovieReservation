@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MovieReservation.Controllers
+namespace DbInfrastructure.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

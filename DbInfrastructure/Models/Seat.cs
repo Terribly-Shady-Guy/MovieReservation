@@ -1,4 +1,4 @@
-﻿namespace MovieReservation.Models
+﻿namespace DbInfrastructure.Models
 {
     public class Seat
     {

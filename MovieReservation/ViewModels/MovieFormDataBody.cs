@@ -1,6 +1,6 @@
-﻿using MovieReservation.ValidationAttributes;
+﻿using DbInfrastructure.ValidationAttributes;
 
-namespace MovieReservation.ViewModels
+namespace DbInfrastructure.ViewModels
 {
     public class MovieFormDataBody
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace MovieReservation.Models
+namespace DbInfrastructure.Models
 {
     public class AppUser : IdentityUser
     {

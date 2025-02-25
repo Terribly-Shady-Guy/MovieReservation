@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MovieReservation.Models;
+using DbInfrastructure.Models;
 
 namespace DbInfrastructure
 {

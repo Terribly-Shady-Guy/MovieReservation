@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MovieReservation.Models;
+using DbInfrastructure.Models;
 
-namespace MovieReservation.Data.EfConfig
+namespace DbInfrastructure.Data.EfConfig
 {
     public class InternalLoginConfig : IEntityTypeConfiguration<InternalLogin>
     {

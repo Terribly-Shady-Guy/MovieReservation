@@ -1,4 +1,4 @@
-﻿namespace MovieReservation.ViewModels
+﻿namespace DbInfrastructure.ViewModels
 {
     public class UserLoginVM
     {

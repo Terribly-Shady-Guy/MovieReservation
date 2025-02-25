@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MovieReservation.Data.DbContexts;
-using MovieReservation.Models;
-using MovieReservation.Services;
-using MovieReservation.SwaggerOperationFilters;
+using DbInfrastructure.Models;
+using DbInfrastructure.Services;
+using DbInfrastructure.SwaggerOperationFilters;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

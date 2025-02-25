@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MovieReservation.Models;
+using DbInfrastructure.Models;
 
-namespace MovieReservation.Data.DbContexts
+namespace DbInfrastructure
 {
     public class MovieReservationDbContext : IdentityDbContext<AppUser>
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MovieReservation.Models;
-using MovieReservation.ViewModels;
+using DbInfrastructure.Models;
+using DbInfrastructure.ViewModels;
 
-namespace MovieReservation.Services
+namespace DbInfrastructure.Services
 {
     public class UserService
     {
