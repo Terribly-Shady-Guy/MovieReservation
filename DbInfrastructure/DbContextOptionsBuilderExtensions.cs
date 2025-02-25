@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using MovieReservation.Models;
 
-namespace MovieReservation.Data
+namespace DbInfrastructure
 {
-    public static class DbContextOptionsBuilderExtensions
+    internal static class DbContextOptionsBuilderExtensions
     {
-        public static void UseDataSeeding(this DbContextOptionsBuilder options)
+        internal static void UseDataSeeding(this DbContextOptionsBuilder options)
         {
             List<IdentityRole> newRoles =
             [

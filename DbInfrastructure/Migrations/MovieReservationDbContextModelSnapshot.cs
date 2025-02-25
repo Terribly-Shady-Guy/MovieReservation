@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieReservation.Data.DbContexts;
 
 #nullable disable
 
-namespace MovieReservation.Migrations
+namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250216170541_InitialCreate")]
-    partial class InitialCreate
+    partial class MovieReservationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

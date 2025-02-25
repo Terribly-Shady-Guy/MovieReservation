@@ -1,9 +1,8 @@
+using DbInfrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MovieReservation.Data;
 using MovieReservation.Data.DbContexts;
 using MovieReservation.Models;
 using MovieReservation.Services;
@@ -99,15 +98,7 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     .AddEntityFrameworkStores<MovieReservationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddDbContext<MovieReservationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("default"), config =>
-    {
-        config.EnableRetryOnFailure();
-    });
-
-    options.UseDataSeeding();
-});
+builder.Services.AddDbInfrastructure(builder.Configuration.GetConnectionString("default"));
 
 builder.Services.AddProblemDetails();
 
