@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using DbInfrastructure.Models;
 
-namespace DbInfrastructure.EfConfig
+namespace DbInfrastructure.ModelConfiguration
 {
     internal class ReservationConfig : IEntityTypeConfiguration<Reservation>
     {
