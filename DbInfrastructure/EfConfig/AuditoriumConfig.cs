@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using DbInfrastructure.Models;
 
-namespace DbInfrastructure.Data.EfConfig
+namespace DbInfrastructure.EfConfig
 {
     internal class AuditoriumConfig : IEntityTypeConfiguration<Auditorium>
     {
