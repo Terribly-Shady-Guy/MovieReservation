@@ -1,7 +1,8 @@
 ﻿using DbInfrastructure.Models;
-using DbInfrastructure.ViewModels;
+using DbInfrastructure;
+using MovieReservation.ViewModels;
 
-namespace DbInfrastructure.Services
+namespace MovieReservation.Services
 {
     public class LocationService
     {

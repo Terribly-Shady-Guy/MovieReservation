@@ -1,5 +1,5 @@
 ﻿
-namespace DbInfrastructure.Services
+namespace MovieReservation.Services
 {
     public interface IFileHandler
     {

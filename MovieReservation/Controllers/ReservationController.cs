@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DbInfrastructure.Controllers
+namespace MovieReservation.Controllers
 {
     [Authorize(Roles = "User, Admin")]
     [Route("api/[controller]")]

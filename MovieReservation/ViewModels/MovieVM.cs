@@ -1,4 +1,4 @@
-﻿namespace DbInfrastructure.ViewModels
+﻿namespace MovieReservation.ViewModels
 {
     public class MovieVM
     {

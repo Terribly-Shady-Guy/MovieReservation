@@ -1,12 +1,12 @@
-using DbInfrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using DbInfrastructure.Models;
-using DbInfrastructure.Services;
-using DbInfrastructure.SwaggerOperationFilters;
+using MovieReservation.Services;
+using MovieReservation.SwaggerOperationFilters;
 using System.Reflection;
+using DbInfrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>

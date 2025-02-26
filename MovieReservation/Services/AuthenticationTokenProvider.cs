@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using DbInfrastructure.ViewModels;
+using MovieReservation.ViewModels;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace DbInfrastructure.Services
+namespace MovieReservation.Services
 {
     public class JwtOptions
     {

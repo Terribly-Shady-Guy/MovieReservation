@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using DbInfrastructure.Models;
-using DbInfrastructure.ViewModels;
+using MovieReservation.ViewModels;
 using System.Security.Claims;
+using DbInfrastructure;
 
-namespace DbInfrastructure.Services
+namespace MovieReservation.Services
 {
     public class LoginDto
     {
