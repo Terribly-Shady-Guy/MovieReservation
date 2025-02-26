@@ -26,7 +26,7 @@ namespace DbInfrastructure
 
             var hasher = new PasswordHasher<AppUser>();
 
-            AppUser seededAdmin = new()
+            var seededAdmin = new AppUser
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "root",
