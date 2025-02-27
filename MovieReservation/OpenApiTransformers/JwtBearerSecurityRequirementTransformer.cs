@@ -90,10 +90,11 @@ namespace MovieReservation.OpenApiTransformers
             }
 
             return new ParsedDisplayName(
+                NamespaceName: string.Join('.', tokenizedName, 0, typeIndex),
                 ControllerName: tokenizedName[typeIndex], 
                 ActionName: tokenizedName[typeIndex + 1]);
         }
     }
 
-    internal record ParsedDisplayName(string ControllerName, string ActionName);
+    internal record ParsedDisplayName(string NamespaceName,string ControllerName, string ActionName);
 }
