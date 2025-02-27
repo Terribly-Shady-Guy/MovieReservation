@@ -86,6 +86,7 @@ namespace MovieReservation.OpenApiTransformers
                 if (tokenizedName[i].EndsWith("Controller"))
                 {
                     typeIndex = i;
+                    break;
                 }
             }
 
