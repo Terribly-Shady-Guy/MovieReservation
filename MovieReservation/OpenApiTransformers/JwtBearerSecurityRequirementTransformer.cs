@@ -32,7 +32,7 @@ namespace MovieReservation.OpenApiTransformers
             string? name = context.Description.ActionDescriptor.DisplayName;
             if (name is null) return;
 
-            ParsedDisplayName displayName = GetControllerAndActionName(name);
+            ParsedDisplayName displayName = ParseDisplayName(name);
 
             if (!_controllerTypes.TryGetValue(displayName.ControllerName, out Type? controllerType))
             {
@@ -76,7 +76,7 @@ namespace MovieReservation.OpenApiTransformers
             });
         }
 
-        private static ParsedDisplayName GetControllerAndActionName(string name)
+        private static ParsedDisplayName ParseDisplayName(string name)
         {
             string[] tokenizedName = name.Split(['.', ' ']);
 
