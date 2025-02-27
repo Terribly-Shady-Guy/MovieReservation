@@ -22,7 +22,6 @@ namespace MovieReservation.OpenApiTransformers
                 .GetTypes()
                 .Where(t => t.IsClass && t.IsSubclassOf(controllerBaseType))
                 .ToDictionary(t => t.Name);
-                
         }
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
@@ -77,7 +76,7 @@ namespace MovieReservation.OpenApiTransformers
             });
         }
 
-        private ParsedDisplayName GetControllerAndActionName(string name)
+        private static ParsedDisplayName GetControllerAndActionName(string name)
         {
             string[] tokenizedName = name.Split(['.', ' ']);
 
@@ -96,5 +95,5 @@ namespace MovieReservation.OpenApiTransformers
         }
     }
 
-    internal record struct ParsedDisplayName(string ControllerName, string ActionName);
+    internal record ParsedDisplayName(string ControllerName, string ActionName);
 }
