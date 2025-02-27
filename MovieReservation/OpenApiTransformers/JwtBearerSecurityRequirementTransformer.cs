@@ -22,7 +22,7 @@ namespace MovieReservation.OpenApiTransformers
             _controllerTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => t.IsClass && t.IsSubclassOf(controllerBaseType))
-                .ToDictionary(t => t.Name);
+                .ToDictionary(t => t.Namespace + t.Name);
         }
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ namespace MovieReservation.OpenApiTransformers
 
             ParsedDisplayName displayName = ParseDisplayName(name);
 
-            if (!_controllerTypes.TryGetValue(displayName.ControllerName, out Type? controllerType))
+            if (!_controllerTypes.TryGetValue(displayName.NamespaceName + displayName.ControllerName, out Type? controllerType))
             {
                 return;
             }
