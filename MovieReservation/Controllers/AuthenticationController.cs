@@ -28,6 +28,7 @@ namespace MovieReservation.Controllers
         /// <response code="202">Authentication was successful, but 2fa is required</response>
         /// <response code="401">The user does not exist or password is incorrect</response>
         [ProducesResponseType<AuthenticationToken>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status102Processing)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces("application/json")]
         [HttpPost]

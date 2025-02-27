@@ -4,9 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using DbInfrastructure.Models;
 using MovieReservation.Services;
-using MovieReservation.SwaggerOperationFilters;
-using System.Reflection;
 using DbInfrastructure;
+using MovieReservation.OpenApiTransformers;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -19,30 +19,38 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+
+builder.Services.AddOpenApi(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    options.AddDocumentTransformer((document, context, CancellationToken) =>
     {
-        Version = "V1",
-        Title = "Movie Reservation API",
-        Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
+        document.Info = new OpenApiInfo
+        {
+            Version = "V1",
+            Title = "Movie Reservation API",
+            Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
+        };
+
+        var securitySchemes = new Dictionary<string, OpenApiSecurityScheme>
+        {
+            ["Bearer"] = new OpenApiSecurityScheme
+            {
+                Description = "Jwt bearer token using Authorization header",
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Name = "Authorization"
+            }
+        };
+
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes = securitySchemes;
+
+        return Task.CompletedTask;
     });
 
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "Jwt bearer token using Authorization header",
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Name = "Authorization"
-    });
-
-    options.OperationFilter<JwtSecurityRequirementOperationFilter>();
-
-    string xmlCommentFilePath = Path.Combine(AppContext.BaseDirectory, Assembly.GetExecutingAssembly().GetName().Name + ".xml");
-
-    options.IncludeXmlComments(xmlCommentFilePath);
+    options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
 });
 
 builder.Services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
@@ -121,8 +129,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
     
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
     imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
