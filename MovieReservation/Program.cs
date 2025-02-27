@@ -130,7 +130,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.WithTitle("Movie Reservation OpenApi Client")
+            .WithTheme(ScalarTheme.BluePlanet)
+            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
+    });
     
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
     imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
