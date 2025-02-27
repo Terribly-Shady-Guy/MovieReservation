@@ -9,6 +9,7 @@ namespace MovieReservation.OpenApiTransformers
 {
     public class JwtBearerSecurityRequirementTransformer : IOpenApiOperationTransformer
     {
+        private record ParsedDisplayName(string NamespaceName, string ControllerName, string ActionName);
         private readonly Dictionary<string, Type> _controllerTypes;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
 
@@ -96,6 +97,4 @@ namespace MovieReservation.OpenApiTransformers
                 ActionName: tokenizedName[typeIndex + 1]);
         }
     }
-
-    internal record ParsedDisplayName(string NamespaceName,string ControllerName, string ActionName);
 }
