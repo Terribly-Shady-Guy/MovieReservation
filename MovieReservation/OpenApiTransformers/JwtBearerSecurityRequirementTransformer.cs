@@ -8,7 +8,6 @@ namespace MovieReservation.OpenApiTransformers
     public class JwtBearerSecurityRequirementTransformer : IOpenApiOperationTransformer
     {
         private readonly IAuthenticationSchemeProvider _schemeProvider;
-        private const string SecurityDefinitionId = "Bearer";
 
         public JwtBearerSecurityRequirementTransformer(IAuthenticationSchemeProvider schemeProvider)
         {
@@ -17,7 +16,7 @@ namespace MovieReservation.OpenApiTransformers
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            var scheme = await _schemeProvider.GetSchemeAsync(SecurityDefinitionId);
+            var scheme = await _schemeProvider.GetSchemeAsync("Bearer");
             if (scheme is null) return;
 
             bool hasAuthData = context.Description.ActionDescriptor.EndpointMetadata
@@ -40,7 +39,7 @@ namespace MovieReservation.OpenApiTransformers
             {
                 Reference = new OpenApiReference
                 {
-                    Id = SecurityDefinitionId,
+                    Id = scheme.Name,
                     Type = ReferenceType.SecurityScheme
                 }
             };

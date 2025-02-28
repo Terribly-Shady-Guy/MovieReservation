@@ -33,7 +33,7 @@ builder.Services.AddOpenApi(options =>
 
         var securitySchemes = new Dictionary<string, OpenApiSecurityScheme>
         {
-            ["Bearer"] = new OpenApiSecurityScheme
+            [JwtBearerDefaults.AuthenticationScheme] = new OpenApiSecurityScheme
             {
                 Description = "Jwt bearer token using Authorization header",
                 Scheme = "bearer",
