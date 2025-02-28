@@ -47,7 +47,7 @@ namespace MovieReservation.OpenApiTransformers
 
             operation.Security.Add(new OpenApiSecurityRequirement
             {
-                { requirementSecurityScheme, Array.Empty<string>() }
+                [requirementSecurityScheme] = Array.Empty<string>()
             });
         }
     }
