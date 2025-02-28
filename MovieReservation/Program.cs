@@ -134,7 +134,8 @@ if (app.Environment.IsDevelopment())
     {
         options.WithTitle("Movie Reservation OpenApi Client")
             .WithTheme(ScalarTheme.BluePlanet)
-            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
+            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
+            .WithClientButton(false);
     });
     
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");

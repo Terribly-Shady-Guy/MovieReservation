@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
+using System.ComponentModel;
 using System.Security.Claims;
 
 namespace MovieReservation.Controllers
@@ -31,8 +32,9 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status102Processing)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Produces("application/json")]
+        [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
         [HttpPost]
-        public async Task<ActionResult> Login(UserLoginVM userLogin)
+        public async Task<ActionResult> Login([Description("Object containing username and password for login")]UserLoginVM userLogin)
         {
             LoginDto login = await _authentication.Login(userLogin);
 
@@ -70,8 +72,9 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Produces("application/json")]
+        [EndpointDescription("An endpoint for refreshing the access token. This endpoint will validate the access token and matches refresh token to database login.")]
         [HttpPatch]
-        public async Task<ActionResult<AuthenticationToken>> RefreshTokens(AuthenticationTokenRequestBody expiredToken)
+        public async Task<ActionResult<AuthenticationToken>> RefreshTokens([Description("An object containing the expired access token and valid refresh token.")]AuthenticationTokenRequestBody expiredToken)
         {
             AuthenticationToken? token = await _authentication.RefreshTokens(expiredToken.AccessToken, expiredToken.RefreshToken);
 
@@ -94,6 +97,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [EndpointDescription("An endpoint for handling logout. This endpoint will delete the login session from db when sucessful.")]
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult> Logout(string refreshToken)
