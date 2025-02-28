@@ -17,12 +17,12 @@ namespace MovieReservation.OpenApiTransformers
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            var schemes = await _schemeProvider.GetSchemeAsync(SecurityDefinitionId);
-            if (schemes is null) return;
+            var scheme = await _schemeProvider.GetSchemeAsync(SecurityDefinitionId);
+            if (scheme is null) return;
 
             bool hasAuthData = context.Description.ActionDescriptor.EndpointMetadata
                  .OfType<IAuthorizeData>()
-                 .Any(auth => auth.AuthenticationSchemes is null || auth.AuthenticationSchemes.Contains("Bearer"));
+                 .Any(auth => auth.AuthenticationSchemes is null || auth.AuthenticationSchemes.Contains(scheme.Name));
 
             if (!hasAuthData) return;
 
