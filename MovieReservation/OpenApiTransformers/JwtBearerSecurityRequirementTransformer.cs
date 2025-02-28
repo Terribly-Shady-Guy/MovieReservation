@@ -22,7 +22,7 @@ namespace MovieReservation.OpenApiTransformers
 
             bool hasAuthData = context.Description.ActionDescriptor.EndpointMetadata
                  .OfType<IAuthorizeData>()
-                 .Any();
+                 .Any(auth => auth.AuthenticationSchemes is null || auth.AuthenticationSchemes.Contains("Bearer"));
 
             if (!hasAuthData) return;
 
