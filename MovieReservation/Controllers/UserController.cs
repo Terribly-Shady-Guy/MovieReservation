@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.OpenApiTransformers;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
 
@@ -21,7 +22,7 @@ namespace MovieReservation.Controllers
         /// <param name="user">An object representing the new user.</param>
         /// <returns></returns>
         /// <response code="201">The new user account was sucessfully created.</response>
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was sucessfully created.")]
         [HttpPost]
         public async Task<ActionResult> AddNewUser(NewUserVM user)
         {
@@ -42,8 +43,8 @@ namespace MovieReservation.Controllers
         /// <returns></returns>
         /// <response code="200">The user was sucessfully promoted to admin.</response>
         /// <response code="404">The user with specified id does not exist.</response>
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was sucessfully promoted to admin.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
         [Authorize(Roles = "Admin")]
         [HttpPatch("{id}")]
         public async Task<ActionResult> PromoteUser(string id)

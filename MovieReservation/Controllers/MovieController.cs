@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.OpenApiTransformers;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
+using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
@@ -23,10 +25,10 @@ namespace MovieReservation.Controllers
         /// <param name="genre">Optional filter by movie genre.</param>
         /// <returns>The list of available movies.</returns>
         /// <response code="200">Sucessfully retrieves list of movies.</response>
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "Sucessfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
-        public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery] string? genre)
+        public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
         {
             return Ok(await _movieService.GetMovies(genre));
         }
@@ -42,7 +44,7 @@ namespace MovieReservation.Controllers
         /// Type must be either a .jpg, .jpeg, or .png.
         /// Size must be 10mb or smaller.
         /// </remarks>
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was sucessfully added.")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddNewMovie([FromForm] MovieFormDataBody movie)
@@ -66,8 +68,8 @@ namespace MovieReservation.Controllers
         /// <returns></returns>
         /// <response code="204">The movie was deleted sucessfully.</response>
         /// <response code="404">The id for the movie does not exist.</response>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was sucessfully deleted.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status400BadRequest, Description = "The id for the move does not exist.")]
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovie(int id)

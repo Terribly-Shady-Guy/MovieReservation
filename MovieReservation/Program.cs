@@ -47,6 +47,24 @@ builder.Services.AddOpenApi(options =>
         return Task.CompletedTask;
     });
 
+    // This is a temporary workaround until the new description property is added to ProducesResponseType.
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        var responseTypes = context.Description.ActionDescriptor.EndpointMetadata
+            .OfType<ProducesResponseTypeWithDescriptionAttribute>()
+            .ToList();
+
+        foreach (var responseType in responseTypes)
+        {
+            if (responseType.Description is not null && operation.Responses.TryGetValue(responseType.StatusCode.ToString(), out OpenApiResponse response))
+            {
+                response.Description = responseType.Description;
+            }
+        }
+
+        return Task.CompletedTask;
+    });
+
     options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
 });
 
