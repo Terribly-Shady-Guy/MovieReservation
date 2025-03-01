@@ -19,53 +19,11 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApi(options =>
 {
-    options.AddDocumentTransformer((document, context, CancellationToken) =>
-    {
-        document.Info = new OpenApiInfo
-        {
-            Version = "V1",
-            Title = "Movie Reservation API",
-            Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
-        };
-
-        var securitySchemes = new Dictionary<string, OpenApiSecurityScheme>
-        {
-            [JwtBearerDefaults.AuthenticationScheme] = new OpenApiSecurityScheme
-            {
-                Description = "Jwt bearer token using Authorization header",
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Name = "Authorization"
-            }
-        };
-
-        document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes = securitySchemes;
-
-        return Task.CompletedTask;
-    });
-
+    options.AddDocumentTransformer<CoreDocumentSetupTransformer>();
     // This is a temporary workaround until the new description property is added to ProducesResponseType.
-    options.AddOperationTransformer((operation, context, cancellationToken) =>
-    {
-        var responseTypes = context.Description.ActionDescriptor.EndpointMetadata
-            .OfType<ProducesResponseTypeWithDescriptionAttribute>()
-            .ToList();
-
-        foreach (var responseType in responseTypes)
-        {
-            if (responseType.Description is not null && operation.Responses.TryGetValue(responseType.StatusCode.ToString(), out OpenApiResponse response))
-            {
-                response.Description = responseType.Description;
-            }
-        }
-
-        return Task.CompletedTask;
-    });
-
+    options.AddOperationTransformer<ResponseTransformer>();
     options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
+    options.AddSchemaTransformer<SchemaExampleTransformer>();
 });
 
 builder.Services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
