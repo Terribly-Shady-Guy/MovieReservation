@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using DbInfrastructure.Models;
 using MovieReservation.Services;
 using DbInfrastructure;
@@ -23,7 +22,6 @@ builder.Services.AddOpenApi(options =>
     // This is a temporary workaround until the new description property is added to ProducesResponseType.
     options.AddOperationTransformer<ResponseTransformer>();
     options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
-    options.AddSchemaTransformer<SchemaExampleTransformer>();
 });
 
 builder.Services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
