@@ -19,11 +19,11 @@ namespace MovieReservation.OpenApiTransformers
             var scheme = await _schemeProvider.GetSchemeAsync("Bearer");
             if (scheme is null) return;
 
-            bool hasAuthData = context.Description.ActionDescriptor.EndpointMetadata
+            bool hasBearerAuthData = context.Description.ActionDescriptor.EndpointMetadata
                  .OfType<IAuthorizeData>()
                  .Any(authData => authData.AuthenticationSchemes is null || authData.AuthenticationSchemes.Contains(scheme.Name));
 
-            if (!hasAuthData) return;
+            if (!hasBearerAuthData) return;
 
             operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {

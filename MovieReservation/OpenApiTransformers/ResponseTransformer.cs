@@ -8,7 +8,7 @@ namespace MovieReservation.OpenApiTransformers
         public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
             var responseTypes = context.Description.ActionDescriptor.EndpointMetadata
-            .OfType<ProducesResponseTypeWithDescriptionAttribute>();
+                .OfType<ProducesResponseTypeWithDescriptionAttribute>();
 
             foreach (var responseType in responseTypes)
             {
