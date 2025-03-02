@@ -16,12 +16,12 @@ namespace MovieReservation.OpenApiTransformers
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            var scheme = await _schemeProvider.GetSchemeAsync("Bearer");
-            if (scheme is null) return;
+            var jwtBearerScheme = await _schemeProvider.GetSchemeAsync("Bearer");
+            if (jwtBearerScheme is null) return;
 
             bool hasBearerAuthData = context.Description.ActionDescriptor.EndpointMetadata
                  .OfType<IAuthorizeData>()
-                 .Any(authData => authData.AuthenticationSchemes is null || authData.AuthenticationSchemes.Contains(scheme.Name));
+                 .Any(authData => authData.AuthenticationSchemes is null || authData.AuthenticationSchemes.Contains(jwtBearerScheme.Name));
 
             if (!hasBearerAuthData) return;
 
@@ -39,7 +39,7 @@ namespace MovieReservation.OpenApiTransformers
             {
                 Reference = new OpenApiReference
                 {
-                    Id = scheme.Name,
+                    Id = jwtBearerScheme.Name,
                     Type = ReferenceType.SecurityScheme
                 }
             };
