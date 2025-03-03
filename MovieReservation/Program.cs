@@ -6,6 +6,7 @@ using MovieReservation.Services;
 using DbInfrastructure;
 using MovieReservation.OpenApiTransformers;
 using Scalar.AspNetCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -18,9 +19,47 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApi(options =>
 {
-    options.AddDocumentTransformer<CoreDocumentSetupTransformer>();
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Info = new OpenApiInfo
+        {
+            Version = "V1",
+            Title = "Movie Reservation API",
+            Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
+        };
+
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes.Add(JwtBearerDefaults.AuthenticationScheme,
+            new OpenApiSecurityScheme
+            {
+                Description = "Jwt bearer token using Authorization header",
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Name = "Authorization"
+            });
+
+        return Task.CompletedTask;
+    });
+
     // This is a temporary workaround until the new description property is added to ProducesResponseType.
-    options.AddOperationTransformer<ResponseTransformer>();
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        var responseTypes = context.Description.ActionDescriptor.EndpointMetadata
+                .OfType<ProducesResponseTypeWithDescriptionAttribute>();
+
+        foreach (var responseType in responseTypes)
+        {
+            if (responseType.Description is not null && operation.Responses.TryGetValue(responseType.StatusCode.ToString(), out OpenApiResponse? response))
+            {
+                response.Description = responseType.Description;
+            }
+        }
+
+        return Task.CompletedTask;
+    });
+
     options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
 });
 
