@@ -20,8 +20,8 @@ namespace MovieReservation.Controllers
         }
 
         [EndpointSummary("Login")]
-        [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Authentication was sucessful.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status102Processing, Description = "Authentication was sucessful, but 2fa is required.")]
+        [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Authentication was successful.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status102Processing, Description = "Authentication was successful, but 2fa is required.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "The user does not exist or password is incorrect.")]
         [Produces("application/json")]
         [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
@@ -52,7 +52,7 @@ namespace MovieReservation.Controllers
         }
 
         [EndpointSummary("Refresh tokens")]
-        [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "The token was sucessfully refreshed.")]
+        [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "The token was successfully refreshed.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Refresh or access token is invalid")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user associated with the token does not exist")]
         [Produces("application/json")]
@@ -71,10 +71,10 @@ namespace MovieReservation.Controllers
         }
 
         [EndpointSummary("Logout")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "User sucessfully logged out.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "User successfully logged out.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Access or refresh token is missing.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "User does not exist.")]
-        [EndpointDescription("An endpoint for handling logout. This endpoint will delete the login session from db when sucessful.")]
+        [EndpointDescription("An endpoint for handling logout. This endpoint will delete the login session from db when successful.")]
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult> Logout(string refreshToken)

@@ -19,7 +19,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Add user")]
         [EndpointDescription("An endpoint to create a new user account with User role.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was sucessfully created.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
         [HttpPost]
         public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")]NewUserVM user)
         {
@@ -35,7 +35,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Promote user to admin")]
         [EndpointDescription("An endpoint that allows admin ussers to promote a user to Admin role.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was sucessfully promoted to admin.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was successfully promoted to admin.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
         [Authorize(Roles = "Admin")]
         [HttpPatch("{id}")]

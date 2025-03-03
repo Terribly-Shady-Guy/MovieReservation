@@ -21,7 +21,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("List movies")]
         [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by gemre.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "Sucessfully retrieved the list of movies")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
         public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
@@ -31,7 +31,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Add new movie.")]
         [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was sucessfully added.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
@@ -50,7 +50,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Delete movie")]
         [EndpointDescription("An endpoint that allows an admin user to delete a movie.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was sucessfully deleted.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was successfully deleted.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status400BadRequest, Description = "The id for the move does not exist.")]
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
