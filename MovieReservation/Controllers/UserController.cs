@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApiTransformers;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
+using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
@@ -16,15 +17,11 @@ namespace MovieReservation.Controllers
             _userService = userService;
         }
 
-        /// <summary>
-        /// An endpoint to add a new user in the database.
-        /// </summary>
-        /// <param name="user">An object representing the new user.</param>
-        /// <returns></returns>
-        /// <response code="201">The new user account was sucessfully created.</response>
+        [EndpointSummary("Add user")]
+        [EndpointDescription("An endpoint to create a new user account with User role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was sucessfully created.")]
         [HttpPost]
-        public async Task<ActionResult> AddNewUser(NewUserVM user)
+        public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")]NewUserVM user)
         {
             string? id = await _userService.AddNewUserAsync(user);
 
@@ -36,18 +33,13 @@ namespace MovieReservation.Controllers
             return Created(id, new { Message = "Account created sucessfully." });
         }
 
-        /// <summary>
-        /// An endpoint for admin users to promote other users to admin role.
-        /// </summary>
-        /// <param name="id">The id for the promoted user</param>
-        /// <returns></returns>
-        /// <response code="200">The user was sucessfully promoted to admin.</response>
-        /// <response code="404">The user with specified id does not exist.</response>
+        [EndpointSummary("Promote user to admin")]
+        [EndpointDescription("An endpoint that allows admin ussers to promote a user to Admin role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was sucessfully promoted to admin.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
         [Authorize(Roles = "Admin")]
         [HttpPatch("{id}")]
-        public async Task<ActionResult> PromoteUser(string id)
+        public async Task<ActionResult> PromoteUser([Description("The id for an existing user to promote.")] string id)
         {
             bool isSucessful = await _userService.PromoteToAdmin(id);
 

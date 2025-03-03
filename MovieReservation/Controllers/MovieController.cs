@@ -19,12 +19,8 @@ namespace MovieReservation.Controllers
             _movieService = movieService;
         }
 
-        /// <summary>
-        /// An endpoint for retrieving list of movies.
-        /// </summary>
-        /// <param name="genre">Optional filter by movie genre.</param>
-        /// <returns>The list of available movies.</returns>
-        /// <response code="200">Sucessfully retrieves list of movies.</response>
+        [EndpointSummary("List movies")]
+        [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by gemre.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "Sucessfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
@@ -33,21 +29,12 @@ namespace MovieReservation.Controllers
             return Ok(await _movieService.GetMovies(genre));
         }
 
-        /// <summary>
-        /// An endpoint for admins to add a new movie.
-        /// </summary>
-        /// <param name="movie">A formdata object representing the new movie.</param>
-        /// <returns></returns>
-        /// <response code="201">Movie was sucessfully added.</response>
-        /// <remarks>
-        /// The uploaded poster image file must meet the following requirements:
-        /// Type must be either a .jpg, .jpeg, or .png.
-        /// Size must be 10mb or smaller.
-        /// </remarks>
+        [EndpointSummary("Add new movie.")]
+        [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was sucessfully added.")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult> AddNewMovie([FromForm] MovieFormDataBody movie)
+        public async Task<ActionResult> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
         {
             await _movieService.AddMovie(movie);
 
@@ -61,18 +48,13 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// An endpoint for an admin to delete a movie.
-        /// </summary>
-        /// <param name="id">The movie id</param>
-        /// <returns></returns>
-        /// <response code="204">The movie was deleted sucessfully.</response>
-        /// <response code="404">The id for the movie does not exist.</response>
+        [EndpointSummary("Delete movie")]
+        [EndpointDescription("An endpoint that allows an admin user to delete a movie.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was sucessfully deleted.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status400BadRequest, Description = "The id for the move does not exist.")]
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteMovie(int id)
+        public async Task<ActionResult> DeleteMovie([Description("The movie id.")] int id)
         {
             bool isDeleted = await _movieService.DeleteMovie(id);
 

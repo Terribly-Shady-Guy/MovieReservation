@@ -19,16 +19,7 @@ namespace MovieReservation.Controllers
             _authentication = authentication;
         }
 
-        /// <summary>An endpoint for user login</summary>
-        /// <param name="userLogin">Object containing username and password for login</param>
-        /// <returns>An object containing the jwt access token</returns>
-        /// <remarks>
-        /// This endpoint handles authentication using a jwt as an access token and uses a basic refresh token.
-        /// The refresh token and its expiration date and time will be stored in the database.
-        /// </remarks>
-        /// <response code="200">Authentication was successful</response>
-        /// <response code="202">Authentication was successful, but 2fa is required</response>
-        /// <response code="401">The user does not exist or password is incorrect</response>
+        [EndpointSummary("Login")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Authentication was sucessful.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status102Processing, Description = "Authentication was sucessful, but 2fa is required.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "The user does not exist or password is incorrect.")]
@@ -60,15 +51,7 @@ namespace MovieReservation.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// An endpoint for refreshing access token.
-        /// </summary>
-        /// <param name="expiredToken">The expired access token</param>
-        /// <returns>A new access token</returns>
-        /// <remarks>This endpoint validates the access token and creates a new access and refresh token when valid.</remarks>
-        /// <response code="200">The token was successfully refreshed</response>
-        /// <response code="401">Refresh or access token is invalid</response>
-        /// <response code="404">The user associated with the token does not exist</response>
+        [EndpointSummary("Refresh tokens")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "The token was sucessfully refreshed.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Refresh or access token is invalid")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user associated with the token does not exist")]
@@ -87,14 +70,7 @@ namespace MovieReservation.Controllers
             return Ok(token);
         }
 
-        /// <summary>
-        /// An endpoint for handling logout.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>This endpoint deletes the refresh token stored in the db upon successful authorization.</remarks>
-        /// <response code="204">User successfully logged out</response>
-        /// <response code="401">Access or refresh token is missing</response>
-        /// <response code="404">User does not exist</response>
+        [EndpointSummary("Logout")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "User sucessfully logged out.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Access or refresh token is missing.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "User does not exist.")]
