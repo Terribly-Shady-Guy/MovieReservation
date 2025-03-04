@@ -50,7 +50,6 @@ namespace MovieReservation.Services
                 IssuerSigningKey = securityKey,
                 ValidAudience = _options.Value.Audience,
                 ValidIssuer = _options.Value.Issuer,
-                ClockSkew = TimeSpan.FromSeconds(30),
             };
 
             var result = await _jwtHandler.ValidateTokenAsync(expiredToken, tokenParams);

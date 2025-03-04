@@ -88,7 +88,7 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
             IssuerSigningKey = signingKey,
             ValidAudience = jwtConfig.GetValue<string>("Audience"),
             ValidIssuer = jwtConfig.GetValue<string>("Issuer"),
-            ClockSkew = TimeSpan.FromSeconds(30)
+            ClockSkew = TimeSpan.FromSeconds(15)
         };
     });
 
@@ -142,7 +142,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
-        options.WithTitle("Movie Reservation OpenApi Client")
+        options.WithTitle("Movie Reservation API")
             .WithTheme(ScalarTheme.BluePlanet)
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
             .WithClientButton(false);
