@@ -2,7 +2,7 @@
 using MovieReservation.ValidationAttributes;
 using System.Text;
 
-namespace MovieReservation.Tests
+namespace Tests
 {
     public class MoviePosterFileAttribute_IsValid
     {
