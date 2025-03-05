@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
-namespace MovieReservation.OpenApiTransformers
+namespace MovieReservation.OpenApi.Transformers
 {
-    public class JwtBearerSecurityRequirementTransformer : IOpenApiOperationTransformer
+    public sealed class JwtBearerSecurityRequirementTransformer : IOpenApiOperationTransformer
     {
         private readonly IAuthenticationSchemeProvider _schemeProvider;
 
@@ -16,7 +16,7 @@ namespace MovieReservation.OpenApiTransformers
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            var jwtBearerScheme = await _schemeProvider.GetSchemeAsync("Bearer");
+            AuthenticationScheme? jwtBearerScheme = await _schemeProvider.GetSchemeAsync("Bearer");
             if (jwtBearerScheme is null) return;
 
             bool hasBearerAuthData = context.Description.ActionDescriptor.EndpointMetadata

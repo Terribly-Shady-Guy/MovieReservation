@@ -4,9 +4,10 @@ using Microsoft.IdentityModel.Tokens;
 using DbInfrastructure.Models;
 using MovieReservation.Services;
 using DbInfrastructure;
-using MovieReservation.OpenApiTransformers;
 using Scalar.AspNetCore;
 using Microsoft.OpenApi.Models;
+using MovieReservation.OpenApi.Transformers;
+using MovieReservation.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>

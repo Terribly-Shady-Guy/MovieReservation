@@ -4,7 +4,7 @@ using MovieReservation.Services;
 using MovieReservation.ViewModels;
 using System.ComponentModel;
 using System.Security.Claims;
-using MovieReservation.OpenApiTransformers;
+using MovieReservation.OpenApi;
 
 namespace MovieReservation.Controllers
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieReservation.OpenApiTransformers;
+using MovieReservation.OpenApi;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
 using System.ComponentModel;
