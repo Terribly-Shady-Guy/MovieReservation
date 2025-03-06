@@ -146,7 +146,9 @@ if (app.Environment.IsDevelopment())
         options.WithTitle("Movie Reservation API")
             .WithTheme(ScalarTheme.BluePlanet)
             .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
-            .WithClientButton(false);
+            .WithClientButton(false)
+            .WithForceThemeMode(ThemeMode.Dark)
+            .WithDarkModeToggle(false);
     });
     
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
