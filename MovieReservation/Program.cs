@@ -52,7 +52,11 @@ builder.Services.AddOpenApi(options =>
 
         foreach (var responseType in responseTypes)
         {
-            if (responseType.Description is not null && operation.Responses.TryGetValue(responseType.StatusCode.ToString(), out OpenApiResponse? response))
+            bool isStatusCodeInResponses = operation.Responses.TryGetValue(
+                responseType.StatusCode.ToString(),
+                out OpenApiResponse? response);
+
+            if (responseType.Description is not null && isStatusCodeInResponses && response is not null)
             {
                 response.Description = responseType.Description;
             }
