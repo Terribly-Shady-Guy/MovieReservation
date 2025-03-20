@@ -25,9 +25,8 @@ namespace MovieReservation.OpenApi.Transformers
         private IOpenApiOperationTransformer? GetOrCreateTransformer(IServiceProvider serviceProvider, IEndpointOperationTransformerMetadata metadata)
         {
             string cacheKey = metadata.TransformerType.FullName ?? metadata.TransformerType.Name;
-            IOpenApiOperationTransformer? transformer = null;
 
-            if (_transformerCache.TryGetValue(cacheKey, out transformer))
+            if (_transformerCache.TryGetValue(cacheKey, out IOpenApiOperationTransformer? transformer))
             {
                 return transformer;
             }

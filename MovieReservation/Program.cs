@@ -30,8 +30,9 @@ builder.Services.AddOpenApi(options =>
         };
 
         document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes.Add(JwtBearerDefaults.AuthenticationScheme,
-            new OpenApiSecurityScheme
+        document.Components.SecuritySchemes.Add(
+            key: JwtBearerDefaults.AuthenticationScheme,
+            value: new OpenApiSecurityScheme
             {
                 Description = "Jwt bearer token using Authorization header",
                 Scheme = "bearer",

@@ -26,7 +26,7 @@ namespace MovieReservation.OpenApi.Transformers
 
             foreach (var mediaType in operation.RequestBody.Content)
             {
-                mediaType.Value.Schema.Example = requestExample;
+                mediaType.Value.Example = requestExample;
             }
 
             if (operation.Responses.TryGetValue(StatusCodes.Status200OK.ToString(), out var response))
@@ -52,7 +52,7 @@ namespace MovieReservation.OpenApi.Transformers
 
             foreach (var mediaType in response.Content)
             {
-                mediaType.Value.Schema.Example = responseExample;
+                mediaType.Value.Example = responseExample;
             }
         }
     }
