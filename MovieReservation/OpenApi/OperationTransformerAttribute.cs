@@ -3,12 +3,6 @@ using System.Reflection;
 
 namespace MovieReservation.OpenApi
 {
-    public interface IEndpointOperationTransformerMetadata
-    {
-        public Type TransformerType { get; }
-        public IOpenApiOperationTransformer? CreateTransformer(IServiceProvider services);
-    }
-
     /// <summary>
     /// An attribute to apply operation transformers to specific endpoints or controllers.
     /// </summary>
