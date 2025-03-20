@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.OpenApi;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using MovieReservation.Services;
@@ -31,23 +32,28 @@ namespace MovieReservation.OpenApi.Transformers
 
             if (operation.Responses.TryGetValue(StatusCodes.Status200OK.ToString(), out var response))
             {
-                var identity = new ClaimsIdentity();
-                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
-                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+                await AddResponseExample(response);
+            }
+        }
 
-                AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
+        private async Task AddResponseExample(OpenApiResponse response)
+        {
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
 
-                var responseExample = new OpenApiObject()
-                {
-                    ["accessToken"] = new OpenApiString(token.AccessToken),
-                    ["refreshToken"] = new OpenApiString(token.RefreshToken),
-                    ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
-                };
+            AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
 
-                foreach(var mediaType in response.Content)
-                {
-                    mediaType.Value.Schema.Example = responseExample;
-                }
+            var responseExample = new OpenApiObject()
+            {
+                ["accessToken"] = new OpenApiString(token.AccessToken),
+                ["refreshToken"] = new OpenApiString(token.RefreshToken),
+                ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
+            };
+
+            foreach (var mediaType in response.Content)
+            {
+                mediaType.Value.Schema.Example = responseExample;
             }
         }
     }
