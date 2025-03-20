@@ -65,6 +65,7 @@ builder.Services.AddOpenApi(options =>
         return Task.CompletedTask;
     });
 
+    options.AddOperationTransformer<EndpointOperationTransformer>();
     options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
 });
 

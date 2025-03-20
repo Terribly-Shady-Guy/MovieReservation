@@ -5,6 +5,7 @@ using MovieReservation.ViewModels;
 using System.ComponentModel;
 using System.Security.Claims;
 using MovieReservation.OpenApi;
+using MovieReservation.OpenApi.Transformers;
 
 namespace MovieReservation.Controllers
 {
@@ -24,6 +25,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status102Processing, Description = "Authentication was successful, but 2fa is required.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "The user does not exist or password is incorrect.")]
         [Produces("application/json")]
+        [OperationTransformer<LoginEndpointTransformer>]
         [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
         [HttpPost]
         public async Task<ActionResult> Login([Description("Object containing username and password for login")]UserLoginVM userLogin)
