@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
+using MovieReservation.OpenApi.Transformers;
 using MovieReservation.Services;
 using MovieReservation.ViewModels;
 using System.ComponentModel;
@@ -20,6 +21,7 @@ namespace MovieReservation.Controllers
         [EndpointSummary("Add user")]
         [EndpointDescription("An endpoint to create a new user account with User role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
+        [OperationTransformer<NewUserEndpointTransformer>]
         [HttpPost]
         public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")]NewUserVM user)
         {
