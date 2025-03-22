@@ -34,7 +34,7 @@ builder.Services.AddOpenApi(options =>
             key: JwtBearerDefaults.AuthenticationScheme,
             value: new OpenApiSecurityScheme
             {
-                Description = "Jwt bearer token using Authorization header",
+                Description = """Jwt bearer token using "Authorization" header""",
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,

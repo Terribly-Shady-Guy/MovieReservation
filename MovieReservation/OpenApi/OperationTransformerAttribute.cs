@@ -21,7 +21,7 @@ namespace MovieReservation.OpenApi
             ConstructorInfo? constructorToCall = null;
             ParameterInfo[] constructorParams = [];
 
-            foreach (var constructor in constructors)
+            foreach (ConstructorInfo constructor in constructors)
             {
                 ParameterInfo[] parameters = constructor.GetParameters();
                 if (parameters.Length > constructorParams.Length || constructorToCall is null)
@@ -37,7 +37,8 @@ namespace MovieReservation.OpenApi
 
             for (int i = 0; i < constructorParams.Length; i++)
             {
-                constructorArgs[i] = services.GetRequiredService(constructorParams[i].ParameterType);
+                Type paramType = constructorParams[i].ParameterType;
+                constructorArgs[i] = services.GetRequiredService(paramType);
             }
 
             return (TOperationTransformer)constructorToCall.Invoke(constructorArgs);
