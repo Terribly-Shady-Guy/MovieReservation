@@ -7,7 +7,6 @@ using DbInfrastructure;
 using Scalar.AspNetCore;
 using Microsoft.OpenApi.Models;
 using MovieReservation.OpenApi.Transformers;
-using MovieReservation.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -46,26 +45,7 @@ builder.Services.AddOpenApi(options =>
     });
 
     // This is a temporary workaround until the new description property is added to ProducesResponseType.
-    options.AddOperationTransformer((operation, context, cancellationToken) =>
-    {
-        var responseTypes = context.Description.ActionDescriptor.EndpointMetadata
-                .OfType<ProducesResponseTypeWithDescriptionAttribute>();
-
-        foreach (var responseType in responseTypes)
-        {
-            bool isStatusCodeInResponses = operation.Responses.TryGetValue(
-                key: responseType.StatusCode.ToString(),
-                value: out OpenApiResponse? response);
-
-            if (responseType.Description is not null && isStatusCodeInResponses && response is not null)
-            {
-                response.Description = responseType.Description;
-            }
-        }
-
-        return Task.CompletedTask;
-    });
-
+    options.AddOperationTransformer<EndpointResponseDescriptionTransformer>();
     options.AddOperationTransformer<EndpointOperationTransformer>();
     options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
 });
