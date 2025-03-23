@@ -6,10 +6,8 @@ namespace DbInfrastructure
 {
     public class MovieReservationDbContext : IdentityDbContext<AppUser>
     {
-        public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) : base(options)
-        {
-
-        }
+        public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) 
+            : base(options) { }
 
         public DbSet<InternalLogin> Logins { get; set; }
         public DbSet<Movie> Movies { get; set; }
