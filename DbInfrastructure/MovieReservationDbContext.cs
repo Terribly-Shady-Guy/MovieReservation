@@ -4,6 +4,9 @@ using DbInfrastructure.Models;
 
 namespace DbInfrastructure
 {
+    /// <summary>
+    /// DbContext class for interacting with the movie reservation db.
+    /// </summary>
     public class MovieReservationDbContext : IdentityDbContext<AppUser>
     {
         public MovieReservationDbContext(DbContextOptions<MovieReservationDbContext> options) 

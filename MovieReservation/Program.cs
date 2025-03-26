@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
+using MovieReservation.OpenApi.Transformers;
 using DbInfrastructure.Models;
 using MovieReservation.Services;
 using DbInfrastructure;
-using Scalar.AspNetCore;
-using Microsoft.OpenApi.Models;
-using MovieReservation.OpenApi.Transformers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -33,7 +33,7 @@ builder.Services.AddOpenApi(options =>
             key: JwtBearerDefaults.AuthenticationScheme,
             value: new OpenApiSecurityScheme
             {
-                Description = """Jwt bearer token using "Authorization" header""",
+                Description = "Jwt bearer token using \"Authorization\" header",
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
