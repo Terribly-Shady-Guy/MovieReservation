@@ -11,12 +11,11 @@ namespace MovieReservation.OpenApi
     public sealed class OperationTransformerAttribute<TOperationTransformer> : Attribute, IEndpointOperationTransformerMetadata
         where TOperationTransformer : IOpenApiOperationTransformer
     {
-        private readonly Type _transformerType = typeof(TOperationTransformer);
-        public Type TransformerType => _transformerType;
+        public Type TransformerType { get; } = typeof(TOperationTransformer);
 
         public IOpenApiOperationTransformer? CreateTransformer(IServiceProvider services)
         {
-            ConstructorInfo[] constructors = _transformerType.GetConstructors();
+            ConstructorInfo[] constructors = TransformerType.GetConstructors();
 
             ConstructorInfo? constructorToCall = null;
             ParameterInfo[] constructorParams = [];
