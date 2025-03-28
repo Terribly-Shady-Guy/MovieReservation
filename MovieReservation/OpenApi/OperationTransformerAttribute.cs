@@ -4,7 +4,7 @@ using System.Reflection;
 namespace MovieReservation.OpenApi
 {
     /// <summary>
-    /// An attribute to apply operation transformers to specific endpoints or controllers.
+    /// An attribute to apply operation transformers to specific endpoint methods or controllers.
     /// </summary>
     /// <typeparam name="TOperationTransformer">The operation transformer to apply.</typeparam>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
