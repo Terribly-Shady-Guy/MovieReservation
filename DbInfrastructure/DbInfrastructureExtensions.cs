@@ -11,7 +11,8 @@ namespace DbInfrastructure
         /// </summary>
         /// <param name="services">The service collection instance used by the app.</param>
         /// <param name="connectionString">The connection string for SQL Server</param>
-        public static void AddDbInfrastructure(this IServiceCollection services, string? connectionString)
+        /// <returns>The same service collection passed as a parameter</returns>
+        public static IServiceCollection AddDbInfrastructure(this IServiceCollection services, string? connectionString)
         {
             services.AddDbContext<MovieReservationDbContext>(options =>
             {
@@ -22,6 +23,8 @@ namespace DbInfrastructure
 
                 options.UseDataSeeding();
             });
+
+            return services;
         }
     }
 }
