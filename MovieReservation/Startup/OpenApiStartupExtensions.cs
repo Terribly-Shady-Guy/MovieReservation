@@ -45,7 +45,7 @@ namespace MovieReservation.Startup
             return services;
         }
 
-        public static IEndpointConventionBuilder UseOpenApiClient(this IEndpointRouteBuilder app)
+        public static IEndpointConventionBuilder MapOpenApiClient(this IEndpointRouteBuilder app)
         {
             var openApiClientGroup = app.MapGroup("/openapi");
 

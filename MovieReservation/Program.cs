@@ -33,7 +33,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApiClient();
+    app.MapOpenApiClient();
     
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
     imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
