@@ -45,7 +45,7 @@ namespace MovieReservation.Startup
             return services;
         }
 
-        public static IEndpointConventionBuilder MapOpenApiClient(this IEndpointRouteBuilder route)
+        public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder route)
         {
             const string RouteGroupPath = "/apireference";
             var openApiClientGroup = route.MapGroup(RouteGroupPath);

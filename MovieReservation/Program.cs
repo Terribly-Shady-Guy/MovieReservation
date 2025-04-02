@@ -53,7 +53,7 @@ if (app.Environment.IsDevelopment())
         RequestPath = "/Images"
     });
 
-    app.MapOpenApiClient();
+    app.MapOpenApiReference();
 }
 
 app.MapHealthChecks("/health");
