@@ -30,11 +30,16 @@ builder.Services.AddTransient<LocationService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseExceptionHandler();
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApiClient();
-    
     string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
     imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
 
@@ -48,15 +53,9 @@ if (app.Environment.IsDevelopment())
         FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(imagesDirectoryPath),
         RequestPath = "/Images"
     });
+
+    app.MapOpenApiClient();
 }
-
-app.UseExceptionHandler();
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 
