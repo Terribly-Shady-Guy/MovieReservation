@@ -54,14 +54,12 @@ namespace MovieReservation.Startup
             openApiClientGroup.MapScalarApiReference(options =>
             {
                 options.WithTitle("Movie Reservation API")
-                    .WithTheme(ScalarTheme.BluePlanet)
+                    .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
                     .WithClientButton(false)
-                    .WithForceThemeMode(ThemeMode.Dark)
-                    .WithDarkModeToggle(false)
                     .WithOpenApiRoutePattern($$"""{{RouteGroupPath}}/openapi/{documentName}.json""");
             });
-
+            
             return openApiClientGroup;
         }
     }
