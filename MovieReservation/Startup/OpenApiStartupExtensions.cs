@@ -47,9 +47,10 @@ namespace MovieReservation.Startup
 
         public static IEndpointConventionBuilder MapOpenApiClient(this IEndpointRouteBuilder app)
         {
-            var openApiClientGroup = app.MapGroup("/openapi");
+            const string RouteGroupPath = "/apireference";
+            var openApiClientGroup = app.MapGroup(RouteGroupPath);
 
-            openApiClientGroup.MapOpenApi("/{documentName}.json");
+            openApiClientGroup.MapOpenApi();
             openApiClientGroup.MapScalarApiReference(options =>
             {
                 options.WithTitle("Movie Reservation API")
@@ -57,7 +58,8 @@ namespace MovieReservation.Startup
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
                     .WithClientButton(false)
                     .WithForceThemeMode(ThemeMode.Dark)
-                    .WithDarkModeToggle(false);
+                    .WithDarkModeToggle(false)
+                    .WithOpenApiRoutePattern($$"""{{RouteGroupPath}}/openapi/{documentName}.json""");
             });
 
             return openApiClientGroup;
