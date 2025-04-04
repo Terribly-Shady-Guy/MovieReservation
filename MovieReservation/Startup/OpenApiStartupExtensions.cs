@@ -7,6 +7,11 @@ namespace MovieReservation.Startup
 {
     public static class OpenApiStartupExtensions
     {
+        /// <summary>
+        /// Adds the OpenAPI services for generating documents.
+        /// </summary>
+        /// <param name="services">THe application service collection instance.</param>
+        /// <returns>The same service collection instance from paramater.</returns>
         public static IServiceCollection AddOpenApiServices(this IServiceCollection services)
         {
             services.AddOpenApi(options =>
@@ -45,6 +50,11 @@ namespace MovieReservation.Startup
             return services;
         }
 
+        /// <summary>
+        /// Maps endpoints for OpenAPI document generation and API reference ui.
+        /// </summary>
+        /// <param name="route">A route builder from either WebApplication or a RouteGroupBuilder.</param>
+        /// <returns>The builder for the api reference route group.</returns>
         public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder route)
         {
             const string RouteGroupPath = "/apireference";

@@ -9,6 +9,12 @@ namespace MovieReservation.Startup
 {
     public static class IdentityJwtAuthenticationStartupExtensions
     {
+        /// <summary>
+        /// Adds the services for enabling Jwt authentication with identity framework.
+        /// </summary>
+        /// <param name="services">The application service collection instance.</param>
+        /// <param name="jwtConfig">The configuration section containing jwt configs.</param>
+        /// <returns>The same service collection instance from parameter.</returns>
         public static IServiceCollection AddIdentityJwtAuthentication(this IServiceCollection services, IConfigurationSection jwtConfig)
         {
             services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
