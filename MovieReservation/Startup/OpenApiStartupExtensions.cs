@@ -48,7 +48,8 @@ namespace MovieReservation.Startup
         public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder route)
         {
             const string RouteGroupPath = "/apireference";
-            var openApiReferenceGroup = route.MapGroup(RouteGroupPath);
+            var openApiReferenceGroup = route.MapGroup(RouteGroupPath)
+                .ExcludeFromDescription();
 
             openApiReferenceGroup.MapOpenApi();
             openApiReferenceGroup.MapScalarApiReference(options =>
