@@ -5,14 +5,18 @@ namespace MovieReservation.Services
 {
     public class LocalRsaKeyHandler : IRsaKeyHandler
     {
-        private readonly string _rsaDirectoryPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..", "Rsa"));
+        private readonly string _rsaDirectoryPath;
         private readonly string _rsaPrivateKeyPath;
         private readonly string _rsaPublicKeyPath;
 
         public LocalRsaKeyHandler()
         {
-            _rsaPrivateKeyPath = Path.Combine(_rsaDirectoryPath, "private.xml");
-            _rsaPublicKeyPath = Path.Combine(_rsaDirectoryPath, "public.xml");
+            string rsaDirectoryPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
+            rsaDirectoryPath = Path.GetFullPath(rsaDirectoryPath);
+
+            _rsaDirectoryPath = rsaDirectoryPath;
+            _rsaPrivateKeyPath = Path.Combine(rsaDirectoryPath, "private.xml");
+            _rsaPublicKeyPath = Path.Combine(rsaDirectoryPath, "public.xml");
         }
 
         public void SaveKey()
@@ -31,10 +35,9 @@ namespace MovieReservation.Services
         }
 
         public bool KeyExists()
-        {
-            return File.Exists(_rsaPrivateKeyPath)
-                && File.Exists(_rsaPrivateKeyPath);
-        }
+        => File.Exists(_rsaPrivateKeyPath)
+            && File.Exists(_rsaPrivateKeyPath);
+        
 
         public async Task<RsaSecurityKey> LoadPublicAsync()
         {
