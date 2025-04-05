@@ -5,7 +5,7 @@ namespace MovieReservation.Services
 {
     public class LocalRsaKeyHandler : IRsaKeyHandler
     {
-        private readonly string _rsaDirectoryPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
+        private readonly string _rsaDirectoryPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..", "Rsa"));
         private readonly string _rsaPrivateKeyPath;
         private readonly string _rsaPublicKeyPath;
 
