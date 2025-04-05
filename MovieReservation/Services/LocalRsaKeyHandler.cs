@@ -6,6 +6,14 @@ namespace MovieReservation.Services
     public class LocalRsaKeyHandler : IRsaKeyHandler
     {
         private readonly string _rsaDirectoryPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
+        private readonly string _rsaPrivateKeyPath;
+        private readonly string _rsaPublicKeyPath;
+
+        public LocalRsaKeyHandler()
+        {
+            _rsaPrivateKeyPath = Path.Combine(_rsaDirectoryPath, "private.xml");
+            _rsaPublicKeyPath = Path.Combine(_rsaDirectoryPath, "public.xml");
+        }
 
         public void SaveKey()
         {
@@ -18,19 +26,19 @@ namespace MovieReservation.Services
             string privateKey = rsa.ToXmlString(true);
             string publicKey = rsa.ToXmlString(false);
 
-            File.WriteAllText(Path.Combine(_rsaDirectoryPath, "private.xml"), privateKey);
-            File.WriteAllText(Path.Combine(_rsaDirectoryPath, "public.xml"), publicKey);
+            File.WriteAllText(_rsaPrivateKeyPath, privateKey);
+            File.WriteAllText(_rsaPublicKeyPath, publicKey);
         }
 
         public bool KeyExists()
         {
-            return File.Exists(Path.Combine(_rsaDirectoryPath, "private.xml"))
-                && File.Exists(Path.Combine(_rsaDirectoryPath, "public.xml"));
+            return File.Exists(_rsaPrivateKeyPath)
+                && File.Exists(_rsaPrivateKeyPath);
         }
 
         public async Task<RsaSecurityKey> LoadPublicAsync()
         {
-            string publicKey = await File.ReadAllTextAsync(Path.Combine(_rsaDirectoryPath, "public.xml"));
+            string publicKey = await File.ReadAllTextAsync(_rsaPublicKeyPath);
 
             var rsa = RSA.Create();
             rsa.FromXmlString(publicKey);
@@ -40,7 +48,7 @@ namespace MovieReservation.Services
 
         public async Task<RsaSecurityKey> LoadPrivateAsync()
         {
-            string privateKey = await File.ReadAllTextAsync(Path.Combine(_rsaDirectoryPath, "private.xml"));
+            string privateKey = await File.ReadAllTextAsync(_rsaPrivateKeyPath);
 
             var rsa = RSA.Create();
             rsa.FromXmlString(privateKey);
