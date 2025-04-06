@@ -10,7 +10,7 @@ namespace MovieReservation.Startup
         /// <summary>
         /// Adds the OpenAPI services for generating documents.
         /// </summary>
-        /// <param name="services">THe application service collection instance.</param>
+        /// <param name="services">The application service collection instance.</param>
         /// <returns>The same service collection instance from paramater.</returns>
         public static IServiceCollection AddOpenApiServices(this IServiceCollection services)
         {
