@@ -17,12 +17,6 @@ builder.Services.AddDbInfrastructure(builder.Configuration.GetConnectionString("
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddHsts(options =>
-{
-    options.MaxAge = TimeSpan.FromDays(365);
-    options.IncludeSubDomains = true;
-});
-
 builder.Services.AddHealthChecks();
 
 builder.Services.AddTransient<MovieService>();
@@ -36,11 +30,6 @@ builder.Services.AddTransient<LocationService>();
 var app = builder.Build();
 
 app.UseExceptionHandler();
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 
