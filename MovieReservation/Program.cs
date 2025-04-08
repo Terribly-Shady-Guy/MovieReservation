@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseStaticFiles(new StaticFileOptions
     {
         FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(imagesDirectoryPath),
-        RequestPath = "/Images"
+        RequestPath = "/images"
     });
 
     app.MapOpenApiReference();
