@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using MovieReservation.OpenApi.Transformers;
 using Scalar.AspNetCore;
 
@@ -27,7 +26,7 @@ namespace MovieReservation.Startup
 
                     document.Components ??= new OpenApiComponents();
                     document.Components.SecuritySchemes.Add(
-                        key: JwtBearerDefaults.AuthenticationScheme,
+                        key: "Bearer",
                         value: new OpenApiSecurityScheme
                         {
                             Description = "Jwt bearer token using \"Authorization\" header",
@@ -68,7 +67,9 @@ namespace MovieReservation.Startup
                     .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
                     .WithClientButton(false)
-                    .WithOpenApiRoutePattern($$"""{{RouteGroupPath}}/openapi/{documentName}.json""");
+                    .WithOpenApiRoutePattern($$"""{{RouteGroupPath}}/openapi/{documentName}.json""")
+                    .WithSearchHotKey("s")
+                    .WithPreferredScheme("Bearer");
             });
             
             return openApiReferenceGroup;
