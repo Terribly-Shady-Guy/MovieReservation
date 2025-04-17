@@ -4,7 +4,7 @@ namespace MovieReservation.OpenApi
 {
     public interface IEndpointOperationTransformerMetadata
     {
-        public Type TransformerType { get; }
+        public string TransformerTypeName { get; }
         public IOpenApiOperationTransformer? CreateTransformer(IServiceProvider services);
     }
 }
