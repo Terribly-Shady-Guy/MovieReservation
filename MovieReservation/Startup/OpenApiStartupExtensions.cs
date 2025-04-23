@@ -26,7 +26,7 @@ namespace MovieReservation.Startup
 
                     document.Components ??= new OpenApiComponents();
                     document.Components.SecuritySchemes.Add(
-                        key: "Bearer",
+                        key: "JWTBearer",
                         value: new OpenApiSecurityScheme
                         {
                             Description = "Jwt bearer token using \"Authorization\" header",
@@ -69,7 +69,7 @@ namespace MovieReservation.Startup
                     .WithClientButton(false)
                     .WithOpenApiRoutePattern($$"""{{RouteGroupPath}}/openapi/{documentName}.json""")
                     .WithSearchHotKey("s")
-                    .WithPreferredScheme("Bearer");
+                    .WithPreferredScheme("JWTBearer");
             });
             
             return openApiReferenceGroup;
