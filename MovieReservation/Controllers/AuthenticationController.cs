@@ -34,7 +34,10 @@ namespace MovieReservation.Controllers
 
             if (!login.Result.Succeeded && !login.Result.RequiresTwoFactor)
             {
-                return Unauthorized();
+                return Problem(
+                    title: "Unauthorized",
+                    detail: "The provided username or password is incorrect.",
+                    statusCode: StatusCodes.Status401Unauthorized);
             }
             else if (login.Result.RequiresTwoFactor)
             {
@@ -66,7 +69,10 @@ namespace MovieReservation.Controllers
 
             if (token == null)
             {
-                return Unauthorized();
+                return Problem(
+                    title: "Unauthorized",
+                    detail: "The provided access or refresh token is invalid.",
+                    statusCode: StatusCodes.Status401Unauthorized);
             }
 
             return Ok(token);
@@ -86,7 +92,10 @@ namespace MovieReservation.Controllers
 
             if (userIdClaim is null)
             {
-                return NotFound();
+                return Problem(
+                    title: "Not Found",
+                    detail: "The provided access token is invalid.",
+                    statusCode: StatusCodes.Status404NotFound);
             }
 
            await _authentication.Logout(userIdClaim.Value, refreshToken);

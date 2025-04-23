@@ -61,7 +61,10 @@ namespace MovieReservation.Controllers
 
             if (!isDeleted)
             {
-                return BadRequest(new { Message = $"Failed to delete user id {id}" });
+                return Problem(
+                    title: "Bad Request",
+                    detail: "The user could not be deleted.",
+                    statusCode: StatusCodes.Status400BadRequest);
             }
 
             return NoContent();

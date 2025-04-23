@@ -29,7 +29,10 @@ namespace MovieReservation.Controllers
 
             if (id is null)
             {
-                return BadRequest();
+                return Problem(
+                    title: "Bad Request",
+                    detail: "The account could not be created.",
+                    statusCode: StatusCodes.Status400BadRequest);
             }
 
             return Created(id, new { Message = "Account created sucessfully." });
@@ -47,7 +50,10 @@ namespace MovieReservation.Controllers
 
             if (!isSucessful)
             {
-                return NotFound();
+                return Problem(
+                    title: "Bad Request",
+                    detail: "The user with the provided id could not be found.",
+                    statusCode: StatusCodes.Status404NotFound);
             }
 
             return Ok(new {Message = $"Sucessfully promoted user {id} to \"Admin\"."});
