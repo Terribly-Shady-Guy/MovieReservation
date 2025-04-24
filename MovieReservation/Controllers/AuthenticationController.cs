@@ -50,10 +50,24 @@ namespace MovieReservation.Controllers
             return Ok(login.AuthToken);
         }
 
+        [EndpointSummary("Two factor login")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "The provided code is invalid or user doesn't exist.")]
+        [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Two factor authentication is successful.")]
+        [Produces("application/json")]
         [HttpPost]
-        public async Task<ActionResult> LoginWithTwoFactor(string twoFactorCode, string userId)
+        public async Task<ActionResult<AuthenticationToken>> LoginWithTwoFactor(string twoFactorCode, string userId)
         {
-            return Ok();
+            var result = await _authentication.LoginWithTwoFactorCode(twoFactorCode, userId);
+
+            if (!result.Result.Succeeded)
+            {
+                return Problem(
+                    title: "Unauthorized",
+                    detail: "The provided id or code is invalid.",
+                    statusCode: StatusCodes.Status401Unauthorized);
+            }
+
+            return Ok(result.AuthToken);
         }
 
         [EndpointSummary("Refresh tokens")]
