@@ -95,7 +95,7 @@ namespace MovieReservation.Controllers
         [EndpointSummary("Logout")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "User successfully logged out.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Access or refresh token is missing.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "User does not exist.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status400BadRequest, Description = "User does not exist.")]
         [EndpointDescription("An endpoint for handling logout. This endpoint will delete the login session from db when successful.")]
         [HttpDelete]
         [Authorize]
@@ -107,9 +107,9 @@ namespace MovieReservation.Controllers
             if (userIdClaim is null)
             {
                 return Problem(
-                    title: "Not Found",
+                    title: "Bad request",
                     detail: "The provided access token is invalid.",
-                    statusCode: StatusCodes.Status404NotFound);
+                    statusCode: StatusCodes.Status400BadRequest);
             }
 
            await _authentication.Logout(userIdClaim.Value, refreshToken);
