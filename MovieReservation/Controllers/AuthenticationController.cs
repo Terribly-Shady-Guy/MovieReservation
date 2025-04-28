@@ -22,7 +22,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Login")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Authentication was successful.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status102Processing, Description = "Authentication was successful, but 2fa is required.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status202Accepted, Description = "Authentication was successful, but 2fa is required.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status401Unauthorized, Description = "The user does not exist or password is incorrect.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status403Forbidden, Description = "The user account is locked.")]
         [Produces("application/json")]
