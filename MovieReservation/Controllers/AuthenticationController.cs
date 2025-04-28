@@ -46,8 +46,15 @@ namespace MovieReservation.Controllers
                     login.UserId
                 });
             }
+            else if (login.Result.IsLockedOut)
+            {
+                return Problem(
+                    title: "Forbidden",
+                    detail: "The current account could not be logged in as it is currently locked.",
+                    statusCode: StatusCodes.Status403Forbidden);
+            }
 
-            return Ok(login.AuthToken);
+                return Ok(login.AuthToken);
         }
 
         [EndpointSummary("Two factor login")]
