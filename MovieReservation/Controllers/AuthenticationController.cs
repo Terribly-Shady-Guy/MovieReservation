@@ -64,17 +64,24 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult<AuthenticationToken>> LoginWithTwoFactor(string twoFactorCode, string userId)
         {
-            var result = await _authentication.LoginWithTwoFactorCode(twoFactorCode, userId);
+            var login = await _authentication.LoginWithTwoFactorCode(twoFactorCode, userId);
 
-            if (!result.Result.Succeeded)
+            if (!login.Result.Succeeded && !login.Result.IsLockedOut)
             {
                 return Problem(
                     title: "2fa failed",
                     detail: "The provided id or code is invalid.",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
+            else if (login.Result.IsLockedOut)
+            {
+                return Problem(
+                    title: "Account locked",
+                    detail: "The current account could not be logged in as it is currently locked.",
+                    statusCode: StatusCodes.Status403Forbidden);
+            }
 
-            return Ok(result.AuthToken);
+            return Ok(login.AuthToken);
         }
 
         [EndpointSummary("Refresh tokens")]

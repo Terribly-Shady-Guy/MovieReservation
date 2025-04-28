@@ -86,7 +86,13 @@ namespace MovieReservation.Services
                     Result = SignInResult.Failed
                 };
             }
-            
+
+            bool isLockedOut = await _userManager.IsLockedOutAsync(user);
+            if (isLockedOut)
+            {
+                return new LoginDto { Result = SignInResult.LockedOut };
+            }
+
             bool result = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", twoFactorCode);
             if (!result)
             {
