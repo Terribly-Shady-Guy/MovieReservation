@@ -55,7 +55,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status403Forbidden);
             }
 
-                return Ok(login.AuthToken);
+            return Ok(login.AuthToken);
         }
 
         [EndpointSummary("Two factor login")]
@@ -126,9 +126,9 @@ namespace MovieReservation.Controllers
                     detail: "The provided access token is invalid.",
                     statusCode: StatusCodes.Status400BadRequest);
             }
-
-           await _authentication.Logout(userIdClaim.Value, refreshToken);
-
+            
+            await _authentication.Logout(userIdClaim.Value, refreshToken);
+            
             return NoContent();
         }
     }
