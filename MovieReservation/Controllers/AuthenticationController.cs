@@ -35,7 +35,7 @@ namespace MovieReservation.Controllers
             if (!login.Result.Succeeded && !login.Result.RequiresTwoFactor)
             {
                 return Problem(
-                    title: "Unauthorized",
+                    title: "Login failed",
                     detail: "The provided username or password is incorrect.",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
@@ -49,7 +49,7 @@ namespace MovieReservation.Controllers
             else if (login.Result.IsLockedOut)
             {
                 return Problem(
-                    title: "Forbidden",
+                    title: "Account locked",
                     detail: "The current account could not be logged in as it is currently locked.",
                     statusCode: StatusCodes.Status403Forbidden);
             }
@@ -69,7 +69,7 @@ namespace MovieReservation.Controllers
             if (!result.Result.Succeeded)
             {
                 return Problem(
-                    title: "Unauthorized",
+                    title: "2fa failed",
                     detail: "The provided id or code is invalid.",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
@@ -91,7 +91,7 @@ namespace MovieReservation.Controllers
             if (token == null)
             {
                 return Problem(
-                    title: "Unauthorized",
+                    title: "Invalid tokens",
                     detail: "The provided access or refresh token is invalid.",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
@@ -114,7 +114,7 @@ namespace MovieReservation.Controllers
             if (userIdClaim is null)
             {
                 return Problem(
-                    title: "Bad request",
+                    title: "Invalid token",
                     detail: "The provided access token is invalid.",
                     statusCode: StatusCodes.Status400BadRequest);
             }
