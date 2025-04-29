@@ -25,6 +25,7 @@ namespace MovieReservation.OpenApi
         {
 
         }
+
         /// <summary>
         /// Adds an optional description to the response in the OpenApi document.
         /// </summary>

@@ -11,6 +11,7 @@ namespace MovieReservation.Services
     {
         public string Issuer { get; set; } = string.Empty;
         public string Audience { get; set; } = string.Empty;
+        public int LifetimeMinutes { get; set; }
     }
 
     public class AuthenticationTokenProvider : IAuthenticationTokenProvider
@@ -65,7 +66,7 @@ namespace MovieReservation.Services
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 SigningCredentials = signingCredentials,
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddMinutes(_options.Value.LifetimeMinutes),
                 Subject = identity,
                 Issuer = _options.Value.Issuer,
                 Audience = _options.Value.Audience,
