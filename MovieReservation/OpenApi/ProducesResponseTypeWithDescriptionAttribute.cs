@@ -14,6 +14,7 @@ namespace MovieReservation.OpenApi
         {
             
         }
+
         protected ProducesResponseTypeWithDescriptionAttribute(Type type, int statusCode) : base(type, statusCode)
         {
 
