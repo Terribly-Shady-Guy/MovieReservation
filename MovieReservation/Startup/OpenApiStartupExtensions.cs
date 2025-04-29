@@ -52,7 +52,7 @@ namespace MovieReservation.Startup
         /// <summary>
         /// Maps endpoints for OpenAPI document generation and API reference UI.
         /// </summary>
-        /// <param name="routeBuilder">A route builder from either <c>WebApplication</c> or a <c>RouteGroupBuilder</c>.</param>
+        /// <param name="routeBuilder">A route builder from either <see cref="WebApplication"/> or a <see cref="RouteGroupBuilder"/>.</param>
         /// <returns>The builder for the /apireference route group.</returns>
         public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
