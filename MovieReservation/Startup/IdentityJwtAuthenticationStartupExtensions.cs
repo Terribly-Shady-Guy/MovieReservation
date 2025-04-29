@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MovieReservation.Services;
+using Microsoft.Extensions.Options;
 
 namespace MovieReservation.Startup
 {
@@ -18,12 +19,12 @@ namespace MovieReservation.Startup
         public static IServiceCollection AddIdentityJwtAuthentication(this IServiceCollection services, IConfigurationSection jwtConfig)
         {
             services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
+            services.AddOptions<JwtOptions>()
+                .Bind(jwtConfig);
 
             services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-                .Configure<IRsaKeyHandler, IConfiguration>((options, keyHandler, config) =>
+                .Configure<IRsaKeyHandler, IOptions<JwtOptions>>((options, keyHandler, config) =>
                 {
-                    var jwtConfig = config.GetSection("Jwt");
-
                     if (!keyHandler.KeyExists())
                     {
                         keyHandler.SaveKey();
@@ -40,8 +41,8 @@ namespace MovieReservation.Startup
                         ValidateAudience = true,
                         ValidAlgorithms = [SecurityAlgorithms.RsaSha256],
                         IssuerSigningKey = signingKey,
-                        ValidAudience = jwtConfig.GetValue<string>("Audience"),
-                        ValidIssuer = jwtConfig.GetValue<string>("Issuer"),
+                        ValidAudience = config.Value.Audience,
+                        ValidIssuer = config.Value.Issuer,
                         ClockSkew = TimeSpan.FromSeconds(15)
                     };
                 });
@@ -69,7 +70,6 @@ namespace MovieReservation.Startup
                 .AddEntityFrameworkStores<MovieReservationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<JwtOptions>(jwtConfig);
             services.AddTransient<AuthenticationService>();
             services.AddTransient<IAuthenticationTokenProvider, AuthenticationTokenProvider>();
             services.AddTransient<UserService>();
