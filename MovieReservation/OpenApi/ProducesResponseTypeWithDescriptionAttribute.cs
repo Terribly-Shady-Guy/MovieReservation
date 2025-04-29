@@ -15,12 +15,12 @@ namespace MovieReservation.OpenApi
         {
             
         }
-        public ProducesResponseTypeWithDescriptionAttribute(Type type, int statusCode) : base(type, statusCode)
+        protected ProducesResponseTypeWithDescriptionAttribute(Type type, int statusCode) : base(type, statusCode)
         {
 
         }
 
-        public ProducesResponseTypeWithDescriptionAttribute(Type type, int statusCode, string contentType, params string[] additionalContentTypes)
+        protected ProducesResponseTypeWithDescriptionAttribute(Type type, int statusCode, string contentType, params string[] additionalContentTypes)
             : base(type, statusCode, contentType, additionalContentTypes)
         {
 
