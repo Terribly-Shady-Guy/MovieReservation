@@ -19,7 +19,7 @@ namespace MovieReservation.Startup
         public static IServiceCollection AddIdentityJwtAuthentication(this IServiceCollection services, IConfigurationSection jwtConfig)
         {
             services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
-            services.AddOptions<JwtOptions>(jwtConfig.Key)
+            services.AddOptions<JwtOptions>()
                 .Bind(jwtConfig);
 
             services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
@@ -29,11 +29,11 @@ namespace MovieReservation.Startup
                     {
                         keyHandler.SaveKey();
                     }
-
+                    
                     RsaSecurityKey signingKey = keyHandler.LoadPublicAsync()
                         .GetAwaiter()
                         .GetResult();
-
+                    
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

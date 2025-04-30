@@ -116,7 +116,7 @@ namespace MovieReservation.Controllers
         [Authorize]
         public async Task<ActionResult> Logout(string refreshToken)
         {
-            Claim? userIdClaim = HttpContext.User.Claims
+            Claim? userIdClaim = User.Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
             if (userIdClaim is null)
