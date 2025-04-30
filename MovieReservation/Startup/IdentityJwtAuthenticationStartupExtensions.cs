@@ -47,10 +47,10 @@ namespace MovieReservation.Startup
                     };
                 });
 
-            services.AddAuthentication(configureOptions =>
+            services.AddAuthentication(options =>
             {
-                configureOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                configureOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
                 .AddJwtBearer();
 
