@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using MovieReservation.OpenApi.Transformers;
 using Scalar.AspNetCore;
 
@@ -29,14 +30,14 @@ namespace MovieReservation.Startup
                         key: "JWT Bearer",
                         value: new OpenApiSecurityScheme
                         {
-                            Description = "Jwt bearer token using \"Authorization\" header",
+                            Description = $"Jwt bearer token using \"{HeaderNames.Authorization}\" header",
                             Scheme = "bearer",
                             BearerFormat = "JWT",
                             In = ParameterLocation.Header,
                             Type = SecuritySchemeType.Http,
-                            Name = "Authorization"
+                            Name = HeaderNames.Authorization
                         });
-
+                    
                     return Task.CompletedTask;
                 });
 
