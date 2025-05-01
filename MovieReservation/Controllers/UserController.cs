@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -36,6 +36,19 @@ namespace MovieReservation.Controllers
             }
 
             return Created(id, new { Message = "Account created sucessfully." });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ConfirmEmail()
+        {
+            throw new NotImplementedException();
         }
 
         [EndpointSummary("Promote user to admin")]

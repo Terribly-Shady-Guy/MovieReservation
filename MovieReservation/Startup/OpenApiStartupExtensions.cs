@@ -57,8 +57,7 @@ namespace MovieReservation.Startup
         /// <returns>The builder for the /apireference route group.</returns>
         public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
-            const string RouteGroupPath = "/apireference";
-            var openApiReferenceGroup = routeBuilder.MapGroup(RouteGroupPath)
+            var openApiReferenceGroup = routeBuilder.MapGroup("/apireference")
                 .ExcludeFromDescription();
 
             openApiReferenceGroup.MapOpenApi();
@@ -68,7 +67,7 @@ namespace MovieReservation.Startup
                     .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
                     .WithClientButton(false)
-                    .WithOpenApiRoutePattern($$"""{{RouteGroupPath}}/openapi/{documentName}.json""")
+                    .WithOpenApiRoutePattern("/apireference/openapi/{documentName}.json")
                     .WithSearchHotKey("s")
                     .WithPreferredScheme("JWT Bearer");
             });
