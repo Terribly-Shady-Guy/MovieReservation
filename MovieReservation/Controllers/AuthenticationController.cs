@@ -116,20 +116,31 @@ namespace MovieReservation.Controllers
         [Authorize]
         public async Task<ActionResult> Logout(string refreshToken)
         {
-            Claim? userIdClaim = User.Claims
-                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            try
+            {
+                Claim? userIdClaim = User.Claims
+                    .SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-            if (userIdClaim is null)
+                if (userIdClaim is null)
+                {
+                    return Problem(
+                        title: "Invalid token",
+                        detail: "The provided access token is invalid.",
+                        statusCode: StatusCodes.Status400BadRequest);
+                }
+
+                await _authentication.Logout(userIdClaim.Value, refreshToken);
+
+                return NoContent();
+            }
+            catch (InvalidOperationException)
             {
                 return Problem(
-                    title: "Invalid token",
-                    detail: "The provided access token is invalid.",
-                    statusCode: StatusCodes.Status400BadRequest);
+                        title: "Invalid token",
+                        detail: "The provided access token is invalid.",
+                        statusCode: StatusCodes.Status400BadRequest);
             }
             
-            await _authentication.Logout(userIdClaim.Value, refreshToken);
-            
-            return NoContent();
         }
     }
 }
