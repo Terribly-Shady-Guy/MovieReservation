@@ -19,8 +19,14 @@ namespace MovieReservation.Startup
         public static IServiceCollection AddIdentityJwtAuthentication(this IServiceCollection services, IConfigurationSection jwtConfig)
         {
             services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
+
             services.AddOptions<JwtOptions>()
-                .Bind(jwtConfig);
+                .Bind(jwtConfig)
+                .Validate(options =>
+                {
+                    return options.LifetimeMinutes > 0;
+                }, 
+                failureMessage: "lifetime minutes must be greater than 0.");
 
             services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                 .Configure<IRsaKeyHandler, IOptions<JwtOptions>>((options, keyHandler, config) =>
