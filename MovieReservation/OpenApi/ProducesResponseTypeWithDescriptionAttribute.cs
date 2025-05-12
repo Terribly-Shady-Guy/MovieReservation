@@ -34,6 +34,9 @@ namespace MovieReservation.OpenApi
 
     /// <inheritdoc/>
     /// <typeparam name="TResponseType">The type returned in the response</typeparam>
+#if NET10_0_OR_GREATER
+       [Obsolete("Please use Description property in ProducesResponseType instead")]
+#endif
     public class ProducesResponseTypeWithDescriptionAttribute<TResponseType> : ProducesResponseTypeWithDescriptionAttribute
     {
         public ProducesResponseTypeWithDescriptionAttribute(int statusCode) : base(typeof(TResponseType), statusCode)
