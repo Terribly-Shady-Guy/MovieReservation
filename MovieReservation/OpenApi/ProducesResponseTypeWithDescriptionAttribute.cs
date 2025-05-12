@@ -5,7 +5,7 @@ namespace MovieReservation.OpenApi
     ///<inheritdoc/>
     /// <remarks>This filter can also additionally contain a description for context. 
     /// This is meant to be temporary until Description is added to <see cref="ProducesResponseTypeAttribute" />.</remarks>
-#if !NET9_0
+#if NET10_0_OR_GREATER
        [Obsolete("Please use Description property in ProducesResponseType instead")]
 #endif
     public class ProducesResponseTypeWithDescriptionAttribute : ProducesResponseTypeAttribute
