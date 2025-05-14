@@ -43,7 +43,7 @@ namespace MovieReservation.Controllers
             else if (login.Result.RequiresTwoFactor)
             {
                 return Accepted(new { 
-                    Message = "Two factor authentication is required. Please check your email for code",
+                    Message = "Two factor authentication is required. Please check your email for code.",
                     login.UserId
                 });
             }
