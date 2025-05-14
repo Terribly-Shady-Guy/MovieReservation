@@ -58,9 +58,9 @@ namespace DbInfrastructure.Migrations
                 {
                     location_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    street = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    city = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    state = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    street = table.Column<string>(type: "varchar(300)", unicode: false, maxLength: 300, nullable: false),
+                    city = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    state = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     zip = table.Column<string>(type: "char(5)", unicode: false, fixedLength: true, maxLength: 5, nullable: false)
                 },
                 constraints: table =>
@@ -74,10 +74,10 @@ namespace DbInfrastructure.Migrations
                 {
                     movie_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "varchar(900)", unicode: false, nullable: false),
+                    title = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "varchar(300)", unicode: false, maxLength: 300, nullable: false),
-                    poster_image_name = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    genre = table.Column<string>(type: "varchar(900)", unicode: false, nullable: false)
+                    poster_image_name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    genre = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {

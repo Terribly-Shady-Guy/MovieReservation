@@ -17,12 +17,14 @@ namespace DbInfrastructure.ModelConfiguration
             builder.Property(e => e.Title)
                 .HasColumnName("title")
                 .IsRequired()
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasMaxLength(100);
 
             builder.Property(e => e.PosterImageName)
                 .IsRequired()
                 .IsUnicode(false)
-                .HasColumnName("poster_image_name");
+                .HasColumnName("poster_image_name")
+                .HasMaxLength(100);
 
             builder.Property(e => e.Description)
                 .IsRequired()
@@ -33,7 +35,8 @@ namespace DbInfrastructure.ModelConfiguration
             builder.Property(e => e.Genre)
                 .IsRequired()
                 .IsUnicode(false)
-                .HasColumnName("genre");
+                .HasColumnName("genre")
+                .HasMaxLength(20);
 
             builder.HasIndex(e => e.Genre);
             builder.HasIndex(e => e.Title);

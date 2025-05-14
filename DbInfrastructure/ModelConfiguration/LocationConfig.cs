@@ -17,17 +17,20 @@ namespace DbInfrastructure.ModelConfiguration
             builder.Property(e => e.Street)
                 .IsRequired()
                 .IsUnicode(false)
-                .HasColumnName("street");
+                .HasColumnName("street")
+                .HasMaxLength(300);
 
             builder.Property(e => e.City)
                 .IsRequired()
                 .IsUnicode(false)
-                .HasColumnName("city");
+                .HasColumnName("city")
+                .HasMaxLength(100);
 
             builder.Property(e => e.State)
                 .IsRequired()
                 .HasColumnName("state")
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasMaxLength(50);
 
             builder.Property(e => e.Zip)
                 .IsRequired()

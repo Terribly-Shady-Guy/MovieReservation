@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250226005414_InitialCreate")]
+    [Migration("20250514233858_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace DbInfrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -169,20 +169,23 @@ namespace DbInfrastructure.Migrations
 
                     b.Property<string>("City")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("city");
 
                     b.Property<string>("State")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("state");
 
                     b.Property<string>("Street")
                         .IsRequired()
+                        .HasMaxLength(300)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("varchar(300)")
                         .HasColumnName("street");
 
                     b.Property<string>("Zip")
@@ -217,20 +220,23 @@ namespace DbInfrastructure.Migrations
 
                     b.Property<string>("Genre")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(900)")
+                        .HasColumnType("varchar(20)")
                         .HasColumnName("genre");
 
                     b.Property<string>("PosterImageName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("poster_image_name");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(900)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("title");
 
                     b.HasKey("MovieId")
