@@ -22,11 +22,7 @@ namespace MovieReservation.Startup
 
             services.AddOptions<JwtOptions>()
                 .Bind(jwtConfig)
-                .Validate(options =>
-                {
-                    return options.LifetimeMinutes > 0;
-                }, 
-                failureMessage: "lifetime minutes must be greater than 0.");
+                .Validate(options => options.LifetimeMinutes > 0, "lifetime minutes must be greater than 0.");
 
             services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
                 .Configure<IRsaKeyHandler, IOptions<JwtOptions>>((options, keyHandler, config) =>
