@@ -69,7 +69,7 @@ namespace MovieReservation.Startup
                     .WithClientButton(false)
                     .WithOpenApiRoutePattern("/apireference/openapi/{documentName}.json")
                     .WithSearchHotKey("s")
-                    .WithPreferredScheme("JWT Bearer");
+                    .AddPreferredSecuritySchemes("JWT Bearer");
             });
             
             return openApiReferenceGroup;
