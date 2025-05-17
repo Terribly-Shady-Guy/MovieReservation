@@ -3,6 +3,7 @@ using DbInfrastructure;
 using MovieReservation.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.AddServerHeader = false;
