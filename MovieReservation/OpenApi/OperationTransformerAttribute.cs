@@ -38,7 +38,7 @@ namespace MovieReservation.OpenApi
                 }
             }
             
-            if (constructorToCall is null) throw new InvalidOperationException("The provided type does not contain a public constructor.");
+            if (constructorToCall is null) throw new InvalidOperationException($"The provided type \"{_transformerType.Name}\" does not contain a public constructor.");
 
             var constructorArgs = new object[constructorParams.Length];
 
