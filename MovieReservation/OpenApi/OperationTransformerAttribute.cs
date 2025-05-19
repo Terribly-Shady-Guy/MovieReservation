@@ -15,7 +15,13 @@ namespace MovieReservation.OpenApi
 
         public string TransformerTypeName => _transformerType.FullName ?? _transformerType.Name;
 
-        public IOpenApiOperationTransformer? CreateTransformer(IServiceProvider services)
+        /// <summary>
+        /// Creates a <see cref="IOpenApiOperationTransformer"/> object with dependency injection support.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns>An instance of the provided type.</returns>
+        /// <exception cref="InvalidOperationException"/>
+        public IOpenApiOperationTransformer CreateTransformer(IServiceProvider services)
         {
             ConstructorInfo[] constructors = _transformerType.GetConstructors();
 
@@ -32,7 +38,7 @@ namespace MovieReservation.OpenApi
                 }
             }
             
-            if (constructorToCall is null) return null;
+            if (constructorToCall is null) throw new InvalidOperationException("The provided type does not contain a public constructor.");
 
             var constructorArgs = new object[constructorParams.Length];
 

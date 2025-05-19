@@ -14,7 +14,7 @@ namespace MovieReservation.OpenApi.Transformers
                 
             foreach (var transformerMetadata in endpointOperationTransformerMetadata)
             {
-                IOpenApiOperationTransformer? transformer = GetOrCreateTransformer(context.ApplicationServices, transformerMetadata);
+                IOpenApiOperationTransformer transformer = GetOrCreateTransformer(context.ApplicationServices, transformerMetadata);
                 if (transformer is not null)
                 {
                     await transformer.TransformAsync(operation, context, cancellationToken);
@@ -22,7 +22,7 @@ namespace MovieReservation.OpenApi.Transformers
             }
         }
 
-        private IOpenApiOperationTransformer? GetOrCreateTransformer(IServiceProvider serviceProvider, IEndpointOperationTransformerMetadata metadata)
+        private IOpenApiOperationTransformer GetOrCreateTransformer(IServiceProvider serviceProvider, IEndpointOperationTransformerMetadata metadata)
         {
             string cacheKey = metadata.TransformerTypeName;
 
@@ -32,10 +32,6 @@ namespace MovieReservation.OpenApi.Transformers
             }
 
             transformer = metadata.CreateTransformer(serviceProvider);
-            if (transformer == null)
-            {
-                return null;
-            }
 
             _transformerCache.Add(cacheKey, transformer);
             return transformer;
