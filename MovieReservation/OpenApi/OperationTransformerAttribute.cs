@@ -16,7 +16,7 @@ namespace MovieReservation.OpenApi
         public string TransformerTypeName => _transformerType.FullName ?? _transformerType.Name;
 
         /// <summary>
-        /// Creates a <see cref="IOpenApiOperationTransformer"/> object with dependency injection support.
+        /// Creates an <see cref="IOpenApiOperationTransformer"/> object with dependency injection support.
         /// </summary>
         /// <param name="services"></param>
         /// <returns>An instance of the provided type.</returns>
