@@ -18,7 +18,7 @@ namespace MovieReservation.OpenApi
         /// <summary>
         /// Creates an <see cref="IOpenApiOperationTransformer"/> object with dependency injection support.
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">The application's service provider.</param>
         /// <returns>An instance of the provided type.</returns>
         /// <exception cref="InvalidOperationException"/>
         public IOpenApiOperationTransformer CreateTransformer(IServiceProvider services)
