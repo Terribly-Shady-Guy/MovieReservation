@@ -15,10 +15,7 @@ namespace MovieReservation.OpenApi.Transformers
             foreach (var transformerMetadata in endpointOperationTransformerMetadata)
             {
                 IOpenApiOperationTransformer transformer = GetOrCreateTransformer(context.ApplicationServices, transformerMetadata);
-                if (transformer is not null)
-                {
-                    await transformer.TransformAsync(operation, context, cancellationToken);
-                }
+                await transformer.TransformAsync(operation, context, cancellationToken);
             }
         }
 
