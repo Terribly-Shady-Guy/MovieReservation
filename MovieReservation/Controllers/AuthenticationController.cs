@@ -112,8 +112,8 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Access or refresh token is missing.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "User does not exist.")]
         [EndpointDescription("An endpoint for handling logout. This endpoint will delete the login session from db when successful.")]
-        [HttpDelete]
         [Authorize]
+        [HttpDelete]
         public async Task<ActionResult> Logout(string refreshToken)
         {
             try
