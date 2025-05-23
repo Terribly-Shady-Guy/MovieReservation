@@ -63,7 +63,7 @@ namespace MovieReservation.Services
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPrivateAsync();
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
             
-            var tokenDescriptor = new SecurityTokenDescriptor()
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(_options.Value.LifetimeMinutes),

@@ -1,12 +1,18 @@
-﻿using Microsoft.Net.Http.Headers;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using MovieReservation.OpenApi.Transformers;
+using MovieReservation.Services;
 using Scalar.AspNetCore;
+using System.Security.Claims;
 
 namespace MovieReservation.Startup
 {
     public static class OpenApiStartupExtensions
     {
+        private const string BearerSchemeKey = "JWT Bearer";
         /// <summary>
         /// Adds the OpenAPI services for generating documents.
         /// </summary>
@@ -27,7 +33,7 @@ namespace MovieReservation.Startup
 
                     document.Components ??= new OpenApiComponents();
                     document.Components.SecuritySchemes.Add(
-                        key: "JWT Bearer",
+                        key: BearerSchemeKey,
                         value: new OpenApiSecurityScheme
                         {
                             Description = $"Jwt bearer token using \"{HeaderNames.Authorization}\" header",
@@ -57,6 +63,8 @@ namespace MovieReservation.Startup
         /// <returns>The builder for the /apireference route group.</returns>
         public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
+            IServiceProvider services = routeBuilder.ServiceProvider;
+
             var openApiReferenceGroup = routeBuilder.MapGroup("/apireference")
                 .ExcludeFromDescription();
 
@@ -69,7 +77,29 @@ namespace MovieReservation.Startup
                     .WithClientButton(false)
                     .WithOpenApiRoutePattern("/apireference/openapi/{documentName}.json")
                     .WithSearchHotKey("s")
-                    .AddPreferredSecuritySchemes("JWT Bearer");
+                    .AddPreferredSecuritySchemes(BearerSchemeKey)
+                    .WithPersistentAuthentication()
+                    .AddHttpAuthentication(BearerSchemeKey, scheme =>
+                    {
+                        IRsaKeyHandler handler = services.GetRequiredService<IRsaKeyHandler>();
+                        IOptions<JwtOptions> options = services.GetRequiredService<IOptions<JwtOptions>>();
+
+                        RsaSecurityKey securityKey = handler.LoadPrivateAsync().GetAwaiter().GetResult();
+
+                        var descriptor = new SecurityTokenDescriptor
+                        {
+                            SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256),
+                            Expires = DateTime.UtcNow.AddDays(7),
+                            Subject = new ClaimsIdentity(
+                            [
+                                new Claim(ClaimTypes.Role, "Admin")
+                            ]),
+                            Audience = options.Value.Audience,
+                            Issuer = options.Value.Issuer,
+                        };
+
+                        scheme.Token = new JsonWebTokenHandler().CreateToken(descriptor);
+                    });
             });
             
             return openApiReferenceGroup;
