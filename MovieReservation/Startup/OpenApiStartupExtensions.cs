@@ -60,8 +60,7 @@ namespace MovieReservation.Startup
         /// Maps endpoints for OpenAPI document generation and API reference UI.
         /// </summary>
         /// <param name="routeBuilder">A route builder from either <see cref="WebApplication"/> or a <see cref="RouteGroupBuilder"/>.</param>
-        /// <returns>The builder for the /apireference route group.</returns>
-        public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
+        public static void MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
             IRsaKeyHandler handler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
             IOptions<JwtOptions> options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
@@ -99,8 +98,6 @@ namespace MovieReservation.Startup
                     .WithPersistentAuthentication()
                     .AddHttpAuthentication(BearerSchemeKey, scheme => scheme.Token = token);
             });
-            
-            return openApiReferenceGroup;
         }
     }
 }
