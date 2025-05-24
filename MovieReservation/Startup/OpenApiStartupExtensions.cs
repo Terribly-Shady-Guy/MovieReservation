@@ -82,7 +82,7 @@ namespace MovieReservation.Startup
             var tokenHandler = new JsonWebTokenHandler();
             string token = tokenHandler.CreateToken(descriptor);
 
-            var openApiReferenceGroup = routeBuilder.MapGroup("/apireference")
+            RouteGroupBuilder openApiReferenceGroup = routeBuilder.MapGroup("/apireference")
                 .ExcludeFromDescription();
 
             openApiReferenceGroup.MapOpenApi();
