@@ -98,7 +98,8 @@ namespace MovieReservation.Startup
                             Issuer = options.Value.Issuer,
                         };
 
-                        scheme.Token = new JsonWebTokenHandler().CreateToken(descriptor);
+                        var tokenHandler = new JsonWebTokenHandler();
+                        scheme.Token = tokenHandler.CreateToken(descriptor);
                     });
             });
             
