@@ -63,7 +63,25 @@ namespace MovieReservation.Startup
         /// <returns>The builder for the /apireference route group.</returns>
         public static IEndpointConventionBuilder MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
-            IServiceProvider services = routeBuilder.ServiceProvider;
+            IRsaKeyHandler handler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
+            IOptions<JwtOptions> options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
+
+            RsaSecurityKey securityKey = handler.LoadPrivateAsync().GetAwaiter().GetResult();
+
+            var descriptor = new SecurityTokenDescriptor
+            {
+                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256),
+                Expires = DateTime.UtcNow.AddDays(7),
+                Subject = new ClaimsIdentity(
+                [
+                    new Claim(ClaimTypes.Role, "Admin")
+                ]),
+                Audience = options.Value.Audience,
+                Issuer = options.Value.Issuer,
+            };
+
+            var tokenHandler = new JsonWebTokenHandler();
+            string token = tokenHandler.CreateToken(descriptor);
 
             var openApiReferenceGroup = routeBuilder.MapGroup("/apireference")
                 .ExcludeFromDescription();
@@ -79,28 +97,7 @@ namespace MovieReservation.Startup
                     .WithSearchHotKey("s")
                     .AddPreferredSecuritySchemes(BearerSchemeKey)
                     .WithPersistentAuthentication()
-                    .AddHttpAuthentication(BearerSchemeKey, scheme =>
-                    {
-                        IRsaKeyHandler handler = services.GetRequiredService<IRsaKeyHandler>();
-                        IOptions<JwtOptions> options = services.GetRequiredService<IOptions<JwtOptions>>();
-
-                        RsaSecurityKey securityKey = handler.LoadPrivateAsync().GetAwaiter().GetResult();
-
-                        var descriptor = new SecurityTokenDescriptor
-                        {
-                            SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256),
-                            Expires = DateTime.UtcNow.AddDays(7),
-                            Subject = new ClaimsIdentity(
-                            [
-                                new Claim(ClaimTypes.Role, "Admin")
-                            ]),
-                            Audience = options.Value.Audience,
-                            Issuer = options.Value.Issuer,
-                        };
-
-                        var tokenHandler = new JsonWebTokenHandler();
-                        scheme.Token = tokenHandler.CreateToken(descriptor);
-                    });
+                    .AddHttpAuthentication(BearerSchemeKey, scheme => scheme.Token = token);
             });
             
             return openApiReferenceGroup;
