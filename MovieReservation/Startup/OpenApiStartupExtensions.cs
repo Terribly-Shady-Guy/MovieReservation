@@ -65,7 +65,9 @@ namespace MovieReservation.Startup
             IRsaKeyHandler handler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
             IOptions<JwtOptions> options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
 
-            RsaSecurityKey securityKey = handler.LoadPrivateAsync().GetAwaiter().GetResult();
+            RsaSecurityKey securityKey = handler.LoadPrivateAsync()
+                .GetAwaiter()
+                .GetResult();
 
             var descriptor = new SecurityTokenDescriptor
             {
