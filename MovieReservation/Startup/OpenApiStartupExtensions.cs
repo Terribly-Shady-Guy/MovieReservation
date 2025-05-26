@@ -62,8 +62,8 @@ namespace MovieReservation.Startup
         /// <param name="routeBuilder">A route builder from either <see cref="WebApplication"/> or a <see cref="RouteGroupBuilder"/>.</param>
         public static void MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
-            IRsaKeyHandler handler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
-            IOptions<JwtOptions> options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
+            var handler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
+            var options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
 
             RsaSecurityKey securityKey = handler.LoadPrivateAsync()
                 .GetAwaiter()
