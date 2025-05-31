@@ -64,6 +64,8 @@ namespace MovieReservation.Startup
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
 
+                options.User.RequireUniqueEmail = true;
+
                 options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedAccount = true;
             })
