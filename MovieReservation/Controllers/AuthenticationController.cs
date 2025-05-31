@@ -9,7 +9,7 @@ using MovieReservation.OpenApi.Transformers;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -28,7 +28,7 @@ namespace MovieReservation.Controllers
         [Produces("application/json")]
         [OperationTransformer<LoginEndpointTransformer>]
         [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<ActionResult<AuthenticationToken>> Login([Description("Object containing username and password for login")]UserLoginVM userLogin)
         {
             LoginDto login = await _authentication.Login(userLogin);
@@ -63,7 +63,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status403Forbidden, Description = "The user account is locked.")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Two factor authentication is successful.")]
         [Produces("application/json")]
-        [HttpPost]
+        [HttpPost("TwoFactorLogin")]
         public async Task<ActionResult<AuthenticationToken>> LoginWithTwoFactor(string twoFactorCode, string userId)
         {
             var login = await _authentication.LoginWithTwoFactorCode(twoFactorCode, userId);

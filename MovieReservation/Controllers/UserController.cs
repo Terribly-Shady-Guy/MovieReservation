@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace MovieReservation.Controllers
         [EndpointDescription("An endpoint to create a new user account with User role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
         [OperationTransformer<NewUserEndpointTransformer>]
-        [HttpPost]
+        [HttpPost("NewUser")]
         public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")]NewUserVM user)
         {
             string? id = await _userService.AddNewUserAsync(user);
@@ -39,7 +39,7 @@ namespace MovieReservation.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword()
         {
             throw new NotImplementedException();
