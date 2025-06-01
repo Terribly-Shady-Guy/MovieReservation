@@ -21,7 +21,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("List movies")]
         [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by gemre.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
+        [ProducesResponseTypeWithDescription<List<MovieVM>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
         public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
