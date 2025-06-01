@@ -29,7 +29,7 @@ namespace MovieReservation.Controllers
         [OperationTransformer<LoginEndpointTransformer>]
         [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
         [HttpPost("Login")]
-        public async Task<ActionResult<AuthenticationToken>> Login([Description("Object containing username and password for login")]UserLoginVM userLogin)
+        public async Task<ActionResult<AuthenticationToken>> Login([Description("Object containing username and password for login")] UserLoginVM userLogin)
         {
             LoginDto login = await _authentication.Login(userLogin);
 
@@ -92,7 +92,7 @@ namespace MovieReservation.Controllers
         [Produces("application/json")]
         [EndpointDescription("An endpoint for refreshing the access token. This endpoint will validate the access token and matches refresh token to database login.")]
         [HttpPatch]
-        public async Task<ActionResult<AuthenticationToken>> RefreshTokens([Description("An object containing the expired access token and valid refresh token.")]AuthenticationTokenRequestBody expiredToken)
+        public async Task<ActionResult<AuthenticationToken>> RefreshTokens([Description("An object containing the expired access token and valid refresh token.")] AuthenticationTokenRequestBody expiredToken)
         {
             AuthenticationToken? token = await _authentication.RefreshTokens(expiredToken.AccessToken, expiredToken.RefreshToken);
 
