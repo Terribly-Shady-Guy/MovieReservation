@@ -31,7 +31,7 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Add new movie.")]
         [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
-        [Consumes(typeof(MovieFormDataBody), "multipart/form-data")]
+        [Consumes("multipart/form-data")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
