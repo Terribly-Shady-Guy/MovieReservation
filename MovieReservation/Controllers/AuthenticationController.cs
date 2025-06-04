@@ -139,8 +139,7 @@ namespace MovieReservation.Controllers
                         title: "Invalid token",
                         detail: "The provided access token is invalid.",
                         statusCode: StatusCodes.Status400BadRequest);
-            }
-            
+            }   
         }
     }
 }
