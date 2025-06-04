@@ -136,9 +136,9 @@ namespace MovieReservation.Controllers
             catch (InvalidOperationException)
             {
                 return Problem(
-                        title: "Invalid token",
-                        detail: "The provided access token is invalid.",
-                        statusCode: StatusCodes.Status400BadRequest);
+                    title: "Invalid token",
+                    detail: "The provided access token is invalid.",
+                    statusCode: StatusCodes.Status400BadRequest);
             }   
         }
     }
