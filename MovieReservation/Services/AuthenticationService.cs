@@ -22,7 +22,11 @@ namespace MovieReservation.Services
         private readonly IAuthenticationTokenProvider _tokenProvider;
         private readonly MovieReservationDbContext _dbContext;
 
-        public AuthenticationService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IAuthenticationTokenProvider tokenProvider, MovieReservationDbContext context)
+        public AuthenticationService(
+            UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
+            IAuthenticationTokenProvider tokenProvider, 
+            MovieReservationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,6 +37,7 @@ namespace MovieReservation.Services
         public async Task<LoginDto> Login(UserLoginVM userCredentials)
         {
             AppUser? user = await _userManager.FindByEmailAsync(userCredentials.Email);
+
             if (user == null)
             {
                 return new LoginDto
