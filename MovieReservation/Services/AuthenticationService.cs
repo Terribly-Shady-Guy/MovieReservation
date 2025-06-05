@@ -155,7 +155,16 @@ namespace MovieReservation.Services
             login.RefreshToken = newToken.RefreshToken;
             login.ExpirationDate = newToken.RefreshExpiration;
 
-            _dbContext.Update(login);
+            _dbContext.Logins
+                .Entry(login)
+                .Property(l => l.RefreshToken)
+                .IsModified = true;
+
+            _dbContext.Logins
+                .Entry(login)
+                .Property(l => l.ExpirationDate)
+                .IsModified = true;
+            
             await _dbContext.SaveChangesAsync();
 
             return newToken;
