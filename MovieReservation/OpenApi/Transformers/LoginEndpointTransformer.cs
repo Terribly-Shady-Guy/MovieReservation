@@ -20,7 +20,7 @@ namespace MovieReservation.OpenApi.Transformers
         {
             var requestExample = new OpenApiObject()
             {
-                ["username"] = new OpenApiString("johndoe"),
+                ["email"] = new OpenApiString("john.doe@example.com"),
                 ["password"] = new OpenApiString("Password123@")
             };
 
