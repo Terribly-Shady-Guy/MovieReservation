@@ -1,8 +1,11 @@
-﻿namespace MovieReservation.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MovieReservation.ViewModels
 {
     public class UserLoginVM
     {
-        public required string Username { get; set; }
+        [EmailAddress]
+        public required string Email { get; set; }
         public required string Password { get; set; }
     }
 }

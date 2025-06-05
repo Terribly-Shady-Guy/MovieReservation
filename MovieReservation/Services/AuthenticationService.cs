@@ -32,7 +32,7 @@ namespace MovieReservation.Services
 
         public async Task<LoginDto> Login(UserLoginVM userCredentials)
         {
-            AppUser? user = await _userManager.FindByNameAsync(userCredentials.Username);
+            AppUser? user = await _userManager.FindByEmailAsync(userCredentials.Email);
             if (user == null)
             {
                 return new LoginDto
@@ -40,7 +40,7 @@ namespace MovieReservation.Services
                     Result = SignInResult.Failed,
                 };
             }
-
+            
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, userCredentials.Password, true);
             
             if (!result.Succeeded)
