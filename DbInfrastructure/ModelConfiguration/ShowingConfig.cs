@@ -33,7 +33,7 @@ namespace DbInfrastructure.ModelConfiguration
                 .HasForeignKey(e => e.MovieId)
                 .HasConstraintName("FK_Movies_Showings");
 
-            builder.ToTable("Showings", schema =>
+            builder.ToTable(nameof(Showing) + "s", schema =>
             {
                 schema.HasCheckConstraint("CK_min_price", "price > 0");
             });

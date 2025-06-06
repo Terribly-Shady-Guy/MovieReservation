@@ -30,7 +30,7 @@ namespace DbInfrastructure.ModelConfiguration
                 .HasForeignKey(e => e.LocationId)
                 .HasConstraintName("FK_Auditoriums_Locations");
 
-            builder.ToTable("Auditoriums", table =>
+            builder.ToTable(nameof(Auditorium) + "s", table =>
             {
                 table.HasCheckConstraint("CK_max_capacity", "max_capacity > 0");
             });
