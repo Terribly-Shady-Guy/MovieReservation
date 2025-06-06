@@ -44,10 +44,7 @@ namespace MovieReservation.OpenApi.Transformers
                     ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
                 };
 
-                foreach (var mediaType in okResponse.Content)
-                {
-                    mediaType.Value.Example = responseExample;
-                }
+                AddResponseExample(responseExample, okResponse);
             }
 
             if (operation.Responses.TryGetValue(StatusCodes.Status202Accepted.ToString(), out var acceptedResponse))
@@ -58,10 +55,15 @@ namespace MovieReservation.OpenApi.Transformers
                     ["userId"] = new OpenApiString("some user id string")
                 };
 
-                foreach (var mediaType in acceptedResponse.Content)
-                {
-                    mediaType.Value.Example = messageExample;
-                }
+                AddResponseExample(messageExample, acceptedResponse);
+            }            
+        }
+
+        private static void AddResponseExample(OpenApiObject example, OpenApiResponse response)
+        {
+            foreach (KeyValuePair<string, OpenApiMediaType> mediaType in response.Content)
+            {
+                mediaType.Value.Example = example;
             }
         }
     }
