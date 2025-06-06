@@ -31,39 +31,47 @@ namespace MovieReservation.OpenApi.Transformers
 
             if (operation.Responses.TryGetValue(StatusCodes.Status200OK.ToString(), out var okResponse))
             {
-                var identity = new ClaimsIdentity();
-                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
-                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
-
-                AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
-
-                var responseExample = new OpenApiObject()
-                {
-                    ["accessToken"] = new OpenApiString(token.AccessToken),
-                    ["refreshToken"] = new OpenApiString(token.RefreshToken),
-                    ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
-                };
-
-                AddResponseExample(responseExample, okResponse);
+                await Add200ResponseExample(okResponse);
             }
 
             if (operation.Responses.TryGetValue(StatusCodes.Status202Accepted.ToString(), out var acceptedResponse))
             {
-                var messageExample = new OpenApiObject()
-                {
-                    ["message"] = new OpenApiString("some message for result"),
-                    ["userId"] = new OpenApiString("some user id string")
-                };
-
-                AddResponseExample(messageExample, acceptedResponse);
+                Add202ResponseExample(acceptedResponse);
             }            
         }
 
-        private static void AddResponseExample(OpenApiObject example, OpenApiResponse response)
+        private async Task Add200ResponseExample(OpenApiResponse response)
         {
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+
+            AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
+
+            var responseExample = new OpenApiObject()
+            {
+                ["accessToken"] = new OpenApiString(token.AccessToken),
+                ["refreshToken"] = new OpenApiString(token.RefreshToken),
+                ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
+            };
+
             foreach (KeyValuePair<string, OpenApiMediaType> mediaType in response.Content)
             {
-                mediaType.Value.Example = example;
+                mediaType.Value.Example = responseExample;
+            }
+        }
+
+        private static void Add202ResponseExample(OpenApiResponse response)
+        {
+            var messageExample = new OpenApiObject()
+            {
+                ["message"] = new OpenApiString("some message for result"),
+                ["userId"] = new OpenApiString("some user id string")
+            };
+
+            foreach (KeyValuePair<string, OpenApiMediaType> mediaType in response.Content)
+            {
+                mediaType.Value.Example = messageExample;
             }
         }
     }
