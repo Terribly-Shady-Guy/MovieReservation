@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.OpenApi;
+﻿using Azure;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using MovieReservation.Services;
@@ -29,30 +30,39 @@ namespace MovieReservation.OpenApi.Transformers
                 mediaType.Value.Example = requestExample;
             }
 
-            if (operation.Responses.TryGetValue(StatusCodes.Status200OK.ToString(), out var response))
+            if (operation.Responses.TryGetValue(StatusCodes.Status200OK.ToString(), out var okResponse))
             {
-                await AddResponseExample(response);
+                var identity = new ClaimsIdentity();
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+
+                AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
+
+                var responseExample = new OpenApiObject()
+                {
+                    ["accessToken"] = new OpenApiString(token.AccessToken),
+                    ["refreshToken"] = new OpenApiString(token.RefreshToken),
+                    ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
+                };
+
+                foreach (var mediaType in okResponse.Content)
+                {
+                    mediaType.Value.Example = responseExample;
+                }
             }
-        }
 
-        private async Task AddResponseExample(OpenApiResponse response)
-        {
-            var identity = new ClaimsIdentity();
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
-
-            AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
-
-            var responseExample = new OpenApiObject()
+            if (operation.Responses.TryGetValue(StatusCodes.Status202Accepted.ToString(), out var acceptedResponse))
             {
-                ["accessToken"] = new OpenApiString(token.AccessToken),
-                ["refreshToken"] = new OpenApiString(token.RefreshToken),
-                ["refreshExpiration"] = new OpenApiDateTime(token.RefreshExpiration)
-            };
+                var messageExample = new OpenApiObject()
+                {
+                    ["message"] = new OpenApiString("some message for result"),
+                    ["userId"] = new OpenApiString("some user id string")
+                };
 
-            foreach (var mediaType in response.Content)
-            {
-                mediaType.Value.Example = responseExample;
+                foreach (var mediaType in acceptedResponse.Content)
+                {
+                    mediaType.Value.Example = messageExample;
+                }
             }
         }
     }
