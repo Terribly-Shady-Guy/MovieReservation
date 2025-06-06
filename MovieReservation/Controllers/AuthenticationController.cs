@@ -63,7 +63,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status403Forbidden, Description = "The user account is locked.")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Two factor authentication is successful.")]
         [Produces("application/json")]
-        [HttpPost("TwoFactorLogin")]
+        [HttpPost("Two-Factor-Login")]
         public async Task<ActionResult<AuthenticationToken>> LoginWithTwoFactor(string twoFactorCode, string userId)
         {
             var login = await _authentication.LoginWithTwoFactorCode(twoFactorCode, userId);

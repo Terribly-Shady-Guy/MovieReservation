@@ -39,7 +39,7 @@ namespace MovieReservation.Controllers
         }
 
         [Authorize]
-        [HttpPost("ChangePassword")]
+        [HttpPost("Change-Password")]
         public async Task<ActionResult> ChangePassword()
         {
             throw new NotImplementedException();

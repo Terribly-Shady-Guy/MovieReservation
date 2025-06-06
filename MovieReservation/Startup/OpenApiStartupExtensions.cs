@@ -84,7 +84,7 @@ namespace MovieReservation.Startup
             var tokenHandler = new JsonWebTokenHandler();
             string token = tokenHandler.CreateToken(descriptor);
 
-            RouteGroupBuilder openApiReferenceGroup = routeBuilder.MapGroup("/apireference")
+            RouteGroupBuilder openApiReferenceGroup = routeBuilder.MapGroup("/api-reference")
                 .ExcludeFromDescription();
 
             openApiReferenceGroup.MapOpenApi();
@@ -94,7 +94,7 @@ namespace MovieReservation.Startup
                     .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
                     .WithClientButton(false)
-                    .WithOpenApiRoutePattern("/apireference/openapi/{documentName}.json")
+                    .WithOpenApiRoutePattern("/api-reference/openapi/{documentName}.json")
                     .WithSearchHotKey("s")
                     .AddPreferredSecuritySchemes(BearerSchemeKey)
                     .WithPersistentAuthentication()
