@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<Seat> builder)
         {
             builder.HasKey(e => e.SeatId)
-                .HasName("PK_seat_id");
+                .HasName("PK_Seat");
 
             builder.Property(e => e.SeatId)
                 .HasColumnName("seat_id");

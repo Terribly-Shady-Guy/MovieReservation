@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<Auditorium> builder)
         {
             builder.HasKey(e => e.AuditoriumNumber)
-                .HasName("PK_auditorium_number");
+                .HasName("PK_Auditorium");
 
             builder.Property(e => e.AuditoriumNumber)
                 .IsRequired()

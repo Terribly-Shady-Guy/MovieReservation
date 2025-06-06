@@ -51,7 +51,7 @@ namespace DbInfrastructure.ModelConfiguration
                         .HasColumnType("INTEGER");
 
                     joinEntity.HasKey("ShowingSeatId", "ReservationId")
-                        .HasName("PK_showingseat_reservation");
+                        .HasName("PK_showingseats");
                 });
         }
     }

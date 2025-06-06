@@ -83,7 +83,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id")
-                        .HasName("pk_user_id");
+                        .HasName("pk_AppUser");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -112,7 +112,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("max_capacity");
 
                     b.HasKey("AuditoriumNumber")
-                        .HasName("PK_auditorium_number");
+                        .HasName("PK_Auditorium");
 
                     b.HasIndex("LocationId");
 
@@ -195,7 +195,7 @@ namespace DbInfrastructure.Migrations
                         .IsFixedLength();
 
                     b.HasKey("LocationId")
-                        .HasName("PK_location_id");
+                        .HasName("PK_Location");
 
                     b.ToTable("Locations");
                 });
@@ -238,7 +238,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("title");
 
                     b.HasKey("MovieId")
-                        .HasName("PK_movie_id");
+                        .HasName("PK_Movied");
 
                     b.HasIndex("Genre");
 
@@ -296,7 +296,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("auditorium_number");
 
                     b.HasKey("SeatId")
-                        .HasName("PK_seat_id");
+                        .HasName("PK_Seat");
 
                     b.HasIndex("AuditoriumNumber");
 
@@ -325,7 +325,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("price");
 
                     b.HasKey("ShowingId")
-                        .HasName("PK_showing_id");
+                        .HasName("PK_Showing");
 
                     b.HasIndex("MovieId");
 
@@ -353,7 +353,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("showing_id");
 
                     b.HasKey("ShowingSeatId")
-                        .HasName("PK_showing_seat_id");
+                        .HasName("PK_ShowingSeat");
 
                     b.HasIndex("SeatId");
 
@@ -506,7 +506,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("reservation_id");
 
                     b.HasKey("ShowingSeatId", "ReservationId")
-                        .HasName("PK_showingseat_reservation");
+                        .HasName("PK_showingseats");
 
                     b.HasIndex("ReservationId");
 

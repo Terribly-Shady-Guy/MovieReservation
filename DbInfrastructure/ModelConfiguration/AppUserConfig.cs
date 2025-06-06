@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.HasKey(x => x.Id)
-                .HasName("pk_user_id");
+                .HasName("pk_AppUser");
 
             builder.Property(e => e.FirstName)
                 .HasColumnType("VARCHAR(50)");
