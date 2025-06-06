@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<Seat> builder)
         {
             builder.HasKey(e => e.SeatId)
-                .HasName("PK_Seat");
+                .HasName("PK_Seats");
 
             builder.Property(e => e.SeatId)
                 .HasColumnName("seat_id");
@@ -21,7 +21,7 @@ namespace DbInfrastructure.ModelConfiguration
             builder.HasOne(e => e.Auditorium)
                 .WithMany(e => e.Seats)
                 .HasForeignKey(e => e.AuditoriumNumber)
-                .HasConstraintName("FK_seat_auditorium");
+                .HasConstraintName("FK_Seats_Auditoriums");
         }
     }
 }

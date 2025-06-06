@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250606035924_InitialCreate")]
+    [Migration("20250606050202_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,7 +86,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id")
-                        .HasName("pk_AppUser");
+                        .HasName("PK_AppUsers");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -115,7 +115,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("max_capacity");
 
                     b.HasKey("AuditoriumNumber")
-                        .HasName("PK_Auditorium");
+                        .HasName("PK_Auditoriums");
 
                     b.HasIndex("LocationId");
 
@@ -150,7 +150,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("NVARCHAR(450)");
 
                     b.HasKey("LoginId")
-                        .HasName("PK_Login");
+                        .HasName("PK_Logins");
 
                     b.HasIndex("RefreshToken");
 
@@ -198,7 +198,7 @@ namespace DbInfrastructure.Migrations
                         .IsFixedLength();
 
                     b.HasKey("LocationId")
-                        .HasName("PK_Location");
+                        .HasName("PK_Locations");
 
                     b.ToTable("Locations");
                 });
@@ -241,7 +241,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("title");
 
                     b.HasKey("MovieId")
-                        .HasName("PK_Movied");
+                        .HasName("PK_Movies");
 
                     b.HasIndex("Genre");
 
@@ -277,7 +277,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("ReservationId")
-                        .HasName("PK_reservation_id");
+                        .HasName("PK_Reservations");
 
                     b.HasIndex("UserId");
 
@@ -299,7 +299,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("auditorium_number");
 
                     b.HasKey("SeatId")
-                        .HasName("PK_Seat");
+                        .HasName("PK_Seats");
 
                     b.HasIndex("AuditoriumNumber");
 
@@ -328,7 +328,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("price");
 
                     b.HasKey("ShowingId")
-                        .HasName("PK_Showing");
+                        .HasName("PK_Showings");
 
                     b.HasIndex("MovieId");
 
@@ -356,7 +356,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("showing_id");
 
                     b.HasKey("ShowingSeatId")
-                        .HasName("PK_ShowingSeat");
+                        .HasName("PK_ShowingSeats");
 
                     b.HasIndex("SeatId");
 
@@ -509,7 +509,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("reservation_id");
 
                     b.HasKey("ShowingSeatId", "ReservationId")
-                        .HasName("PK_showingseats");
+                        .HasName("PK_ReservedSeats");
 
                     b.HasIndex("ReservationId");
 
@@ -523,7 +523,7 @@ namespace DbInfrastructure.Migrations
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_auditorium_location");
+                        .HasConstraintName("FK_Auditoriums_Locations");
 
                     b.Navigation("Location");
                 });
@@ -547,7 +547,7 @@ namespace DbInfrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_app_user_reservation");
+                        .HasConstraintName("FK_AppUsers_Reservations");
 
                     b.Navigation("User");
                 });
@@ -559,7 +559,7 @@ namespace DbInfrastructure.Migrations
                         .HasForeignKey("AuditoriumNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_seat_auditorium");
+                        .HasConstraintName("FK_Seats_Auditoriums");
 
                     b.Navigation("Auditorium");
                 });
@@ -571,7 +571,7 @@ namespace DbInfrastructure.Migrations
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_movie_showing");
+                        .HasConstraintName("FK_Movies_Showings");
 
                     b.Navigation("Movie");
                 });
@@ -583,14 +583,14 @@ namespace DbInfrastructure.Migrations
                         .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_showing_seat_seat");
+                        .HasConstraintName("FK_ShowingSeats_Seats");
 
                     b.HasOne("DbInfrastructure.Models.Showing", "Showing")
                         .WithMany("ShowingSeats")
                         .HasForeignKey("ShowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_showing_seat_showing");
+                        .HasConstraintName("FK_ShowingSeats_Showings");
 
                     b.Navigation("Seat");
 

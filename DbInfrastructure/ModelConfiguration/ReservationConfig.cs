@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<Reservation> builder)
         {
             builder.HasKey(e => e.ReservationId)
-                .HasName("PK_reservation_id");
+                .HasName("PK_Reservations");
 
             builder.Property(e => e.ReservationId)
                 .HasColumnName("reservation_id");
@@ -36,7 +36,7 @@ namespace DbInfrastructure.ModelConfiguration
             builder.HasOne(e => e.User)
                 .WithMany(e => e.Reservations)
                 .HasForeignKey(e => e.UserId)
-                .HasConstraintName("FK_app_user_reservation");
+                .HasConstraintName("FK_AppUsers_Reservations");
 
             builder.HasMany(e => e.ShowingSeats)
                 .WithMany(e => e.Reservations)
@@ -51,7 +51,7 @@ namespace DbInfrastructure.ModelConfiguration
                         .HasColumnType("INTEGER");
 
                     joinEntity.HasKey("ShowingSeatId", "ReservationId")
-                        .HasName("PK_showingseats");
+                        .HasName("PK_ReservedSeats");
                 });
         }
     }

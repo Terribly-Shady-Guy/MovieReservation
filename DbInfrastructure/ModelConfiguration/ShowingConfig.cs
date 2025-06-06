@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<Showing> builder)
         {
             builder.HasKey(e => e.ShowingId)
-                .HasName("PK_Showing");
+                .HasName("PK_Showings");
 
             builder.Property(e => e.ShowingId)
                 .HasColumnName("showing_id");
@@ -31,7 +31,7 @@ namespace DbInfrastructure.ModelConfiguration
             builder.HasOne(e => e.Movie)
                 .WithMany(e => e.Showings)
                 .HasForeignKey(e => e.MovieId)
-                .HasConstraintName("FK_movie_showing");
+                .HasConstraintName("FK_Movies_Showings");
 
             builder.ToTable("Showings", schema =>
             {
