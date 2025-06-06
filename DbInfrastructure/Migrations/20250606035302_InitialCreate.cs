@@ -157,7 +157,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logins", x => x.LoginId);
+                    table.PrimaryKey("PK_Login", x => x.LoginId);
                     table.ForeignKey(
                         name: "FK_AppUser_Logins",
                         column: x => x.UserId,

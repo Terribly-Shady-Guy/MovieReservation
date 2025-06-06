@@ -8,7 +8,8 @@ namespace DbInfrastructure.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<InternalLogin> builder)
         {
-            builder.HasKey(e => e.LoginId);
+            builder.HasKey(e => e.LoginId)
+                .HasName("PK_Login");
 
             builder.Property(e => e.RefreshToken)
                 .IsUnicode(false)
