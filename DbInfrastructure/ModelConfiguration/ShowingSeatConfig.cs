@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<ShowingSeat> builder)
         {
             builder.HasKey(e => e.ShowingSeatId)
-                .HasName("PK_showing_seat_id");
+                .HasName("PK_ShowingSeats");
 
             builder.Property(e => e.ShowingSeatId)
                 .HasColumnName("showing_seat_id");
@@ -24,12 +24,12 @@ namespace DbInfrastructure.ModelConfiguration
             builder.HasOne(e => e.Showing)
                 .WithMany(e => e.ShowingSeats)
                 .HasForeignKey(e => e.ShowingId)
-                .HasConstraintName("FK_showing_seat_showing");
+                .HasConstraintName("FK_ShowingSeats_Showings");
 
             builder.HasOne(e => e.Seat)
                 .WithMany(e => e.ShowingSeats)
                 .HasForeignKey(e => e.SeatId)
-                .HasConstraintName("FK_showing_seat_seat");
+                .HasConstraintName("FK_ShowingSeats_Seats");
         }
     }
 }

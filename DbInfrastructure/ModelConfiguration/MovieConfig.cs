@@ -9,7 +9,7 @@ namespace DbInfrastructure.ModelConfiguration
         public void Configure(EntityTypeBuilder<Movie> builder)
         {
             builder.HasKey(e => e.MovieId)
-                .HasName("PK_movie_id");
+                .HasName("PK_Movies");
 
             builder.Property(e => e.MovieId)
                 .HasColumnName("movie_id");

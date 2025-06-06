@@ -35,7 +35,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_id", x => x.Id);
+                    table.PrimaryKey("PK_AppUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,7 +65,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_location_id", x => x.location_id);
+                    table.PrimaryKey("PK_Locations", x => x.location_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +81,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_movie_id", x => x.movie_id);
+                    table.PrimaryKey("PK_Movies", x => x.movie_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,7 +157,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Login", x => x.LoginId);
+                    table.PrimaryKey("PK_Logins", x => x.LoginId);
                     table.ForeignKey(
                         name: "FK_AppUser_Logins",
                         column: x => x.UserId,
@@ -179,9 +179,9 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_reservation_id", x => x.reservation_id);
+                    table.PrimaryKey("PK_Reservations", x => x.reservation_id);
                     table.ForeignKey(
-                        name: "FK_app_user_reservation",
+                        name: "FK_AppUsers_Reservations",
                         column: x => x.user_id,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
@@ -243,10 +243,10 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_auditorium_number", x => x.auditorium_number);
+                    table.PrimaryKey("PK_Auditoriums", x => x.auditorium_number);
                     table.CheckConstraint("CK_max_capacity", "max_capacity > 0");
                     table.ForeignKey(
-                        name: "FK_auditorium_location",
+                        name: "FK_Auditoriums_Locations",
                         column: x => x.location_id,
                         principalTable: "Locations",
                         principalColumn: "location_id",
@@ -265,10 +265,10 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_showing_id", x => x.showing_id);
+                    table.PrimaryKey("PK_Showings", x => x.showing_id);
                     table.CheckConstraint("CK_min_price", "price > 0");
                     table.ForeignKey(
-                        name: "FK_movie_showing",
+                        name: "FK_Movies_Showings",
                         column: x => x.movie_id,
                         principalTable: "Movies",
                         principalColumn: "movie_id",
@@ -285,9 +285,9 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_seat_id", x => x.seat_id);
+                    table.PrimaryKey("PK_Seats", x => x.seat_id);
                     table.ForeignKey(
-                        name: "FK_seat_auditorium",
+                        name: "FK_Seats_Auditoriums",
                         column: x => x.auditorium_number,
                         principalTable: "Auditoriums",
                         principalColumn: "auditorium_number",
@@ -305,15 +305,15 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_showing_seat_id", x => x.showing_seat_id);
+                    table.PrimaryKey("PK_ShowingSeats", x => x.showing_seat_id);
                     table.ForeignKey(
-                        name: "FK_showing_seat_seat",
+                        name: "FK_ShowingSeats_Seats",
                         column: x => x.seat_id,
                         principalTable: "Seats",
                         principalColumn: "seat_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_showing_seat_showing",
+                        name: "FK_ShowingSeats_Showings",
                         column: x => x.showing_id,
                         principalTable: "Showings",
                         principalColumn: "showing_id",
@@ -329,7 +329,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_showingseat_reservation", x => new { x.showing_seat_id, x.reservation_id });
+                    table.PrimaryKey("PK_ReservedSeats", x => new { x.showing_seat_id, x.reservation_id });
                     table.ForeignKey(
                         name: "FK_ReservedSeats_Reservations_reservation_id",
                         column: x => x.reservation_id,
