@@ -1,4 +1,6 @@
-﻿namespace MovieReservation.ViewModels
+﻿using DbInfrastructure.Models;
+
+namespace MovieReservation.ViewModels
 {
     public class MovieVM
     {
@@ -6,6 +8,6 @@
         public required string Title { get; set; }
         public required string Description { get; set; }
         public required string PosterImageName { get; set; }
-        public required string Genre { get; set; }
+        public required List<Genre> Genres { get; set; }
     }
 }

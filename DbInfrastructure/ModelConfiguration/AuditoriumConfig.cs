@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using DbInfrastructure.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbInfrastructure.ModelConfiguration
 {
@@ -17,9 +18,10 @@ namespace DbInfrastructure.ModelConfiguration
                 .HasColumnType("VARCHAR(10)")
                 .IsUnicode(false);
 
-            builder.Property(e => e.MaxCapacity)
+            builder.Property(e => e.Type)
+                .HasColumnType("VARCHAR(15)")
                 .IsRequired()
-                .HasColumnName("max_capacity");
+                .HasConversion(new EnumToStringConverter<TheaterType>());
 
             builder.Property(e => e.LocationId)
                 .HasColumnName("location_id")
@@ -29,11 +31,6 @@ namespace DbInfrastructure.ModelConfiguration
                 .WithMany(e => e.Auditoriums)
                 .HasForeignKey(e => e.LocationId)
                 .HasConstraintName("FK_Auditoriums_Locations");
-
-            builder.ToTable(nameof(Auditorium) + "s", table =>
-            {
-                table.HasCheckConstraint("CK_max_capacity", "max_capacity > 0");
-            });
         }
     }
 }

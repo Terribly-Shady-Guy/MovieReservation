@@ -53,6 +53,19 @@ namespace DbInfrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Genre",
+                columns: table => new
+                {
+                    genre_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "VARCHAR(20)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genre", x => x.genre_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -76,8 +89,7 @@ namespace DbInfrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     title = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "varchar(300)", unicode: false, maxLength: 300, nullable: false),
-                    poster_image_name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    genre = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false)
+                    poster_image_name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -174,7 +186,7 @@ namespace DbInfrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     date_reserved = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    total = table.Column<decimal>(type: "MONEY", nullable: false),
+                    Status = table.Column<string>(type: "VARCHAR(15)", nullable: false),
                     date_cancelled = table.Column<DateTime>(type: "DATETIME", nullable: true)
                 },
                 constraints: table =>
@@ -238,18 +250,41 @@ namespace DbInfrastructure.Migrations
                 columns: table => new
                 {
                     auditorium_number = table.Column<string>(type: "VARCHAR(10)", unicode: false, nullable: false),
-                    max_capacity = table.Column<int>(type: "int", nullable: false),
-                    location_id = table.Column<int>(type: "int", nullable: false)
+                    location_id = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "VARCHAR(15)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Auditoriums", x => x.auditorium_number);
-                    table.CheckConstraint("CK_max_capacity", "max_capacity > 0");
                     table.ForeignKey(
                         name: "FK_Auditoriums_Locations",
                         column: x => x.location_id,
                         principalTable: "Locations",
                         principalColumn: "location_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieGenre",
+                columns: table => new
+                {
+                    movie_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    genre_id = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieGenre", x => new { x.movie_id, x.genre_id });
+                    table.ForeignKey(
+                        name: "FK_MovieGenre_Genre_genre_id",
+                        column: x => x.genre_id,
+                        principalTable: "Genre",
+                        principalColumn: "genre_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieGenre_Movies_movie_id",
+                        column: x => x.movie_id,
+                        principalTable: "Movies",
+                        principalColumn: "movie_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -260,13 +295,11 @@ namespace DbInfrastructure.Migrations
                     showing_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     movie_id = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    price = table.Column<decimal>(type: "MONEY", nullable: false)
+                    date = table.Column<DateTime>(type: "DATETIME", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Showings", x => x.showing_id);
-                    table.CheckConstraint("CK_min_price", "price > 0");
                     table.ForeignKey(
                         name: "FK_Movies_Showings",
                         column: x => x.movie_id,
@@ -281,7 +314,9 @@ namespace DbInfrastructure.Migrations
                 {
                     seat_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    auditorium_number = table.Column<string>(type: "VARCHAR(10)", nullable: false)
+                    auditorium_number = table.Column<string>(type: "VARCHAR(10)", nullable: false),
+                    row_identifier = table.Column<string>(type: "CHAR(1)", fixedLength: true, maxLength: 1, nullable: false),
+                    row_seat_number = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -301,11 +336,13 @@ namespace DbInfrastructure.Migrations
                     showing_seat_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     showing_id = table.Column<int>(type: "int", nullable: false),
-                    seat_id = table.Column<int>(type: "int", nullable: false)
+                    seat_id = table.Column<int>(type: "int", nullable: false),
+                    price = table.Column<decimal>(type: "MONEY", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShowingSeats", x => x.showing_seat_id);
+                    table.CheckConstraint("CK_min_price", "price > 0");
                     table.ForeignKey(
                         name: "FK_ShowingSeats_Seats",
                         column: x => x.seat_id,
@@ -389,6 +426,11 @@ namespace DbInfrastructure.Migrations
                 column: "location_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Genre_name",
+                table: "Genre",
+                column: "name");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Logins_refresh_token",
                 table: "Logins",
                 column: "refresh_token");
@@ -399,9 +441,9 @@ namespace DbInfrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Movies_genre",
-                table: "Movies",
-                column: "genre");
+                name: "IX_MovieGenre_genre_id",
+                table: "MovieGenre",
+                column: "genre_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Movies_title",
@@ -419,9 +461,10 @@ namespace DbInfrastructure.Migrations
                 column: "reservation_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Seats_auditorium_number",
+                name: "IX_Seat_Row",
                 table: "Seats",
-                column: "auditorium_number");
+                columns: new[] { "auditorium_number", "row_identifier", "row_seat_number" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Showings_movie_id",
@@ -461,10 +504,16 @@ namespace DbInfrastructure.Migrations
                 name: "Logins");
 
             migrationBuilder.DropTable(
+                name: "MovieGenre");
+
+            migrationBuilder.DropTable(
                 name: "ReservedSeats");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Genre");
 
             migrationBuilder.DropTable(
                 name: "Reservations");

@@ -19,11 +19,6 @@ namespace DbInfrastructure.ModelConfiguration
                 .IsRequired()
                 .HasColumnType("DATETIME");
 
-            builder.Property(e => e.Price)
-                .IsRequired()
-                .HasColumnName("price")
-                .HasColumnType("MONEY");
-
             builder.Property(e => e.MovieId)
                 .IsRequired()
                 .HasColumnName("movie_id");
@@ -32,11 +27,6 @@ namespace DbInfrastructure.ModelConfiguration
                 .WithMany(e => e.Showings)
                 .HasForeignKey(e => e.MovieId)
                 .HasConstraintName("FK_Movies_Showings");
-
-            builder.ToTable(nameof(Showing) + "s", schema =>
-            {
-                schema.HasCheckConstraint("CK_min_price", "price > 0");
-            });
         }
     }
 }

@@ -32,13 +32,6 @@ namespace DbInfrastructure.ModelConfiguration
                 .HasColumnName("description")
                 .HasMaxLength(300);
 
-            builder.Property(e => e.Genre)
-                .IsRequired()
-                .IsUnicode(false)
-                .HasColumnName("genre")
-                .HasMaxLength(20);
-
-            builder.HasIndex(e => e.Genre);
             builder.HasIndex(e => e.Title);
         }
     }

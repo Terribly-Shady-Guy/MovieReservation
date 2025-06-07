@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250606050202_InitialCreate")]
+    [Migration("20250607033701_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -110,19 +110,38 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("location_id");
 
-                    b.Property<int>("MaxCapacity")
-                        .HasColumnType("int")
-                        .HasColumnName("max_capacity");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(15)");
 
                     b.HasKey("AuditoriumNumber")
                         .HasName("PK_Auditoriums");
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Auditoriums", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_max_capacity", "max_capacity > 0");
-                        });
+                    b.ToTable("Auditoriums");
+                });
+
+            modelBuilder.Entity("DbInfrastructure.Models.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("genre_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Genre");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Genre");
                 });
 
             modelBuilder.Entity("DbInfrastructure.Models.InternalLogin", b =>
@@ -219,13 +238,6 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("varchar(300)")
                         .HasColumnName("description");
 
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("genre");
-
                     b.Property<string>("PosterImageName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -242,8 +254,6 @@ namespace DbInfrastructure.Migrations
 
                     b.HasKey("MovieId")
                         .HasName("PK_Movies");
-
-                    b.HasIndex("Genre");
 
                     b.HasIndex("Title");
 
@@ -267,9 +277,9 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("date_reserved");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("MONEY")
-                        .HasColumnName("total");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(15)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -298,10 +308,23 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("VARCHAR(10)")
                         .HasColumnName("auditorium_number");
 
+                    b.Property<string>("RowIdentifier")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("CHAR(1)")
+                        .HasColumnName("row_identifier")
+                        .IsFixedLength();
+
+                    b.Property<int>("RowSeatNumber")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("row_seat_number");
+
                     b.HasKey("SeatId")
                         .HasName("PK_Seats");
 
-                    b.HasIndex("AuditoriumNumber");
+                    b.HasIndex("AuditoriumNumber", "RowIdentifier", "RowSeatNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Seat_Row");
 
                     b.ToTable("Seats");
                 });
@@ -323,19 +346,12 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("movie_id");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("MONEY")
-                        .HasColumnName("price");
-
                     b.HasKey("ShowingId")
                         .HasName("PK_Showings");
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Showings", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_min_price", "price > 0");
-                        });
+                    b.ToTable("Showings");
                 });
 
             modelBuilder.Entity("DbInfrastructure.Models.ShowingSeat", b =>
@@ -346,6 +362,10 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("showing_seat_id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowingSeatId"));
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("MONEY")
+                        .HasColumnName("price");
 
                     b.Property<int>("SeatId")
                         .HasColumnType("int")
@@ -362,7 +382,10 @@ namespace DbInfrastructure.Migrations
 
                     b.HasIndex("ShowingId");
 
-                    b.ToTable("ShowingSeats");
+                    b.ToTable("ShowingSeats", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_min_price", "price > 0");
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -496,6 +519,24 @@ namespace DbInfrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("MovieGenre", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("movie_id");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("genre_id");
+
+                    b.HasKey("MovieId", "GenreId")
+                        .HasName("PK_MovieGenre");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("MovieGenre");
                 });
 
             modelBuilder.Entity("ReservedSeats", b =>
@@ -644,6 +685,21 @@ namespace DbInfrastructure.Migrations
                     b.HasOne("DbInfrastructure.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieGenre", b =>
+                {
+                    b.HasOne("DbInfrastructure.Models.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbInfrastructure.Models.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

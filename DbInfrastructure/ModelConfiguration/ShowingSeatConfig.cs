@@ -17,6 +17,11 @@ namespace DbInfrastructure.ModelConfiguration
             builder.Property(e => e.ShowingId)
                 .IsRequired()
                 .HasColumnName("showing_id");
+            
+            builder.Property(e => e.Price)
+                .IsRequired()
+                .HasColumnName("price")
+                .HasColumnType("MONEY");
 
             builder.Property(e => e.SeatId)
                 .HasColumnName("seat_id");
@@ -30,6 +35,11 @@ namespace DbInfrastructure.ModelConfiguration
                 .WithMany(e => e.ShowingSeats)
                 .HasForeignKey(e => e.SeatId)
                 .HasConstraintName("FK_ShowingSeats_Seats");
+
+            builder.ToTable(nameof(ShowingSeat) + "s", schema =>
+            {
+                schema.HasCheckConstraint("CK_min_price", "price > 0");
+            });
         }
     }
 }

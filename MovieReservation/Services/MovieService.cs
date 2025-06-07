@@ -22,7 +22,7 @@ namespace MovieReservation.Services
 
             if (genre is not null)
             {
-                movies = movies.Where(m => m.Genre.StartsWith(genre));
+                movies = movies.Include(m => m.Genres.Where(g => g.Name.StartsWith(genre)));
             }
 
             return await movies.Select(m => new MovieVM
@@ -30,7 +30,7 @@ namespace MovieReservation.Services
                 MovieId = m.MovieId,
                 Description = m.Description,
                 Title = m.Title,
-                Genre = m.Genre,
+                Genres = m.Genres.ToList(),
                 PosterImageName = _fileHandler.CreateImagePath(m.PosterImageName)
             })
                 .AsNoTracking()
@@ -45,10 +45,11 @@ namespace MovieReservation.Services
             var newMovie = new Movie
             {
                 Title = movie.Title,
-                Genre = movie.Genre,
                 Description = movie.Description,
                 PosterImageName = newFileName
             };
+
+            newMovie.Genres.Add(new Genre { Name = movie.Genre });
             
             _dbContext.Movies.Add(newMovie);
             await _dbContext.SaveChangesAsync();

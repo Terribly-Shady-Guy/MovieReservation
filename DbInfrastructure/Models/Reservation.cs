@@ -1,11 +1,12 @@
 ﻿namespace DbInfrastructure.Models
 {
+    public enum ReservationStatus { Pending, CheckedIn, Cancelled }
     public class Reservation
     {
         public int ReservationId { get; set; }
         public required string UserId { get; set; }
         public required DateTime DateReserved { get; set; }
-        public required decimal Total { get; set; }
+        public required ReservationStatus Status { get; set; }
         public DateTime? DateCancelled { get; set; }
 
         public required AppUser User { get; set; }
