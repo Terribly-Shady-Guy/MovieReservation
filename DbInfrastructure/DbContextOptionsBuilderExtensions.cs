@@ -88,7 +88,7 @@ namespace DbInfrastructure
 
                 foreach (var status in reservationStatuses)
                 {
-                    if (!statuses.Any(s => s.Name == status.Name))
+                    if (!statuses.Any(s => s.Name == status.Name && s.Id == status.Id))
                     {
                         context.Add(status);
                     }
@@ -99,7 +99,7 @@ namespace DbInfrastructure
 
                 foreach (var type in theaterTypes)
                 {
-                    if (!types.Any(t => t.Name == type.Name))
+                    if (!types.Any(t => t.Name == type.Name && t.Id == type.Id))
                     {
                         context.Add(type);
                     }
@@ -146,7 +146,7 @@ namespace DbInfrastructure
 
                 foreach (var status in reservationStatuses)
                 {
-                    if (!statuses.Any(s => s.Name == status.Name))
+                    if (!statuses.Any(s => s.Name == status.Name && s.Id == status.Id))
                     {
                         context.Add(status);
                     }
@@ -157,7 +157,7 @@ namespace DbInfrastructure
 
                 foreach (var type in theaterTypes)
                 {
-                    if (!types.Any(t => t.Name == type.Name))
+                    if (!types.Any(t => t.Name == type.Name && t.Id == type.Id))
                     {
                         context.Add(type);
                     }
