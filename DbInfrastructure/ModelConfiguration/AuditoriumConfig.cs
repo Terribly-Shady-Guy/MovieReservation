@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using DbInfrastructure.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbInfrastructure.ModelConfiguration
 {
@@ -19,9 +18,9 @@ namespace DbInfrastructure.ModelConfiguration
                 .IsUnicode(false);
 
             builder.Property(e => e.Type)
-                .HasColumnType("VARCHAR(15)")
+                .HasColumnType("INTEGER")
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<TheaterType>());
+                .HasConversion<int>();
 
             builder.Property(e => e.LocationId)
                 .HasColumnName("location_id")

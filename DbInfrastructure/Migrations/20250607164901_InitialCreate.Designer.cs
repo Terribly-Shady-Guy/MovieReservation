@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250607033701_InitialCreate")]
+    [Migration("20250607164901_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -110,14 +110,15 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("location_id");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(15)");
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("AuditoriumNumber")
                         .HasName("PK_Auditoriums");
 
                     b.HasIndex("LocationId");
+
+                    b.HasIndex("Type");
 
                     b.ToTable("Auditoriums");
                 });
@@ -277,9 +278,8 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("DATETIME")
                         .HasColumnName("date_reserved");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(15)");
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -289,9 +289,29 @@ namespace DbInfrastructure.Migrations
                     b.HasKey("ReservationId")
                         .HasName("PK_Reservations");
 
+                    b.HasIndex("Status");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("DbInfrastructure.Models.ReservationStatusLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("status_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("VARCHAR(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ReservationStatus");
+
+                    b.ToTable("ReservationStatus", (string)null);
                 });
 
             modelBuilder.Entity("DbInfrastructure.Models.Seat", b =>
@@ -386,6 +406,24 @@ namespace DbInfrastructure.Migrations
                         {
                             t.HasCheckConstraint("CK_min_price", "price > 0");
                         });
+                });
+
+            modelBuilder.Entity("DbInfrastructure.Models.TheaterTypeLookup", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("type_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("VARCHAR(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_TheaterType");
+
+                    b.ToTable("TheaterType", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -566,7 +604,16 @@ namespace DbInfrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Auditoriums_Locations");
 
+                    b.HasOne("DbInfrastructure.Models.TheaterTypeLookup", "TypeLookup")
+                        .WithMany("Auditoriums")
+                        .HasForeignKey("Type")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Auditoriums_TheaterType");
+
                     b.Navigation("Location");
+
+                    b.Navigation("TypeLookup");
                 });
 
             modelBuilder.Entity("DbInfrastructure.Models.InternalLogin", b =>
@@ -583,12 +630,21 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.Reservation", b =>
                 {
+                    b.HasOne("DbInfrastructure.Models.ReservationStatusLookup", "StatusLookup")
+                        .WithMany("Reservations")
+                        .HasForeignKey("Status")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Reservation_ReservationStatus");
+
                     b.HasOne("DbInfrastructure.Models.AppUser", "User")
                         .WithMany("Reservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_AppUsers_Reservations");
+
+                    b.Navigation("StatusLookup");
 
                     b.Navigation("User");
                 });
@@ -741,6 +797,11 @@ namespace DbInfrastructure.Migrations
                     b.Navigation("Showings");
                 });
 
+            modelBuilder.Entity("DbInfrastructure.Models.ReservationStatusLookup", b =>
+                {
+                    b.Navigation("Reservations");
+                });
+
             modelBuilder.Entity("DbInfrastructure.Models.Seat", b =>
                 {
                     b.Navigation("ShowingSeats");
@@ -749,6 +810,11 @@ namespace DbInfrastructure.Migrations
             modelBuilder.Entity("DbInfrastructure.Models.Showing", b =>
                 {
                     b.Navigation("ShowingSeats");
+                });
+
+            modelBuilder.Entity("DbInfrastructure.Models.TheaterTypeLookup", b =>
+                {
+                    b.Navigation("Auditoriums");
                 });
 #pragma warning restore 612, 618
         }

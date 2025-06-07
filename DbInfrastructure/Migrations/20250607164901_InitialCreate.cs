@@ -97,6 +97,30 @@ namespace DbInfrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReservationStatus",
+                columns: table => new
+                {
+                    status_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    name = table.Column<string>(type: "VARCHAR(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReservationStatus", x => x.status_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TheaterType",
+                columns: table => new
+                {
+                    type_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    name = table.Column<string>(type: "VARCHAR(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TheaterType", x => x.type_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -179,28 +203,6 @@ namespace DbInfrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reservations",
-                columns: table => new
-                {
-                    reservation_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    date_reserved = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                    Status = table.Column<string>(type: "VARCHAR(15)", nullable: false),
-                    date_cancelled = table.Column<DateTime>(type: "DATETIME", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reservations", x => x.reservation_id);
-                    table.ForeignKey(
-                        name: "FK_AppUsers_Reservations",
-                        column: x => x.user_id,
-                        principalTable: "AppUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -246,25 +248,6 @@ namespace DbInfrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Auditoriums",
-                columns: table => new
-                {
-                    auditorium_number = table.Column<string>(type: "VARCHAR(10)", unicode: false, nullable: false),
-                    location_id = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "VARCHAR(15)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Auditoriums", x => x.auditorium_number);
-                    table.ForeignKey(
-                        name: "FK_Auditoriums_Locations",
-                        column: x => x.location_id,
-                        principalTable: "Locations",
-                        principalColumn: "location_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MovieGenre",
                 columns: table => new
                 {
@@ -305,6 +288,59 @@ namespace DbInfrastructure.Migrations
                         column: x => x.movie_id,
                         principalTable: "Movies",
                         principalColumn: "movie_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    reservation_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    date_reserved = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    date_cancelled = table.Column<DateTime>(type: "DATETIME", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.reservation_id);
+                    table.ForeignKey(
+                        name: "FK_AppUsers_Reservations",
+                        column: x => x.user_id,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservation_ReservationStatus",
+                        column: x => x.Status,
+                        principalTable: "ReservationStatus",
+                        principalColumn: "status_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Auditoriums",
+                columns: table => new
+                {
+                    auditorium_number = table.Column<string>(type: "VARCHAR(10)", unicode: false, nullable: false),
+                    location_id = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Auditoriums", x => x.auditorium_number);
+                    table.ForeignKey(
+                        name: "FK_Auditoriums_Locations",
+                        column: x => x.location_id,
+                        principalTable: "Locations",
+                        principalColumn: "location_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Auditoriums_TheaterType",
+                        column: x => x.Type,
+                        principalTable: "TheaterType",
+                        principalColumn: "type_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -426,6 +462,11 @@ namespace DbInfrastructure.Migrations
                 column: "location_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Auditoriums_Type",
+                table: "Auditoriums",
+                column: "Type");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Genre_name",
                 table: "Genre",
                 column: "name");
@@ -449,6 +490,11 @@ namespace DbInfrastructure.Migrations
                 name: "IX_Movies_title",
                 table: "Movies",
                 column: "title");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_Status",
+                table: "Reservations",
+                column: "Status");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_user_id",
@@ -525,6 +571,9 @@ namespace DbInfrastructure.Migrations
                 name: "AppUsers");
 
             migrationBuilder.DropTable(
+                name: "ReservationStatus");
+
+            migrationBuilder.DropTable(
                 name: "Seats");
 
             migrationBuilder.DropTable(
@@ -538,6 +587,9 @@ namespace DbInfrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "TheaterType");
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using DbInfrastructure.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DbInfrastructure.ModelConfiguration
 {
@@ -21,9 +20,9 @@ namespace DbInfrastructure.ModelConfiguration
                 .HasColumnName("date_reserved");
 
            builder.Property(e => e.Status)
-                .HasColumnType("VARCHAR(15)")
+                .HasColumnType("INTEGER")
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<ReservationStatus>());
+                .HasConversion<int>();
             
             builder.Property(e => e.DateCancelled)
                 .IsRequired(false)

@@ -20,6 +20,8 @@ namespace DbInfrastructure
         public DbSet<Seat> Seats { get; set; }
         public DbSet<ShowingSeat> ShowingSeats { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<ReservationStatusLookup> ReservationStatuses { get; set; }
+        public DbSet<TheaterTypeLookup> TheaterTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

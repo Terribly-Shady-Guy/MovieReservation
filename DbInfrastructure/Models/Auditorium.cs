@@ -11,5 +11,6 @@
 
         public required Location Location { get; set; }
         public ICollection<Seat> Seats { get; set; } = new List<Seat>();
+        public required TheaterTypeLookup TypeLookup { get; set; }
     }
 }
