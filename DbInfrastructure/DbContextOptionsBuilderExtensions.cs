@@ -42,6 +42,14 @@ namespace DbInfrastructure
 
             seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
 
+            ReservationStatusLookup[] reservationStatuses = Enum.GetValues<ReservationStatus>()
+                .Select(status => new ReservationStatusLookup(status))
+                .ToArray();
+
+            TheaterTypeLookup[] theaterTypes = Enum.GetValues<TheaterType>()
+                .Select(type =>  new TheaterTypeLookup(type))
+                .ToArray();
+
             options.UseSeeding((context, _) =>
             {
                 var roles = context.Set<IdentityRole>()
@@ -73,6 +81,28 @@ namespace DbInfrastructure
 
                     context.Add(seededAdmin);
                     context.Add(seededAdminRole);
+                }
+
+                var statuses = context.Set<ReservationStatusLookup>()
+                    .ToList();
+
+                foreach (var status in reservationStatuses)
+                {
+                    if (!statuses.Any(s => s.Name == status.Name))
+                    {
+                        context.Add(status);
+                    }
+                }
+
+                var types = context.Set<TheaterTypeLookup>()
+                    .ToList();
+
+                foreach (var type in theaterTypes)
+                {
+                    if (!types.Any(t => t.Name == type.Name))
+                    {
+                        context.Add(type);
+                    }
                 }
 
                 context.SaveChanges();
@@ -109,6 +139,28 @@ namespace DbInfrastructure
 
                     context.Add(seededAdminRole);
                     context.Add(seededAdmin);
+                }
+
+                var statuses = await context.Set<ReservationStatusLookup>()
+                    .ToListAsync(cancellationToken);
+
+                foreach (var status in reservationStatuses)
+                {
+                    if (!statuses.Any(s => s.Name == status.Name))
+                    {
+                        context.Add(status);
+                    }
+                }
+
+                var types = await context.Set<TheaterTypeLookup>()
+                    .ToListAsync(cancellationToken);
+
+                foreach (var type in theaterTypes)
+                {
+                    if (!types.Any(t => t.Name == type.Name))
+                    {
+                        context.Add(type);
+                    }
                 }
 
                 await context.SaveChangesAsync(cancellationToken);
