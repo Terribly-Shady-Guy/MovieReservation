@@ -47,7 +47,7 @@ namespace DbInfrastructure
                 .ToArray();
 
             TheaterTypeLookup[] theaterTypes = Enum.GetValues<TheaterType>()
-                .Select(type =>  new TheaterTypeLookup(type))
+                .Select(type => new TheaterTypeLookup(type))
                 .ToArray();
 
             options.UseSeeding((context, _) =>
