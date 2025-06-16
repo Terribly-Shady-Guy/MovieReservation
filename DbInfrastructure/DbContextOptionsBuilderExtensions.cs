@@ -40,7 +40,7 @@ namespace DbInfrastructure
                 LastName = "root",
             };
 
-            seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "admin246810");
+            seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "Admin246810@");
 
             ReservationStatusLookup[] reservationStatuses = Enum.GetValues<ReservationStatus>()
                 .Select(status => new ReservationStatusLookup(status))

@@ -53,7 +53,7 @@ namespace DbInfrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genre",
+                name: "Genres",
                 columns: table => new
                 {
                     genre_id = table.Column<int>(type: "int", nullable: false)
@@ -258,9 +258,9 @@ namespace DbInfrastructure.Migrations
                 {
                     table.PrimaryKey("PK_MovieGenre", x => new { x.movie_id, x.genre_id });
                     table.ForeignKey(
-                        name: "FK_MovieGenre_Genre_genre_id",
+                        name: "FK_MovieGenre_Genres_genre_id",
                         column: x => x.genre_id,
-                        principalTable: "Genre",
+                        principalTable: "Genres",
                         principalColumn: "genre_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -467,8 +467,8 @@ namespace DbInfrastructure.Migrations
                 column: "Type");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Genre_name",
-                table: "Genre",
+                name: "IX_Genres_name",
+                table: "Genres",
                 column: "name");
 
             migrationBuilder.CreateIndex(
@@ -559,7 +559,7 @@ namespace DbInfrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Genre");
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Reservations");
