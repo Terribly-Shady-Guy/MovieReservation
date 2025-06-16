@@ -70,8 +70,8 @@ namespace DbInfrastructure
                 if (user is null)
                 {
                     string adminRoleId = newRoles.Where(r => r.Name == "Admin")
-                    .Select(r => r.Id)
-                    .First();
+                        .Select(r => r.Id)
+                        .First();
 
                     var seededAdminRole = new IdentityUserRole<string>
                     {
@@ -128,8 +128,8 @@ namespace DbInfrastructure
                 if (user is null)
                 {
                     string adminRoleId = newRoles.Where(r => r.Name == "Admin")
-                    .Select(r => r.Id)
-                    .First();
+                        .Select(r => r.Id)
+                        .First();
 
                     var seededAdminRole = new IdentityUserRole<string>
                     {
