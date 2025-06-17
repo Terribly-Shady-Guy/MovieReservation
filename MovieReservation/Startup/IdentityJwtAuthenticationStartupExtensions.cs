@@ -3,8 +3,8 @@ using DbInfrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using MovieReservation.Services;
 using Microsoft.Extensions.Options;
+using ApplicationLogic.Services;
 
 namespace MovieReservation.Startup
 {
@@ -18,8 +18,6 @@ namespace MovieReservation.Startup
         /// <returns>The same service collection instance from parameter.</returns>
         public static IServiceCollection AddIdentityJwtAuthentication(this IServiceCollection services, IConfigurationSection jwtConfig)
         {
-            services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
-
             services.AddOptions<JwtOptions>()
                 .Bind(jwtConfig)
                 .Validate(options => options.LifetimeMinutes > 0, "lifetime minutes must be greater than 0.");
@@ -73,10 +71,6 @@ namespace MovieReservation.Startup
                 .AddSignInManager()
                 .AddEntityFrameworkStores<MovieReservationDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddTransient<AuthenticationService>();
-            services.AddTransient<IAuthenticationTokenProvider, AuthenticationTokenProvider>();
-            services.AddTransient<UserService>();
 
             return services;
         }

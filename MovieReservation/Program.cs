@@ -1,6 +1,6 @@
-using MovieReservation.Services;
 using DbInfrastructure;
 using MovieReservation.Startup;
+using ApplicationLogic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,19 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApiServices();
 
 builder.Services.AddIdentityJwtAuthentication(builder.Configuration.GetRequiredSection("Jwt"));
+
+builder.Services.AddApplicationLogicServices(builder.Configuration, builder.Environment);
 builder.Services.AddDbInfrastructure(builder.Configuration.GetConnectionString("default"));
 
 builder.Services.AddProblemDetails();
 
 builder.Services.AddHealthChecks();
-
-builder.Services.AddTransient<MovieService>();
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddTransient<IFileHandler, LocalFileHandler>();
-}
-
-builder.Services.AddTransient<LocationService>();
 
 var app = builder.Build();
 

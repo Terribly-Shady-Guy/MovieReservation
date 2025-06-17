@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ApplicationLogic.Services;
+using ApplicationLogic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
-using MovieReservation.Services;
-using MovieReservation.ViewModels;
 using System.ComponentModel;
 
 namespace MovieReservation.Controllers

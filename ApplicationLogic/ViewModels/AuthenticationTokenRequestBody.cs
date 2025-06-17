@@ -1,4 +1,4 @@
-﻿namespace MovieReservation.ViewModels
+﻿namespace ApplicationLogic.ViewModels
 {
     public class AuthenticationTokenRequestBody
     {

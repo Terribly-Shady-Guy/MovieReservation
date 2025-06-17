@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace MovieReservation.Services
+namespace ApplicationLogic.Services
 {
     public interface IRsaKeyHandler
     {

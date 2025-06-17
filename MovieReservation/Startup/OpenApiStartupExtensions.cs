@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿using ApplicationLogic.Services;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using MovieReservation.OpenApi.Transformers;
-using MovieReservation.Services;
 using Scalar.AspNetCore;
 using System.Security.Claims;
 

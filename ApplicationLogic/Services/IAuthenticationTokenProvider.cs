@@ -1,8 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using MovieReservation.ViewModels;
+﻿using ApplicationLogic.ViewModels;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
-namespace MovieReservation.Services
+namespace ApplicationLogic.Services
 {
     public interface IAuthenticationTokenProvider
     {

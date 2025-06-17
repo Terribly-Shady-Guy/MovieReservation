@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using ApplicationLogic.ViewModels;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using MovieReservation.ViewModels;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace MovieReservation.Services
+namespace ApplicationLogic.Services
 {
     public class JwtOptions
     {

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ApplicationLogic.Services;
+using ApplicationLogic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieReservation.Services;
-using MovieReservation.ViewModels;
 
 namespace MovieReservation.Controllers
 {

@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DbInfrastructure\DbInfrastructure.csproj" />
+    <ProjectReference Include="..\ApplicationLogic\ApplicationLogic.csproj" />
   </ItemGroup>
 
 </Project>

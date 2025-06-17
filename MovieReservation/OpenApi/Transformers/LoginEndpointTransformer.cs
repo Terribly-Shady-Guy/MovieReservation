@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.OpenApi;
+﻿using ApplicationLogic.Services;
+using ApplicationLogic.ViewModels;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using MovieReservation.Services;
-using MovieReservation.ViewModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 

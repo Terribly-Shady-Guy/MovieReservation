@@ -1,6 +1,6 @@
 ﻿using DbInfrastructure.Models;
 
-namespace MovieReservation.ViewModels
+namespace ApplicationLogic.ViewModels
 {
     public class MovieVM
     {

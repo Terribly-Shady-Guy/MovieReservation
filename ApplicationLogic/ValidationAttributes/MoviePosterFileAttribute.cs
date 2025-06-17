@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MovieReservation.ValidationAttributes
+namespace ApplicationLogic.ValidationAttributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MoviePosterFileAttribute : ValidationAttribute

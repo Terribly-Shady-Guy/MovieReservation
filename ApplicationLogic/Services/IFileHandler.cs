@@ -1,5 +1,4 @@
-﻿
-namespace MovieReservation.Services
+﻿namespace ApplicationLogic.Services
 {
     public interface IFileHandler
     {

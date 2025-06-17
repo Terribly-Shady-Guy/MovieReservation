@@ -1,7 +1,7 @@
-﻿using MovieReservation.ValidationAttributes;
+﻿using ApplicationLogic.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace MovieReservation.ViewModels
+namespace ApplicationLogic.ViewModels
 {
     public class MovieFormDataBody
     {
