@@ -16,7 +16,7 @@ namespace ApplicationLogic.Services
         {
             string trustedPath = Path.Combine(_path, fileName);
 
-            using var stream = File.Create(trustedPath);
+            using FileStream stream = File.Create(trustedPath);
             await file.CopyToAsync(stream);
         }
 
