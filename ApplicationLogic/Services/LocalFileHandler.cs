@@ -1,12 +1,14 @@
-﻿namespace ApplicationLogic.Services
+﻿using Microsoft.AspNetCore.Hosting;
+
+namespace ApplicationLogic.Services
 {
     public class LocalFileHandler : IFileHandler
     {
         private readonly string _path;
 
-        public LocalFileHandler()
+        public LocalFileHandler(IWebHostEnvironment environment)
         {
-            string path = Path.Combine(Environment.CurrentDirectory, "..", "Images");
+            string path = Path.Combine(environment.ContentRootPath, "..", "Images");
             _path = Path.GetFullPath(path);
         }
 
