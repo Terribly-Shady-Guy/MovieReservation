@@ -16,10 +16,8 @@ namespace ApplicationLogic.Services
         {
             string trustedPath = Path.Combine(_path, fileName);
 
-            using (var stream = File.Create(trustedPath))
-            {
-                await file.CopyToAsync(stream);
-            }
+            using var stream = File.Create(trustedPath);
+            await file.CopyToAsync(stream);
         }
 
         public void DeleteFile(string fileName)
