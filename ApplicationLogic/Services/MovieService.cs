@@ -44,9 +44,9 @@ namespace ApplicationLogic.Services
                 PosterImageName = newFileName
             };
 
-            Dictionary<string, Genre> genres = _dbContext.Genres
+            Dictionary<string, Genre> genres = await _dbContext.Genres
                 .Where(g => movie.Genres.Contains(g.Name))
-                .ToDictionary(g => g.Name);
+                .ToDictionaryAsync(g => g.Name);
 
             foreach (string genre in movie.Genres)
             {
