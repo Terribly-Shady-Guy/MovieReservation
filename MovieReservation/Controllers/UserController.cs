@@ -55,7 +55,7 @@ namespace MovieReservation.Controllers
         [EndpointDescription("An endpoint that allows admin ussers to promote a user to Admin role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was successfully promoted to admin.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPatch("{id}")]
         public async Task<ActionResult> PromoteUser([Description("The id for an existing user to promote.")] string id)
         {

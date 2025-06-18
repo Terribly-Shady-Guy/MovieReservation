@@ -7,12 +7,10 @@ namespace ApplicationLogic.Services
     public class UserService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         public async Task<string?> AddNewUserAsync(NewUserVM newUser)
@@ -37,6 +35,18 @@ namespace ApplicationLogic.Services
             return user.Id;
         }
 
+        public async Task ConfirmEmail(string id, string token)
+        {
+            AppUser? user = await _userManager.FindByIdAsync(id);
+            
+            if (user == null)
+            {
+                return;
+            }
+
+            await _userManager.ConfirmEmailAsync(user, token);
+        }
+
         public async Task<bool> PromoteToAdmin(string id)
         {
             AppUser? user = await _userManager.FindByIdAsync(id);
@@ -44,7 +54,7 @@ namespace ApplicationLogic.Services
             {
                 return false;
             }
-
+            await _userManager.RemoveFromRoleAsync(user, "User");
             IdentityResult result = await _userManager.AddToRoleAsync(user, "Admin");
 
             if (!result.Succeeded)

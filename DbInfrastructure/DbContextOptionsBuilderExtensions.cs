@@ -21,6 +21,11 @@ namespace DbInfrastructure
                     Id = Guid.NewGuid().ToString(),
                     Name = "Admin",
                     NormalizedName = "Admin".ToUpper()
+                },
+                new IdentityRole{
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "SuperAdmin",
+                    NormalizedName = "SuperAdmin".ToUpper(),
                 }
             ];
 
@@ -53,7 +58,7 @@ namespace DbInfrastructure
             options.UseSeeding((context, _) =>
             {
                 var roles = context.Set<IdentityRole>()
-                    .Where(r => r.Name == "User" || r.Name == "Admin")
+                    .Where(r => r.Name == "User" || r.Name == "Admin" || r.Name == "SuperAdmin")
                     .ToList();
 
                 foreach (var role in newRoles)
@@ -69,7 +74,7 @@ namespace DbInfrastructure
 
                 if (user is null)
                 {
-                    string adminRoleId = newRoles.Where(r => r.Name == "Admin")
+                    string adminRoleId = newRoles.Where(r => r.Name == "SuperAdmin")
                         .Select(r => r.Id)
                         .First();
 
@@ -111,7 +116,7 @@ namespace DbInfrastructure
             options.UseAsyncSeeding(async (context, _, cancellationToken) =>
             {
                 var roles = await context.Set<IdentityRole>()
-                    .Where(r => r.Name == "User" || r.Name == "Admin")
+                    .Where(r => r.Name == "User" || r.Name == "Admin" || r.Name == "SuperAdmin")
                     .ToListAsync(cancellationToken);
 
                 foreach (var role in newRoles)
@@ -127,7 +132,7 @@ namespace DbInfrastructure
 
                 if (user is null)
                 {
-                    string adminRoleId = newRoles.Where(r => r.Name == "Admin")
+                    string adminRoleId = newRoles.Where(r => r.Name == "SuperAdmin")
                         .Select(r => r.Id)
                         .First();
 
