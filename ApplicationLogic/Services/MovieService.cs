@@ -48,15 +48,15 @@ namespace ApplicationLogic.Services
                 .Where(g => movie.Genres.Contains(g.Name))
                 .ToDictionaryAsync(g => g.Name);
 
-            foreach (string genre in movie.Genres)
+            foreach (string genreName in movie.Genres)
             {
-                if (genres.TryGetValue(genre, out Genre? gen))
+                if (genres.TryGetValue(genreName, out Genre? genre))
                 {
-                    newMovie.Genres.Add(gen);
+                    newMovie.Genres.Add(genre);
                 }
                 else
                 {
-                    newMovie.Genres.Add(new Genre { Name = genre });
+                    newMovie.Genres.Add(new Genre { Name = genreName });
                 }
             }
             
