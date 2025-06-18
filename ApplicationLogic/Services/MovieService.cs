@@ -18,22 +18,17 @@ namespace ApplicationLogic.Services
 
         public async Task<List<MovieVM>> GetMovies(string? genre)
         {
-            var movies = _dbContext.Movies.AsQueryable<Movie>();
-
-            if (genre is not null)
-            {
-                movies = movies.Include(m => m.Genres.Where(g => g.Name.StartsWith(genre)));
-            }
-
-            return await movies.Select(m => new MovieVM
-            {
-                MovieId = m.MovieId,
-                Description = m.Description,
-                Title = m.Title,
-                Genres = m.Genres.ToList(),
-                PosterImageName = _fileHandler.CreateImagePath(m.PosterImageName)
-            })
+            return await _dbContext.Movies
                 .AsNoTracking()
+                .Where(m => m.Genres.Any(g => g.Name.StartsWith(genre ?? "")))
+                .Select(m => new MovieVM
+                {
+                    Description = m.Description,
+                    MovieId = m.MovieId,
+                    Title = m.Title,
+                    PosterImageName = _fileHandler.CreateImagePath(m.PosterImageName),
+                    Genres = m.Genres.Select(g => g.Name).ToList(),
+                })
                 .ToListAsync();
         }
 
@@ -49,7 +44,21 @@ namespace ApplicationLogic.Services
                 PosterImageName = newFileName
             };
 
-            newMovie.Genres.Add(new Genre { Name = movie.Genre });
+            Dictionary<string, Genre> genres = _dbContext.Genres
+                .Where(g => movie.Genres.Contains(g.Name))
+                .ToDictionary(g => g.Name);
+
+            foreach (string genre in movie.Genres)
+            {
+                if (genres.TryGetValue(genre, out Genre? gen))
+                {
+                    newMovie.Genres.Add(gen);
+                }
+                else
+                {
+                    newMovie.Genres.Add(new Genre { Name = genre });
+                }
+            }
             
             _dbContext.Movies.Add(newMovie);
             await _dbContext.SaveChangesAsync();

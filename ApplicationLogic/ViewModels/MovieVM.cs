@@ -8,6 +8,6 @@ namespace ApplicationLogic.ViewModels
         public required string Title { get; set; }
         public required string Description { get; set; }
         public required string PosterImageName { get; set; }
-        public required List<Genre> Genres { get; set; }
+        public required List<string> Genres { get; set; }
     }
 }

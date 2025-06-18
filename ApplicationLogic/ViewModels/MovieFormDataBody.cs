@@ -12,6 +12,6 @@ namespace ApplicationLogic.ViewModels
         [MoviePosterFile]
         public required IFormFile PosterImage { get; set; }
         [MinLength(1)]
-        public required string Genre { get; set; }
+        public required string[] Genres { get; set; }
     }
 }
