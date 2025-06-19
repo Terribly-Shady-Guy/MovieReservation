@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReservation.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "IsAdmin")]
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase

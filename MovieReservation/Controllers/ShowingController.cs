@@ -14,14 +14,14 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "IsAdmin")]
         [HttpPost]
         public async Task<ActionResult> AddShowing()
         {
             throw new NotImplementedException();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "IsAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteShowing(int id)
         {
