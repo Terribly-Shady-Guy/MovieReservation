@@ -218,7 +218,7 @@ namespace ApplicationLogic.Services
         {
             var newLogin = new InternalLogin
             {
-                LoginId = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 RefreshToken = token.RefreshToken,
                 ExpirationDate = token.RefreshExpiration,
                 UserId = user.Id,

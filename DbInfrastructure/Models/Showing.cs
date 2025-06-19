@@ -2,7 +2,7 @@
 {
     public class Showing
     {
-        public int ShowingId { get; set; }
+        public int Id { get; set; }
         public required int MovieId { get; set; }
         public required DateTime Date { get; set; }
 

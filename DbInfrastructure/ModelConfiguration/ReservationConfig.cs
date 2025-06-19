@@ -8,10 +8,10 @@ namespace DbInfrastructure.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Reservation> builder)
         {
-            builder.HasKey(e => e.ReservationId)
+            builder.HasKey(e => e.Id)
                 .HasName("PK_Reservations");
 
-            builder.Property(e => e.ReservationId)
+            builder.Property(e => e.Id)
                 .HasColumnName("reservation_id");
 
             builder.Property(e => e.DateReserved)

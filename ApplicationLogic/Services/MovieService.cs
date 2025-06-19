@@ -20,31 +20,21 @@ namespace ApplicationLogic.Services
         {
             var result = await _dbContext.Movies
                 .AsNoTracking()
-                .SelectMany(m => m.Genres.Where(g => g.Name.StartsWith(genre ?? "")), (m, g) => new
+                .Where(m => m.Genres.Any(g => g.Name.StartsWith(genre ?? "")))
+                .Select(m => new MovieVM
                 {
-                    m.MovieId,
-                    m.Description,
-                    m.PosterImageName,
-                    m.Title,
-                    GenreName = g.Name,
-                })
-                .GroupBy(m => new
-                {
-                    m.MovieId,
-                    m.PosterImageName,
-                    m.Description,
-                    m.Title,
+                    Description = m.Description,
+                    MovieId = m.Id,
+                    Title = m.Title,
+                    PosterImageName = m.PosterImageName,
+                    Genres = m.Genres
+                        .Where(g => g.Name.StartsWith(genre ?? ""))
+                        .Select(g => g.Name)
+                        .ToList(),
                 })
                 .ToListAsync();
 
-            return result.Select(x => new MovieVM
-            {
-                Description = x.Key.Description,
-                MovieId = x.Key.MovieId,
-                Title = x.Key.Title,
-                PosterImageName = x.Key.PosterImageName,
-                Genres = x.Select(g => g.GenreName).ToList(),
-            }).ToList();
+            return result;
         }
 
         public async Task AddMovie(MovieFormDataBody movie)

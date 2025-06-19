@@ -3,7 +3,7 @@
     public enum ReservationStatus { Pending, Confirmed, CheckedIn, Cancelled }
     public class Reservation
     {
-        public int ReservationId { get; set; }
+        public int Id { get; set; }
         public required string UserId { get; set; }
         public required DateTime DateReserved { get; set; }
         public required ReservationStatus Status { get; set; }

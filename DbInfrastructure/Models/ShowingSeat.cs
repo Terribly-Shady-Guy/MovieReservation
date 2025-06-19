@@ -2,7 +2,7 @@
 {
     public class ShowingSeat
     {
-        public int ShowingSeatId { get; set; }
+        public int Id { get; set; }
         public required int ShowingId { get; set; }
         public required int SeatId { get; set; }
         public required decimal Price { get; set; }

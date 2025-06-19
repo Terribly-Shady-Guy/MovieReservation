@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250618231351_InitialCreate")]
+    [Migration("20250619022447_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -147,7 +147,7 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.InternalLogin", b =>
                 {
-                    b.Property<string>("LoginId")
+                    b.Property<string>("Id")
                         .IsUnicode(false)
                         .HasColumnType("VARCHAR(450)");
 
@@ -169,7 +169,7 @@ namespace DbInfrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("NVARCHAR(450)");
 
-                    b.HasKey("LoginId")
+                    b.HasKey("Id")
                         .HasName("PK_Logins");
 
                     b.HasIndex("RefreshToken");
@@ -181,12 +181,12 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.Location", b =>
                 {
-                    b.Property<int>("LocationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("location_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -217,7 +217,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnName("zip")
                         .IsFixedLength();
 
-                    b.HasKey("LocationId")
+                    b.HasKey("Id")
                         .HasName("PK_Locations");
 
                     b.ToTable("Locations");
@@ -225,12 +225,12 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.Movie", b =>
                 {
-                    b.Property<int>("MovieId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("movie_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MovieId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -253,7 +253,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("title");
 
-                    b.HasKey("MovieId")
+                    b.HasKey("Id")
                         .HasName("PK_Movies");
 
                     b.HasIndex("Title");
@@ -263,12 +263,12 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.Reservation", b =>
                 {
-                    b.Property<int>("ReservationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("reservation_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DateCancelled")
                         .HasColumnType("DATETIME")
@@ -286,7 +286,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("user_id");
 
-                    b.HasKey("ReservationId")
+                    b.HasKey("Id")
                         .HasName("PK_Reservations");
 
                     b.HasIndex("Status");
@@ -316,12 +316,12 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.Seat", b =>
                 {
-                    b.Property<int>("SeatId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("seat_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AuditoriumNumber")
                         .IsRequired()
@@ -339,7 +339,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("row_seat_number");
 
-                    b.HasKey("SeatId")
+                    b.HasKey("Id")
                         .HasName("PK_Seats");
 
                     b.HasIndex("AuditoriumNumber", "RowIdentifier", "RowSeatNumber")
@@ -351,12 +351,12 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.Showing", b =>
                 {
-                    b.Property<int>("ShowingId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("showing_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowingId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("DATETIME")
@@ -366,7 +366,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("movie_id");
 
-                    b.HasKey("ShowingId")
+                    b.HasKey("Id")
                         .HasName("PK_Showings");
 
                     b.HasIndex("MovieId");
@@ -376,12 +376,12 @@ namespace DbInfrastructure.Migrations
 
             modelBuilder.Entity("DbInfrastructure.Models.ShowingSeat", b =>
                 {
-                    b.Property<int>("ShowingSeatId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("showing_seat_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowingSeatId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Price")
                         .HasColumnType("MONEY")
@@ -395,7 +395,7 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("showing_id");
 
-                    b.HasKey("ShowingSeatId")
+                    b.HasKey("Id")
                         .HasName("PK_ShowingSeats");
 
                     b.HasIndex("SeatId");

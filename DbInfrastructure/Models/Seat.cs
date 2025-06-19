@@ -2,7 +2,7 @@
 {
     public class Seat
     {
-        public int SeatId { get; set; }
+        public int Id { get; set; }
         public required string AuditoriumNumber { get; set; }
         public required char RowIdentifier { get; set; }
         public required int RowSeatNumber { get; set; }

@@ -185,7 +185,7 @@ namespace DbInfrastructure.Migrations
                 name: "Logins",
                 columns: table => new
                 {
-                    LoginId = table.Column<string>(type: "VARCHAR(450)", unicode: false, nullable: false),
+                    Id = table.Column<string>(type: "VARCHAR(450)", unicode: false, nullable: false),
                     UserId = table.Column<string>(type: "NVARCHAR(450)", unicode: false, nullable: false),
                     refresh_token = table.Column<string>(type: "varchar(400)", unicode: false, nullable: false),
                     expiration_date = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -193,7 +193,7 @@ namespace DbInfrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logins", x => x.LoginId);
+                    table.PrimaryKey("PK_Logins", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AppUser_Logins",
                         column: x => x.UserId,

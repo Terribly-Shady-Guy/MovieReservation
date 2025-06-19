@@ -8,10 +8,10 @@ namespace DbInfrastructure.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Movie> builder)
         {
-            builder.HasKey(e => e.MovieId)
+            builder.HasKey(e => e.Id)
                 .HasName("PK_Movies");
 
-            builder.Property(e => e.MovieId)
+            builder.Property(e => e.Id)
                 .HasColumnName("movie_id");
 
             builder.Property(e => e.Title)

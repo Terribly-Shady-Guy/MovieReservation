@@ -8,7 +8,7 @@ namespace DbInfrastructure.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<InternalLogin> builder)
         {
-            builder.HasKey(e => e.LoginId)
+            builder.HasKey(e => e.Id)
                 .HasName("PK_Logins");
 
             builder.Property(e => e.RefreshToken)
@@ -27,7 +27,7 @@ namespace DbInfrastructure.ModelConfiguration
             builder.Property(e => e.LoginDate)
                 .HasColumnType("DATETIME");
 
-            builder.Property(e => e.LoginId)
+            builder.Property(e => e.Id)
                 .IsUnicode(false)
                 .HasColumnType("VARCHAR(450)");
 

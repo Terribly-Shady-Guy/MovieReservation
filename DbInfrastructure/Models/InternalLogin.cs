@@ -2,7 +2,7 @@
 {
     public class InternalLogin
     {
-        public required string LoginId { get; set; }
+        public required string Id { get; set; }
         public required string UserId { get; set; }
         public required string RefreshToken { get; set; }
         public required DateTime ExpirationDate { get; set; }
