@@ -10,24 +10,9 @@ namespace DbInfrastructure
         {
             List<IdentityRole> newRoles =
             [
-                new IdentityRole
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "User",
-                    NormalizedName = "User".ToUpper()
-                },
-                new IdentityRole
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Admin",
-                    NormalizedName = "Admin".ToUpper()
-                },
-                new IdentityRole
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "SuperAdmin",
-                    NormalizedName = "SuperAdmin".ToUpper(),
-                }
+                new IdentityRole("User"),
+                new IdentityRole("Admin"),
+                new IdentityRole("SuperAdmin"),  
             ];
 
             var hasher = new PasswordHasher<AppUser>();
