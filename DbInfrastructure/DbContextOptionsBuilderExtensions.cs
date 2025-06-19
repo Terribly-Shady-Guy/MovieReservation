@@ -10,11 +10,11 @@ namespace DbInfrastructure
         {
             List<IdentityRole> newRoles =
             [
-                new IdentityRole("User"),
-                new IdentityRole("Admin"),
-                new IdentityRole("SuperAdmin"),  
+                new IdentityRole("User") { NormalizedName = "User".ToUpper() },
+                new IdentityRole("Admin") { NormalizedName = "Admin".ToUpper() },
+                new IdentityRole("SuperAdmin") { NormalizedName = "SuperAdmin".ToUpper() },  
             ];
-
+            
             var hasher = new PasswordHasher<AppUser>();
 
             var seededAdmin = new AppUser
