@@ -54,10 +54,8 @@ namespace MovieReservation.Startup
             })
                 .AddJwtBearer();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("IsAdmin", policy => policy.RequireRole("Admin", "SuperAdmin"));
-            });
+            services.AddAuthorizationBuilder()
+                .AddPolicy("IsAdmin", policy => policy.RequireRole("Admin", "SuperAdmin"));
 
             services.AddIdentityCore<AppUser>(options =>
             {
