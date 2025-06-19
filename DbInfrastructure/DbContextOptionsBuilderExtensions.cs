@@ -19,7 +19,6 @@ namespace DbInfrastructure
 
             var seededAdmin = new AppUser
             {
-                Id = Guid.NewGuid().ToString(),
                 UserName = "root",
                 AccessFailedCount = 0,
                 Email = "root@example.com",
@@ -30,7 +29,7 @@ namespace DbInfrastructure
                 FirstName = "root",
                 LastName = "root",
             };
-
+            
             seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "Admin246810@");
 
             ReservationStatusLookup[] reservationStatuses = Enum.GetValues<ReservationStatus>()
