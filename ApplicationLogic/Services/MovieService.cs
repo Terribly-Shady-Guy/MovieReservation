@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using DbInfrastructure.Models;
+﻿using ApplicationLogic.ViewModels;
 using DbInfrastructure;
-using ApplicationLogic.ViewModels;
+using DbInfrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationLogic.Services
 {
@@ -18,18 +18,33 @@ namespace ApplicationLogic.Services
 
         public async Task<List<MovieVM>> GetMovies(string? genre)
         {
-            return await _dbContext.Movies
+            var result = await _dbContext.Movies
                 .AsNoTracking()
-                .Where(m => m.Genres.Any(g => g.Name.StartsWith(genre ?? "")))
-                .Select(m => new MovieVM
+                .SelectMany(m => m.Genres.Where(g => g.Name.StartsWith(genre ?? "")), (m, g) => new
                 {
-                    Description = m.Description,
-                    MovieId = m.MovieId,
-                    Title = m.Title,
-                    PosterImageName = _fileHandler.CreateImagePath(m.PosterImageName),
-                    Genres = m.Genres.Select(g => g.Name).ToList(),
+                    m.MovieId,
+                    m.Description,
+                    m.PosterImageName,
+                    m.Title,
+                    GenreName = g.Name,
+                })
+                .GroupBy(m => new
+                {
+                    m.MovieId,
+                    m.PosterImageName,
+                    m.Description,
+                    m.Title,
                 })
                 .ToListAsync();
+
+            return result.Select(x => new MovieVM
+            {
+                Description = x.Key.Description,
+                MovieId = x.Key.MovieId,
+                Title = x.Key.Title,
+                PosterImageName = x.Key.PosterImageName,
+                Genres = x.Select(g => g.GenreName).ToList(),
+            }).ToList();
         }
 
         public async Task AddMovie(MovieFormDataBody movie)
