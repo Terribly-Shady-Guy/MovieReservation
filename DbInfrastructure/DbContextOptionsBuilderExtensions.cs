@@ -22,7 +22,8 @@ namespace DbInfrastructure
                     Name = "Admin",
                     NormalizedName = "Admin".ToUpper()
                 },
-                new IdentityRole{
+                new IdentityRole
+                {
                     Id = Guid.NewGuid().ToString(),
                     Name = "SuperAdmin",
                     NormalizedName = "SuperAdmin".ToUpper(),
