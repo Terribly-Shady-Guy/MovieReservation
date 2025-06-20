@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MovieController : ControllerBase

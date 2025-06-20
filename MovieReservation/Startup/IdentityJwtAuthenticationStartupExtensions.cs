@@ -56,7 +56,7 @@ namespace MovieReservation.Startup
 
             services.AddAuthorizationBuilder()
                 .AddPolicy("IsAdmin", policy => policy.RequireRole("Admin", "SuperAdmin"));
-
+            
             services.AddIdentityCore<AppUser>(options =>
             {
                 options.Password.RequireNonAlphanumeric = true;
