@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using MovieReservation.ValidationAttributes;
+﻿using ApplicationLogic.ValidationAttributes;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 
 namespace Tests
