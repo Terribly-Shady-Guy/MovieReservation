@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using ApplicationLogic.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ApplicationLogic.Services
 {

@@ -1,4 +1,5 @@
-﻿using ApplicationLogic.Services;
+﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;

@@ -1,4 +1,5 @@
-﻿using ApplicationLogic.ViewModels;
+﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.ViewModels;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;

@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using ApplicationLogic.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
 namespace ApplicationLogic.Services

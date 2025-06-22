@@ -1,4 +1,5 @@
-﻿using ApplicationLogic.Services;
+﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

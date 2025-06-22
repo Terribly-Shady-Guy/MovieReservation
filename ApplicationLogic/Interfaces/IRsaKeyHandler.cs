@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace ApplicationLogic.Services
+namespace ApplicationLogic.Interfaces
 {
     public interface IRsaKeyHandler
     {

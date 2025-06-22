@@ -1,4 +1,5 @@
-﻿using ApplicationLogic.ViewModels;
+﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.ViewModels;
 using DbInfrastructure;
 using DbInfrastructure.Models;
 using Microsoft.EntityFrameworkCore;

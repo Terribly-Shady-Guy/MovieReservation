@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using ApplicationLogic.Services;
+using ApplicationLogic.Interfaces;
 
 namespace MovieReservation.Startup
 {

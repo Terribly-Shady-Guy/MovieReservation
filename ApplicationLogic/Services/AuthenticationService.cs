@@ -5,6 +5,7 @@ using DbInfrastructure.Models;
 using System.Security.Claims;
 using DbInfrastructure;
 using ApplicationLogic.ViewModels;
+using ApplicationLogic.Interfaces;
 
 namespace ApplicationLogic.Services
 {

@@ -1,4 +1,4 @@
-﻿using ApplicationLogic.Services;
+﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Any;

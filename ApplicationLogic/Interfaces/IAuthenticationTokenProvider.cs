@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
-namespace ApplicationLogic.Services
+namespace ApplicationLogic.Interfaces
 {
     public interface IAuthenticationTokenProvider
     {
