@@ -15,8 +15,6 @@ namespace DbInfrastructure
                 new IdentityRole("SuperAdmin") { NormalizedName = "SuperAdmin".ToUpper() },  
             ];
             
-            var hasher = new PasswordHasher<AppUser>();
-
             var seededAdmin = new AppUser
             {
                 UserName = "root",
@@ -29,7 +27,8 @@ namespace DbInfrastructure
                 FirstName = "root",
                 LastName = "root",
             };
-            
+
+            var hasher = new PasswordHasher<AppUser>();
             seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "Admin246810@");
 
             ReservationStatusLookup[] reservationStatuses = Enum.GetValues<ReservationStatus>()
