@@ -8,7 +8,7 @@ namespace DbInfrastructure
     {
         internal static void UseDataSeeding(this DbContextOptionsBuilder options)
         {
-            List<IdentityRole> newRoles =
+            IdentityRole[] newRoles =
             [
                 new IdentityRole("User") { NormalizedName = "User".ToUpper() },
                 new IdentityRole("Admin") { NormalizedName = "Admin".ToUpper() },
