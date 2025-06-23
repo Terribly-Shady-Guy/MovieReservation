@@ -5,8 +5,13 @@ namespace ApplicationLogic.ValidationAttributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MoviePosterFileAttribute : ValidationAttribute
     {
-        private static readonly string[] _validExtensions = [".jpg", ".png", ".jpeg"];
-        private static readonly string[] _validMimeTypes = ["image/png", "image/jpeg"];
+        private static readonly Dictionary<string, string> _validTypes = new Dictionary<string, string>
+        {
+            [".jpg"] = "image/jpeg",
+            [".jpeg"] = "image/jpeg",
+            [".png"] = "image/png"
+        };
+
         private const int _fileSizeLimitInMB = 10;
 
         public override bool IsValid(object? value)
@@ -18,10 +23,10 @@ namespace ApplicationLogic.ValidationAttributes
 
             string extension = Path.GetExtension(Path.GetFileName(file.FileName))
                 .ToLowerInvariant();
-
-            if (!_validExtensions.Any(ext => ext == extension) || !_validMimeTypes.Any(mime => mime == file.ContentType))
+            
+            if (!_validTypes.TryGetValue(extension, out string? mimeType) || mimeType != file.ContentType)
             {
-                ErrorMessage = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", _validExtensions)}.";
+                ErrorMessage = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", _validTypes.Keys)}.";
                 return false;
             }
             
