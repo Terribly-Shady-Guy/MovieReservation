@@ -5,7 +5,7 @@ namespace ApplicationLogic.ValidationAttributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MoviePosterFileAttribute : ValidationAttribute
     {
-        private static readonly Dictionary<string, string> _validTypes = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _validTypes = new Dictionary<string, string>
         {
             [".jpg"] = "image/jpeg",
             [".jpeg"] = "image/jpeg",
