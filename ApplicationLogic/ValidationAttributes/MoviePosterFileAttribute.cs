@@ -21,7 +21,7 @@ namespace ApplicationLogic.ValidationAttributes
                 return false;
             }
 
-            string extension = Path.GetExtension(Path.GetFileName(file.FileName))
+            string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
             
             if (!_validTypes.TryGetValue(extension, out string? mimeType) || mimeType != file.ContentType)
