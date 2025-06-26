@@ -4,7 +4,7 @@ using MovieReservation.Startup;
 
 namespace MovieReservation.Controllers
 {
-    [Authorize(Roles = "User, Admin")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ShowingController : ControllerBase

@@ -76,8 +76,14 @@ namespace MovieReservation.Startup
         }
     }
 
+    /// <summary>
+    /// A collection of constants for registered authorization policies.
+    /// </summary>
     public static class AuthorizationPolicyNames
     {
+        /// <summary>
+        /// Represents the policy which validates that the user is an admin role.
+        /// </summary>
         public const string IsAdmin = "IsAdmin";
     }
 }
