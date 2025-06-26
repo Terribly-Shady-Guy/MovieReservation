@@ -2,10 +2,11 @@
 using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.Startup;
 
 namespace MovieReservation.Controllers
 {
-    [Authorize(Policy = "IsAdmin")]
+    [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase

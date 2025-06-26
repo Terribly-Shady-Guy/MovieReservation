@@ -3,6 +3,7 @@ using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
+using MovieReservation.Startup;
 using System.ComponentModel;
 
 namespace MovieReservation.Controllers
@@ -33,7 +34,7 @@ namespace MovieReservation.Controllers
         [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
         [Consumes("multipart/form-data")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
         [HttpPost]
         public async Task<ActionResult> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
         {
@@ -42,7 +43,7 @@ namespace MovieReservation.Controllers
             return CreatedAtAction("AddNewMovie", new { Message = "New movie added" });
         }
 
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
         [HttpPut]
         public async Task<ActionResult> EditMovie()
         {
@@ -53,7 +54,7 @@ namespace MovieReservation.Controllers
         [EndpointDescription("An endpoint that allows an admin user to delete a movie.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was successfully deleted.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status400BadRequest, Description = "The id for the move does not exist.")]
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovie([Description("The movie id.")] int id)
         {

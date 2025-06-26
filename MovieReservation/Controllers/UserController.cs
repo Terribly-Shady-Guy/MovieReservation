@@ -45,10 +45,19 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpGet]
-        public async Task<ActionResult> ConfirmEmail()
+        [HttpPost("Confirm-Email")]
+        public async Task<ActionResult> ConfirmEmail(string id, string token)
         {
-            throw new NotImplementedException();
+            bool result = await _userService.ConfirmEmail(id, token);
+            if (!result)
+            {
+                return Problem(
+                    title: "Confirmation Failed",
+                    detail: "The provided email token is invalid.",
+                    statusCode: StatusCodes.Status400BadRequest);
+            }
+
+            return Ok(new {Message = "Email is confirmed."});
         }
 
         [EndpointSummary("Promote user to admin")]

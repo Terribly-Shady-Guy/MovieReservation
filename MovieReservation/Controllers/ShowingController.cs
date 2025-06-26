@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.Startup;
 
 namespace MovieReservation.Controllers
 {
@@ -14,14 +15,14 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
         [HttpPost]
         public async Task<ActionResult> AddShowing()
         {
             throw new NotImplementedException();
         }
 
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteShowing(int id)
         {

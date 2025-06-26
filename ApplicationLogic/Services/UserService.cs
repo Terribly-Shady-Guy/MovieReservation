@@ -35,25 +35,28 @@ namespace ApplicationLogic.Services
             return user.Id;
         }
 
-        public async Task ConfirmEmail(string id, string token)
+        public async Task<bool> ConfirmEmail(string id, string token)
         {
             AppUser? user = await _userManager.FindByIdAsync(id);
             
             if (user == null)
             {
-                return;
+                return false;
             }
 
-            await _userManager.ConfirmEmailAsync(user, token);
+            IdentityResult result = await _userManager.ConfirmEmailAsync(user, token);
+            return result.Succeeded;
         }
 
         public async Task<bool> PromoteToAdmin(string id)
         {
             AppUser? user = await _userManager.FindByIdAsync(id);
+
             if (user == null)
             {
                 return false;
             }
+
             await _userManager.RemoveFromRoleAsync(user, "User");
             IdentityResult result = await _userManager.AddToRoleAsync(user, "Admin");
 
