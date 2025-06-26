@@ -57,12 +57,7 @@ namespace ApplicationLogic.Services
             await _userManager.RemoveFromRoleAsync(user, "User");
             IdentityResult result = await _userManager.AddToRoleAsync(user, "Admin");
 
-            if (!result.Succeeded)
-            {
-                return false;
-            }
-
-            return true;
+            return result.Succeeded;
         }
     }
 }
