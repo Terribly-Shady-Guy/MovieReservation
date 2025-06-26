@@ -6,7 +6,7 @@ using MovieReservation.Startup;
 
 namespace MovieReservation.Controllers
 {
-    [Authorize(Policy = AuthorizationPolicyNames.IsAdmin)]
+    [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase

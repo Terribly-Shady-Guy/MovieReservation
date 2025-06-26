@@ -52,7 +52,7 @@ namespace MovieReservation.Startup
                 .AddJwtBearer();
 
             services.AddAuthorizationBuilder()
-                .AddPolicy(AuthorizationPolicyNames.IsAdmin, policy => policy.RequireRole("Admin", "SuperAdmin"));
+                .AddPolicy(RegisteredAuthorizationPolicyNames.IsAdmin, policy => policy.RequireRole("Admin", "SuperAdmin"));
             
             services.AddIdentityCore<AppUser>(options =>
             {
@@ -79,7 +79,7 @@ namespace MovieReservation.Startup
     /// <summary>
     /// A collection of constants for registered authorization policies.
     /// </summary>
-    public static class AuthorizationPolicyNames
+    public static class RegisteredAuthorizationPolicyNames
     {
         /// <summary>
         /// Represents the policy which validates that the user is an admin role.
