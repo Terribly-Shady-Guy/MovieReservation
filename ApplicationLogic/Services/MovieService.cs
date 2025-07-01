@@ -52,11 +52,11 @@ namespace ApplicationLogic.Services
 
             Dictionary<string, Genre> genres = await _dbContext.Genres
                 .Where(g => movie.Genres.Contains(g.Name))
-                .ToDictionaryAsync(g => g.Name);
+                .ToDictionaryAsync(g => g.Name.ToUpper());
 
             foreach (string genreName in movie.Genres)
             {
-                if (genres.TryGetValue(genreName, out Genre? genre))
+                if (genres.TryGetValue(genreName.ToUpper(), out Genre? genre))
                 {
                     newMovie.Genres.Add(genre);
                 }
