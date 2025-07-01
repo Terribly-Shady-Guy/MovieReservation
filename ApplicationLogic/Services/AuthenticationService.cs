@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using DbInfrastructure.Models;
 using System.Security.Claims;
-using DbInfrastructure;
 using ApplicationLogic.ViewModels;
 using ApplicationLogic.Interfaces;
 
@@ -21,18 +19,18 @@ namespace ApplicationLogic.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IAuthenticationTokenProvider _tokenProvider;
-        private readonly MovieReservationDbContext _dbContext;
+        private readonly LoginManager _login;
 
         public AuthenticationService(
             UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager, 
             IAuthenticationTokenProvider tokenProvider, 
-            MovieReservationDbContext context)
+            LoginManager login)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenProvider = tokenProvider;
-            _dbContext = context;
+            _login = login;
         }
 
         public async Task<LoginDto> Login(UserLoginVM userCredentials)
@@ -73,7 +71,7 @@ namespace ApplicationLogic.Services
             ClaimsIdentity accessTokenIdentity = await CreateClaimsIdentity(user);
             AuthenticationToken token = await _tokenProvider.GenerateTokens(accessTokenIdentity);
 
-            await CreateLogin(user, token);
+            await _login.CreateLogin(user, token);
 
             return new LoginDto
             {
@@ -112,7 +110,7 @@ namespace ApplicationLogic.Services
             ClaimsIdentity identity = await CreateClaimsIdentity(user);
             AuthenticationToken token = await _tokenProvider.GenerateTokens(identity);
 
-            await CreateLogin(user, token);
+            await _login.CreateLogin(user, token);
 
             return new LoginDto
             {
@@ -142,7 +140,7 @@ namespace ApplicationLogic.Services
                 return null; 
             }
 
-            InternalLogin? login = await GetLoginSession(user, refresh);
+            InternalLogin? login = await _login.GetLoginSession(user, refresh);
 
             DateTime current = DateTime.UtcNow;
             if (login is null || current >= login.ExpirationDate)
@@ -153,20 +151,7 @@ namespace ApplicationLogic.Services
             var identity = new ClaimsIdentity(accessToken.Claims);
             AuthenticationToken newToken = await _tokenProvider.GenerateTokens(identity);
 
-            login.RefreshToken = newToken.RefreshToken;
-            login.ExpirationDate = newToken.RefreshExpiration;
-
-            _dbContext.Logins
-                .Entry(login)
-                .Property(l => l.RefreshToken)
-                .IsModified = true;
-
-            _dbContext.Logins
-                .Entry(login)
-                .Property(l => l.ExpirationDate)
-                .IsModified = true;
-            
-            await _dbContext.SaveChangesAsync();
+            await _login.UpdateTokens(login, newToken);
 
             return newToken;
         }
@@ -176,15 +161,14 @@ namespace ApplicationLogic.Services
             AppUser? user = await _userManager.FindByIdAsync(userId);
             if (user == null) { return; }
 
-            InternalLogin? login = await GetLoginSession(user, refreshToken);
+            InternalLogin? login = await _login.GetLoginSession(user, refreshToken);
 
             if (login is null)
             {
                 return;
             }
 
-            _dbContext.Logins.Remove(login);
-            await _dbContext.SaveChangesAsync();
+            await _login.DeleteLogin(login);
         }
 
         private async Task<ClaimsIdentity> CreateClaimsIdentity(AppUser user)
@@ -213,28 +197,6 @@ namespace ApplicationLogic.Services
             }
             
             return await _userManager.GenerateTwoFactorTokenAsync(user, EmailProviderName);
-        }
-
-        private async Task CreateLogin(AppUser user, AuthenticationToken token)
-        {
-            var newLogin = new InternalLogin
-            {
-                Id = Guid.NewGuid().ToString(),
-                RefreshToken = token.RefreshToken,
-                ExpirationDate = token.RefreshExpiration,
-                UserId = user.Id,
-                LoggedInUser = user
-            };
-
-            _dbContext.Logins.Add(newLogin);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        private async Task<InternalLogin?> GetLoginSession(AppUser user, string refreshToken)
-        {
-            return await _dbContext.Logins
-                .Where(l => l.UserId == user.Id && l.RefreshToken == refreshToken)
-                .FirstOrDefaultAsync();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace ApplicationLogic
             services.AddTransient<IAuthenticationTokenProvider, AuthenticationTokenProvider>();
             services.AddTransient<UserService>();
             services.AddSingleton<IRsaKeyHandler, LocalRsaKeyHandler>();
+            services.AddTransient<LoginManager>();
 
             services.AddTransient<MovieService>();
             
