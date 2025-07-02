@@ -31,17 +31,6 @@ namespace ApplicationLogic.Services
             }
         }
 
-        public string CreateImagePath(string fileName)
-        {
-            string filePath = Path.Combine(_path, fileName);
-            if (!File.Exists(filePath))
-            {
-                return string.Empty;
-            }
-
-            return $"Images/{fileName}";
-        }
-
         public FileHandlerResult GetFile(string fileName)
         {
             fileName = Path.GetFileName(fileName);
