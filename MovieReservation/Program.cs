@@ -1,6 +1,10 @@
 using DbInfrastructure;
 using MovieReservation.Startup;
 using ApplicationLogic;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using ApplicationLogic.Interfaces;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,22 +38,36 @@ app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
-    string imagesDirectoryPath = Path.Combine(app.Environment.ContentRootPath, "..", "Images");
-    imagesDirectoryPath = Path.GetFullPath(imagesDirectoryPath);
-
-    if (!Directory.Exists(imagesDirectoryPath))
-    {
-        Directory.CreateDirectory(imagesDirectoryPath);
-    }
-
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(imagesDirectoryPath),
-        RequestPath = "/images"
-    });
-
     app.MapOpenApiReference();
 }
+
+app.MapGet("/Images/{fileName}", Results<FileStreamHttpResult, NotFound<string>, BadRequest<string>>(string fileName, [FromServices] IFileHandler handler) =>
+{
+    var result = handler.GetFile(fileName);
+
+    if (!result.IsSuccess || result.FileStream is null)
+    {
+        return TypedResults.NotFound("File does not exist.");
+    }
+
+    var contentTypes = new Dictionary<string, string>
+    {
+        [".jpg"] = "image/jpeg",
+        [".jpeg"] = "image/jpeg",
+        [".png"] = "image/png"
+    };
+
+    string? ext = Path.GetExtension(result.FileName);
+
+    if (ext is null || !contentTypes.TryGetValue(ext, out string? contentType))
+    {
+        return TypedResults.BadRequest("This is not a supported file type.");
+    }
+
+    return TypedResults.File(result.FileStream, contentType, result.FileName);
+})
+    .RequireAuthorization()
+    .WithName("Images");
 
 app.MapHealthChecks("/health");
 

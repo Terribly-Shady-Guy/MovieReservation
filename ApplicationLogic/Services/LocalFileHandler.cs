@@ -1,4 +1,5 @@
 ﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 
 namespace ApplicationLogic.Services
@@ -39,6 +40,20 @@ namespace ApplicationLogic.Services
             }
 
             return $"Images/{fileName}";
+        }
+
+        public FileHandlerResult GetFile(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            string filePath = Path.Combine(_path, fileName);
+
+            if (!File.Exists(filePath))
+            {
+                return new FileHandlerResult { IsSuccess = false };
+            }
+
+            FileStream stream = File.OpenRead(filePath);
+            return new FileHandlerResult { IsSuccess = true, FileStream = stream, FileName = fileName };
         }
     }
 }

@@ -14,10 +14,12 @@ namespace MovieReservation.Controllers
     public class MovieController : ControllerBase
     {
         private readonly MovieService _movieService;
+        private readonly LinkGenerator _linkGenerator;
 
-        public MovieController(MovieService movieService)
+        public MovieController(MovieService movieService, LinkGenerator link)
         {
             _movieService = movieService;
+            _linkGenerator = link;
         }
 
         [EndpointSummary("List movies")]
@@ -27,7 +29,14 @@ namespace MovieReservation.Controllers
         [HttpGet]
         public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
         {
-            return Ok(await _movieService.GetMovies(genre));
+            List<MovieVM> movies = await _movieService.GetMovies(genre);
+
+            foreach (MovieVM movie in movies)
+            {
+                movie.PosterImageName = _linkGenerator.GetPathByName(HttpContext, "Images", movie.PosterImageName) ?? movie.PosterImageName;
+            }
+            
+            return Ok(movies);
         }
 
         [EndpointSummary("Add new movie.")]
