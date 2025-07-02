@@ -41,7 +41,10 @@ namespace MovieReservation.Startup
                 return TypedResults.File(result.FileStream, contentType, result.FileName);
             })
                 .RequireAuthorization()
-                .WithName("Images");
+                .WithName("Images")
+                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .Produces(StatusCodes.Status200OK);
         }
     }
 }
