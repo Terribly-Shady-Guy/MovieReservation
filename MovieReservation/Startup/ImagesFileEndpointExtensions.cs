@@ -9,7 +9,7 @@ namespace MovieReservation.Startup
     {
         public static void MapImages(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/Images/{fileName}", Results<FileStreamHttpResult, ProblemHttpResult> (string fileName, [FromServices] IFileHandler handler) =>
+            endpoints.MapGet("api/Images/{fileName}", Results<FileStreamHttpResult, ProblemHttpResult> (string fileName, [FromServices] IFileHandler handler) =>
             {
                 var contentTypes = new Dictionary<string, string>
                 {
