@@ -23,7 +23,7 @@ namespace MovieReservation.Startup
                 if (ext is null || !contentTypes.TryGetValue(ext, out string? contentType))
                 {
                     return TypedResults.Problem(
-                        title: "File issue",
+                        title: "File retrieval error",
                         detail: "This is not a supported file type.",
                         statusCode: StatusCodes.Status400BadRequest);
                 }
