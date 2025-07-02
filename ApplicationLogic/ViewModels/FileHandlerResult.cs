@@ -2,7 +2,7 @@
 {
     public class FileHandlerResult
     {
-        public required bool IsSuccess { get; set; }
+        public required bool Success { get; set; }
         public Stream? FileStream { get; set; }
         public string? FileName { get; set; }
     }

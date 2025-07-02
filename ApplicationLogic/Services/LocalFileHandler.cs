@@ -49,11 +49,11 @@ namespace ApplicationLogic.Services
 
             if (!File.Exists(filePath))
             {
-                return new FileHandlerResult { IsSuccess = false };
+                return new FileHandlerResult { Success = false };
             }
 
             FileStream stream = File.OpenRead(filePath);
-            return new FileHandlerResult { IsSuccess = true, FileStream = stream, FileName = fileName };
+            return new FileHandlerResult { Success = true, FileStream = stream, FileName = fileName };
         }
     }
 }

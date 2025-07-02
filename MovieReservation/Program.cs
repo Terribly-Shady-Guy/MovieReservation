@@ -45,7 +45,7 @@ app.MapGet("/Images/{fileName}", Results<FileStreamHttpResult, NotFound<string>,
 {
     var result = handler.GetFile(fileName);
 
-    if (!result.IsSuccess || result.FileStream is null)
+    if (!result.Success || result.FileStream is null)
     {
         return TypedResults.NotFound("File does not exist.");
     }
