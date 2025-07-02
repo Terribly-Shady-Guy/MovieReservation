@@ -1,10 +1,6 @@
 using DbInfrastructure;
 using MovieReservation.Startup;
 using ApplicationLogic;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using ApplicationLogic.Interfaces;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 

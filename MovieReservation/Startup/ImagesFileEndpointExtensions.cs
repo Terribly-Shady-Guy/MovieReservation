@@ -1,4 +1,5 @@
 ﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ namespace MovieReservation.Startup
                         statusCode: StatusCodes.Status400BadRequest);
                 }
 
-                var result = handler.GetFile(fileName);
+                FileHandlerResult result = handler.GetFile(fileName);
 
                 if (!result.Success || result.FileStream is null)
                 {
