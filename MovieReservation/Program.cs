@@ -41,7 +41,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApiReference();
 }
 
-app.MapGet("/Images/{fileName}", Results<FileStreamHttpResult, NotFound<string>, BadRequest<string>>(string fileName, [FromServices] IFileHandler handler) =>
+app.MapGet("/Images/{fileName}", Results<FileStreamHttpResult, ProblemHttpResult>(string fileName, [FromServices] IFileHandler handler) =>
 {
     var contentTypes = new Dictionary<string, string>
     {
@@ -49,19 +49,25 @@ app.MapGet("/Images/{fileName}", Results<FileStreamHttpResult, NotFound<string>,
         [".jpeg"] = "image/jpeg",
         [".png"] = "image/png"
     };
-
+    
     string? ext = Path.GetExtension(fileName);
 
     if (ext is null || !contentTypes.TryGetValue(ext, out string? contentType))
     {
-        return TypedResults.BadRequest("This is not a supported file type.");
+        return TypedResults.Problem(
+            title: "File issue",
+            detail: "This is not a supported file type.",
+            statusCode: StatusCodes.Status400BadRequest);
     }
 
     var result = handler.GetFile(fileName);
 
     if (!result.Success || result.FileStream is null)
     {
-        return TypedResults.NotFound("File does not exist.");
+        return TypedResults.Problem(
+            title: "File retrieval error",
+            detail: "This file does not exist.",
+            statusCode: StatusCodes.Status404NotFound);
     }
 
     return TypedResults.File(result.FileStream, contentType, result.FileName);
