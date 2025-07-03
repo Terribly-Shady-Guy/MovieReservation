@@ -33,7 +33,7 @@ namespace MovieReservation.Controllers
 
             foreach (MovieVM movie in movies)
             {
-                movie.ImageLink = _linkGenerator.GetPathByName(
+                movie.ImageLink = _linkGenerator.GetUriByName(
                     httpContext: HttpContext, 
                     endpointName: "Images", 
                     values: new { fileName = movie.PosterImageName }) ?? string.Empty;
