@@ -1,17 +1,20 @@
 ﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ApplicationLogic.Services
 {
     public class LocalFileHandler : IFileHandler
     {
         private readonly string _path;
+        private readonly ILogger<LocalFileHandler> _logger;
 
-        public LocalFileHandler(IWebHostEnvironment environment)
+        public LocalFileHandler(IWebHostEnvironment environment, ILogger<LocalFileHandler> logger)
         {
             string path = Path.Combine(environment.ContentRootPath, "..", "Images");
             _path = Path.GetFullPath(path);
+            _logger = logger;
         }
 
         public async Task CreateFile(IFormFile file, string fileName)
@@ -38,11 +41,26 @@ namespace ApplicationLogic.Services
 
             if (!File.Exists(filePath))
             {
-                return new FileHandlerResult { Success = false };
+                return FileHandlerResult.Failed();
             }
 
-            FileStream stream = File.OpenRead(filePath);
-            return new FileHandlerResult { Success = true, FileStream = stream, FileName = fileName };
+            try
+            {
+                FileStream stream = File.OpenRead(filePath);
+                return FileHandlerResult.Succeeded(stream, fileName);
+            }
+            catch (Exception ex)
+            {
+                if (ex is UnauthorizedAccessException || ex is IOException)
+                {
+                    _logger.LogError(ex, "Exception handled but logged for possible issue. file name: {fileName} at {filePath}", fileName, _path);
+                    return FileHandlerResult.Failed();
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }
