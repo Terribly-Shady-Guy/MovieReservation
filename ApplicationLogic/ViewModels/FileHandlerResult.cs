@@ -2,9 +2,9 @@
 {
     public class FileHandlerResult
     {
-        public bool Success { get; private set; }
-        public Stream? FileStream { get; private set; }
-        public string? FileName { get; private set; }
+        public bool Success { get; init; }
+        public Stream? FileStream { get; init; }
+        public string? FileName { get; init; }
 
         private FileHandlerResult(bool success, Stream? fileStream, string? fileName)
         {
