@@ -54,7 +54,7 @@ namespace ApplicationLogic.Services
             {
                 if (ex is UnauthorizedAccessException || ex is IOException)
                 {
-                    _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {FileName} at {FilePath} in {FileHandler}", fileName, _path, nameof(LocalFileHandler));
+                    _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {FileName} at {FilePath}", fileName, _path);
                     return FileHandlerResult.Failed();
                 }
                 else
