@@ -2,6 +2,7 @@
 using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography.Xml;
 
 namespace ApplicationLogic.Services
 {
@@ -53,7 +54,7 @@ namespace ApplicationLogic.Services
             {
                 if (ex is UnauthorizedAccessException || ex is IOException)
                 {
-                    _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {fileName} at {filePath} in {fileHandler}", fileName, _path, nameof(LocalFileHandler));
+                    _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {FileName} at {FilePath} in {FileHandler}", fileName, _path, nameof(LocalFileHandler));
                     return FileHandlerResult.Failed();
                 }
                 else
