@@ -2,7 +2,6 @@
 using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Security.Cryptography.Xml;
 
 namespace ApplicationLogic.Services
 {
