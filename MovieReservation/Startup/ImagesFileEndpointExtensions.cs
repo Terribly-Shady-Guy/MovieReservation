@@ -7,6 +7,10 @@ namespace MovieReservation.Startup
 {
     public static class ImagesFileEndpointExtensions
     {
+        /// <summary>
+        /// Maps an endpoint to retreive images from a source.
+        /// </summary>
+        /// <param name="endpoints">the endpoint route builder</param>
         public static void MapImages(this IEndpointRouteBuilder endpoints)
         {
             endpoints.MapGet("api/Images/{fileName}", Results<FileStreamHttpResult, ProblemHttpResult> (string fileName, [FromServices] IFileHandler handler) =>
