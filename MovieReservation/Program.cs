@@ -37,8 +37,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApiReference();
 }
 
-app.MapImages();
-
 app.MapHealthChecks("/health");
 
 app.MapControllers();
