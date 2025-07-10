@@ -1,6 +1,7 @@
 ﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using MovieReservation.OpenApi;
 
 namespace MovieReservation.Controllers
 {
@@ -15,6 +16,11 @@ namespace MovieReservation.Controllers
             _fileHandler = fileHandler;
         }
 
+        [EndpointSummary("Get Images")]
+        [EndpointDescription("Gets the image based on the provided file name in the url.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The file was successfully located.")]
+        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The file type is not supported.")]
+        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status404NotFound, Description = "The file does not exist.")]
         [HttpGet("{fileName}")]
         public ActionResult GetImage(string fileName)
         {
