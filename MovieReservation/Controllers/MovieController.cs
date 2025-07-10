@@ -32,15 +32,15 @@ namespace MovieReservation.Controllers
             List<MovieVM> movies = await _movieService.GetMovies(genre);
 
             string imagesControllerName = nameof(ImagesController)
-                .Replace("Controller", "");
+                .Replace("Controller", string.Empty);
 
-            string getImagesActionName = nameof(ImagesController.GetImage);
+            string getImageActionName = nameof(ImagesController.GetImage);
 
             foreach (MovieVM movie in movies)
             {
                 movie.ImageLink = _linkGenerator.GetUriByAction(
                     httpContext: HttpContext,
-                    action: getImagesActionName,
+                    action: getImageActionName,
                     controller: imagesControllerName,
                     values: new { fileName = movie.PosterImageName }) ?? string.Empty;
             }
