@@ -31,8 +31,11 @@ namespace MovieReservation.Controllers
         {
             List<MovieVM> movies = await _movieService.GetMovies(genre);
 
-            string imagesControllerName = nameof(ImagesController)
-                .Replace("Controller", string.Empty);
+            string imagesControllerName = nameof(ImagesController);
+            if (imagesControllerName.EndsWith("Controller"))
+            {
+                imagesControllerName = imagesControllerName.Remove(imagesControllerName.Length - 10);
+            }
 
             string getImageActionName = nameof(ImagesController.GetImage);
 
