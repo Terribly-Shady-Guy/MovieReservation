@@ -23,7 +23,7 @@ namespace MovieReservation.Controllers
         }
 
         [EndpointSummary("List movies")]
-        [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by gemre.")]
+        [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by genre.")]
         [ProducesResponseTypeWithDescription<List<MovieVM>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
