@@ -34,10 +34,7 @@ namespace MovieReservation.Controllers
             string imagesControllerName = nameof(ImagesController);
 
             const string ControllerNameSuffix = "Controller";
-            if (imagesControllerName.EndsWith(ControllerNameSuffix))
-            {
-                imagesControllerName = imagesControllerName.Remove(imagesControllerName.Length - ControllerNameSuffix.Length);
-            }
+            imagesControllerName = imagesControllerName.Remove(imagesControllerName.Length - ControllerNameSuffix.Length);
 
             string getImageActionName = nameof(ImagesController.GetImage);
 
