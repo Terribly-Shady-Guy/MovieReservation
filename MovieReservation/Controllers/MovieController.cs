@@ -57,8 +57,8 @@ namespace MovieReservation.Controllers
         public async Task<ActionResult> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
         {
             await _movieService.AddMovie(movie);
-
-            return CreatedAtAction("AddNewMovie", new { Message = "New movie added" });
+           
+            return CreatedAtAction(nameof(ListMovies), new { Message = "New movie added" });
         }
 
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
