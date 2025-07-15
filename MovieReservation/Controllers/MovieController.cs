@@ -15,11 +15,13 @@ namespace MovieReservation.Controllers
     {
         private readonly MovieService _movieService;
         private readonly LinkGenerator _linkGenerator;
+        private readonly ILogger<MovieController> _logger;
 
-        public MovieController(MovieService movieService, LinkGenerator link)
+        public MovieController(MovieService movieService, LinkGenerator link, ILogger<MovieController> logger)
         {
             _movieService = movieService;
             _linkGenerator = link;
+            _logger = logger;
         }
 
         [EndpointSummary("List movies")]
@@ -38,11 +40,19 @@ namespace MovieReservation.Controllers
 
             foreach (MovieVM movie in movies)
             {
-                movie.ImageLink = _linkGenerator.GetUriByAction(
+                string? imageLink = _linkGenerator.GetUriByAction(
                     httpContext: HttpContext,
                     action: getImageActionName,
                     controller: imagesControllerName,
-                    values: new { fileName = movie.PosterImageName }) ?? string.Empty;
+                    values: new { fileName = movie.PosterImageName });
+
+               if (imageLink is null)
+               {
+                    _logger.LogWarning("The link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, getImageActionName);
+                    break;
+               }
+
+               movie.PosterImageName = imageLink;
             }
             
             return Ok(movies);
