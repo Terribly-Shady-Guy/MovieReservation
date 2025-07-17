@@ -17,17 +17,15 @@ namespace ApplicationLogic.Services
             _fileHandler = fileHandler;
         }
 
-        public async Task<List<MovieVM>> GetMovies(string? genre)
+        public async Task<List<MovieListItem>> GetMovies(string? genre)
         {
             var result = await _dbContext.Movies
                 .AsNoTracking()
                 .Where(m => m.Genres.Any(g => g.Name.StartsWith(genre ?? "")))
-                .Select(m => new MovieVM
+                .Select(m => new MovieListItem
                 {
-                    Description = m.Description,
-                    MovieId = m.Id,
-                    Title = m.Title,
-                    PosterImageName = m.PosterImageName,
+                    Id = m.Id,
+                    Name = m.Title,
                     Genres = m.Genres
                         .Where(g => g.Name.StartsWith(genre ?? ""))
                         .Select(g => g.Name)
@@ -36,6 +34,30 @@ namespace ApplicationLogic.Services
                 .ToListAsync();
 
             return result;
+        }
+
+        public async Task<MovieVM?> GetById(int id)
+        {
+            Movie? movie = await _dbContext.Movies
+                .AsNoTracking()
+                .Include(m =>  m.Genres)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (movie == null)
+            {
+                return null;
+            }
+
+            return new MovieVM
+            {
+                Description = movie.Description,
+                MovieId = movie.Id,
+                PosterImageName = movie.PosterImageName,
+                Title = movie.Title,
+                Genres = movie.Genres
+                    .Select(g => g.Name)
+                    .ToList(),
+            };
         }
 
         public async Task AddMovie(MovieFormDataBody movie)

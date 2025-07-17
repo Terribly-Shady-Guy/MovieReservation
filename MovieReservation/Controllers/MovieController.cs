@@ -29,33 +29,43 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription<List<MovieVM>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
-        public async Task<ActionResult<List<MovieVM>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
+        public async Task<ActionResult<List<MovieListItem>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
         {
-            List<MovieVM> movies = await _movieService.GetMovies(genre);
+            List<MovieListItem> movies = await _movieService.GetMovies(genre);
+
+            return Ok(movies);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MovieVM?>> GetMovie(int id)
+        {
+            MovieVM? movie = await _movieService.GetById(id);
+
+            if (movie is null)
+            {
+                return Ok(movie);
+            }
 
             string imagesControllerName = nameof(ImagesController)
                 .Replace("Controller", string.Empty);
 
             string getImageActionName = nameof(ImagesController.GetImage);
 
-            foreach (MovieVM movie in movies)
+            string? link = _linkGenerator.GetUriByAction(
+                httpContext: HttpContext,
+                controller: imagesControllerName,
+                action: getImageActionName,
+                values: new { fileName = movie.PosterImageName });
+
+            if (link is null)
             {
-                string? imageLink = _linkGenerator.GetUriByAction(
-                    httpContext: HttpContext,
-                    action: getImageActionName,
-                    controller: imagesControllerName,
-                    values: new { fileName = movie.PosterImageName });
-
-               if (imageLink is null)
-               {
-                    _logger.LogWarning("The link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, getImageActionName);
-                    break;
-               }
-
-               movie.PosterImageName = imageLink;
+                _logger.LogWarning("The link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, imagesControllerName);
+                return Ok(movie);
             }
-            
-            return Ok(movies);
+
+            movie.ImageLink = link;
+
+            return Ok(movie);
         }
 
         [EndpointSummary("Add new movie.")]
@@ -68,7 +78,7 @@ namespace MovieReservation.Controllers
         {
             await _movieService.AddMovie(movie);
            
-            return CreatedAtAction(nameof(ListMovies), new { Message = "New movie added" });
+            return CreatedAtAction(nameof(GetMovie), new { Message = "New movie added" });
         }
 
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
