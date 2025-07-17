@@ -109,7 +109,7 @@ namespace MovieReservation.Controllers
             {
                 return Problem(
                     title: "Bad Request",
-                    detail: "The user could not be deleted.",
+                    detail: "The movie could not be deleted.",
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
