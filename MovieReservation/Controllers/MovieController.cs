@@ -58,19 +58,19 @@ namespace MovieReservation.Controllers
 
             string getImageActionName = nameof(ImagesController.GetImage);
 
-            string? link = _linkGenerator.GetUriByAction(
+            string? imageLink = _linkGenerator.GetUriByAction(
                 httpContext: HttpContext,
                 controller: imagesControllerName,
                 action: getImageActionName,
                 values: new { fileName = movie.PosterImageName });
 
-            if (link is null)
+            if (imageLink is null)
             {
                 _logger.LogWarning("The link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, imagesControllerName);
                 return Ok(movie);
             }
 
-            movie.ImageLink = link;
+            movie.ImageLink = imageLink;
 
             return Ok(movie);
         }
