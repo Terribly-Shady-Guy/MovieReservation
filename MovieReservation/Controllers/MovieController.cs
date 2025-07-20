@@ -83,9 +83,12 @@ namespace MovieReservation.Controllers
         [HttpPost]
         public async Task<ActionResult> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
         {
-            await _movieService.AddMovie(movie);
-           
-            return CreatedAtAction(nameof(GetMovie), new { Message = "New movie added" });
+            int movieId = await _movieService.AddMovie(movie);
+
+            return CreatedAtAction(
+                actionName: nameof(GetMovie),
+                routeValues: new { id = movieId }, 
+                value: new { Message = "New movie added" });
         }
 
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]

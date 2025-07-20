@@ -60,7 +60,7 @@ namespace ApplicationLogic.Services
             };
         }
 
-        public async Task AddMovie(MovieFormDataBody movie)
+        public async Task<int> AddMovie(MovieFormDataBody movie)
         {
             string fileExtension = Path.GetExtension(movie.PosterImage.FileName);
             string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), fileExtension);
@@ -92,6 +92,8 @@ namespace ApplicationLogic.Services
             await _dbContext.SaveChangesAsync();
 
             await _fileHandler.CreateFile(movie.PosterImage, newFileName);
+
+            return newMovie.Id;
         }
 
         public async Task<bool> DeleteMovie(int id)
