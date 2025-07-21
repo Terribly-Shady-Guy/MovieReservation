@@ -29,7 +29,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription<List<MovieListItem>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
         [Produces("application/json")]
         [HttpGet]
-        public async Task<ActionResult<List<MovieListItem>>> ListMovies([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
+        public async Task<ActionResult<List<MovieListItem>>> GetMovieList([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
         {
             List<MovieListItem> movies = await _movieService.GetMovies(genre);
 
