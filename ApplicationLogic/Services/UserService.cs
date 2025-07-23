@@ -13,7 +13,7 @@ namespace ApplicationLogic.Services
             _userManager = userManager;
         }
 
-        public async Task<string?> AddNewUserAsync(NewUserVM newUser)
+        public async Task<string?> AddNewUserAsync(NewUserDto newUser)
         {
             var user = new AppUser()
             {

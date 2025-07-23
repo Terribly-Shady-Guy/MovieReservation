@@ -38,12 +38,12 @@ namespace MovieReservation.Controllers
 
         [EndpointSummary("Get movie by id")]
         [EndpointDescription("Gets a movie by id and either returns null if it does not exist or the movie with a link to get its image. Use the posterImageName property if imageLink is not available.")]
-        [ProducesResponseTypeWithDescription<MovieVM>(StatusCodes.Status200OK, Description = "The object containing the movie info.")]
+        [ProducesResponseTypeWithDescription<MovieDto>(StatusCodes.Status200OK, Description = "The object containing the movie info.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The movie with the provided id doesn't exist.")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<MovieVM>> GetMovie(int id)
+        public async Task<ActionResult<MovieDto>> GetMovie(int id)
         {
-            MovieVM? movie = await _movieService.GetById(id);
+            MovieDto? movie = await _movieService.GetById(id);
 
             if (movie is null)
             {

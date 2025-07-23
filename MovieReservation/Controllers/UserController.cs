@@ -23,7 +23,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
         [OperationTransformer<NewUserEndpointTransformer>]
         [HttpPost("Add")]
-        public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")] NewUserVM user)
+        public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")] NewUserDto user)
         {
             string? id = await _userService.AddNewUserAsync(user);
 

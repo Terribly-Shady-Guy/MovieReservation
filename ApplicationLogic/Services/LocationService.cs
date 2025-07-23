@@ -13,7 +13,7 @@ namespace ApplicationLogic.Services
             _dbContext = dbContext;
         }
 
-        public async Task AddLocation(LocationVM location)
+        public async Task AddLocation(LocationDto location)
         {
             var newLocation = new Location
             {

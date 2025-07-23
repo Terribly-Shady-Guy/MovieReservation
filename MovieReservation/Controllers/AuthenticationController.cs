@@ -29,7 +29,7 @@ namespace MovieReservation.Controllers
         [OperationTransformer<LoginEndpointTransformer>]
         [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
         [HttpPost("Login")]
-        public async Task<ActionResult<AuthenticationToken>> Login([Description("Object containing username and password for login")] UserLoginVM userLogin)
+        public async Task<ActionResult<AuthenticationToken>> Login([Description("Object containing username and password for login")] UserLoginDto userLogin)
         {
             LoginDto login = await _authentication.Login(userLogin);
 

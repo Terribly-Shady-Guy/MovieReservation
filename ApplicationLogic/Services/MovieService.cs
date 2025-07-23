@@ -36,7 +36,7 @@ namespace ApplicationLogic.Services
             return result;
         }
 
-        public async Task<MovieVM?> GetById(int id)
+        public async Task<MovieDto?> GetById(int id)
         {
             Movie? movie = await _dbContext.Movies
                 .AsNoTracking()
@@ -48,7 +48,7 @@ namespace ApplicationLogic.Services
                 return null;
             }
 
-            return new MovieVM
+            return new MovieDto
             {
                 Description = movie.Description,
                 MovieId = movie.Id,

@@ -2,7 +2,7 @@
 
 namespace ApplicationLogic.ViewModels
 {
-    public class NewUserVM
+    public class NewUserDto
     {
         [MinLength(2)]
         public required string FirstName { get; set; }

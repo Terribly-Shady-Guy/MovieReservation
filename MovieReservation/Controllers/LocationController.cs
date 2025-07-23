@@ -19,7 +19,7 @@ namespace MovieReservation.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddLocation(LocationVM location)
+        public async Task<ActionResult> AddLocation(LocationDto location)
         {
             await _locationService.AddLocation(location);
             return CreatedAtAction("AddLocation", new { Message = "New location added. " });

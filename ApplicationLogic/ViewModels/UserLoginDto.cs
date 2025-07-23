@@ -2,7 +2,7 @@
 
 namespace ApplicationLogic.ViewModels
 {
-    public class UserLoginVM
+    public class UserLoginDto
     {
         [EmailAddress]
         public required string Email { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace ApplicationLogic.ViewModels
 {
-    public class LocationVM
+    public class LocationDto
     {
         public required string Street { get; set; }
         public required string City { get; set; }

@@ -33,7 +33,7 @@ namespace ApplicationLogic.Services
             _login = login;
         }
 
-        public async Task<LoginDto> Login(UserLoginVM userCredentials)
+        public async Task<LoginDto> Login(UserLoginDto userCredentials)
         {
             AppUser? user = await _userManager.FindByEmailAsync(userCredentials.Email);
 

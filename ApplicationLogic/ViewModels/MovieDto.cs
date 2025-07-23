@@ -2,7 +2,7 @@
 
 namespace ApplicationLogic.ViewModels
 {
-    public class MovieVM
+    public class MovieDto
     {
         public required int MovieId { get; set; }
         public required string Title { get; set; }
