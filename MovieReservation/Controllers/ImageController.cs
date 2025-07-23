@@ -7,11 +7,11 @@ namespace MovieReservation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ImagesController : ControllerBase
+    public class ImageController : ControllerBase
     {
         private readonly IFileHandler _fileHandler;
 
-        public ImagesController(IFileHandler fileHandler)
+        public ImageController(IFileHandler fileHandler)
         {
             _fileHandler = fileHandler;
         }

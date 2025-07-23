@@ -53,10 +53,10 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status404NotFound);
             }
 
-            string imagesControllerName = nameof(ImagesController)
+            string imagesControllerName = nameof(ImageController)
                 .Replace("Controller", string.Empty);
 
-            string getImageActionName = nameof(ImagesController.GetImage);
+            string getImageActionName = nameof(ImageController.GetImage);
 
             string? imageLink = _linkGenerator.GetUriByAction(
                 httpContext: HttpContext,
