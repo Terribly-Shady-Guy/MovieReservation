@@ -82,7 +82,7 @@ namespace MovieReservation.Startup
     public static class RegisteredAuthorizationPolicyNames
     {
         /// <summary>
-        /// Represents the policy which validates that the user is an admin role.
+        /// Represents the policy that requires the user to be an admin role.
         /// </summary>
         public const string IsAdmin = "IsAdmin";
     }
