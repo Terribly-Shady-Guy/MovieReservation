@@ -43,7 +43,7 @@ namespace MovieReservation.Controllers
 
             FileHandlerResult result = _fileHandler.GetFile(fileName);
 
-            if (!result.Success || result.FileStream is null)
+            if (!result.Success)
             {
                 return Problem(
                     title: "File retrieval error",
@@ -51,7 +51,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status404NotFound);
             }
 
-            return File(result.FileStream, contentType, result.FileName);
+            return File(result.FileStream!, contentType, result.FileName);
         }
     }
 }
