@@ -1,7 +1,10 @@
-﻿namespace ApplicationLogic.ViewModels
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApplicationLogic.ViewModels
 {
     public class FileHandlerResult
     {
+        [MemberNotNullWhen(true, nameof(FileStream), nameof(FileName))]
         public bool Success => FileStream is not null;
         public Stream? FileStream { get; }
         public string? FileName { get; }

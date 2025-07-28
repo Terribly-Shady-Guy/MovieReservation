@@ -51,7 +51,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status404NotFound);
             }
 
-            return File(result.FileStream!, contentType, result.FileName);
+            return File(result.FileStream, contentType, result.FileName);
         }
     }
 }
