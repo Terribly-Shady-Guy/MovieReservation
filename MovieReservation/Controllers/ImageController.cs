@@ -43,7 +43,7 @@ namespace MovieReservation.Controllers
 
             FileHandlerResult result = _fileHandler.GetFile(fileName);
 
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
                 return Problem(
                     title: "File retrieval error",
