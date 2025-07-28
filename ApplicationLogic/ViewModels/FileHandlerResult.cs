@@ -2,7 +2,7 @@
 
 namespace ApplicationLogic.ViewModels
 {
-    public class FileHandlerResult
+    public sealed class FileHandlerResult
     {
         [MemberNotNullWhen(true, nameof(FileStream), nameof(FileName))]
         public bool IsSuccess => FileStream is not null;
