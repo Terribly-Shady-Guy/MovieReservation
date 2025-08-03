@@ -66,7 +66,7 @@ namespace MovieReservation.Controllers
 
             if (imageLink is null)
             {
-                _logger.LogWarning("The link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, getImageActionName);
+                _logger.LogWarning("The image link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, getImageActionName);
                 return Ok(movie);
             }
 
