@@ -32,8 +32,8 @@ namespace MovieReservation.Controllers
         public async Task<ActionResult<AuthenticationToken>> Login([Description("Object containing username and password for login")] UserLoginDto userLogin)
         {
             LoginDto login = await _authentication.Login(userLogin);
-
-            if (!login.Result.Succeeded && !login.Result.RequiresTwoFactor)
+            
+            if (login.Result is { Succeeded: false, RequiresTwoFactor: false })
             {
                 return Problem(
                     title: "Login failed",
