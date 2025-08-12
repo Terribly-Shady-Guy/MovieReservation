@@ -1,21 +1,21 @@
 ﻿namespace DbInfrastructure.Models
 {
-    public abstract class EnumLookup<TEnum>
+    public abstract class EnumLookupBase<TEnum>
         where TEnum : struct, Enum
     {
-        protected EnumLookup(TEnum value)
+        protected EnumLookupBase(TEnum value)
         {
             Id = value;
             Name = value.ToString();
         }
 
-        protected EnumLookup() { }
+        protected EnumLookupBase() { }
 
         public TEnum Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 
-    public class ReservationStatusLookup : EnumLookup<ReservationStatus>
+    public class ReservationStatusLookup : EnumLookupBase<ReservationStatus>
     {
         public ReservationStatusLookup()
         {
@@ -28,7 +28,7 @@
         public ICollection<Reservation> Reservations { get; set; } = [];
     }
 
-    public class TheaterTypeLookup : EnumLookup<TheaterType>
+    public class TheaterTypeLookup : EnumLookupBase<TheaterType>
     {
         public TheaterTypeLookup()
         {
