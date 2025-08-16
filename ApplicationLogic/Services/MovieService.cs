@@ -62,14 +62,14 @@ namespace ApplicationLogic.Services
 
         public async Task<int> AddMovie(MovieFormDataBody movie)
         {
-            string fileExtension = Path.GetExtension(movie.PosterImage.FileName);
-            string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), fileExtension);
+            string uploadedFileExtension = Path.GetExtension(movie.PosterImage.FileName);
+            string newUploadedFileName = Path.ChangeExtension(Path.GetRandomFileName(), uploadedFileExtension);
 
             var newMovie = new Movie
             {
                 Title = movie.Title,
                 Description = movie.Description,
-                PosterImageName = newFileName
+                PosterImageName = newUploadedFileName
             };
 
             Dictionary<string, Genre> genres = await _dbContext.Genres
@@ -91,7 +91,7 @@ namespace ApplicationLogic.Services
             _dbContext.Movies.Add(newMovie);
             await _dbContext.SaveChangesAsync();
 
-            await _fileHandler.CreateFile(movie.PosterImage, newFileName);
+            await _fileHandler.CreateFile(movie.PosterImage, newUploadedFileName);
 
             return newMovie.Id;
         }
