@@ -6,10 +6,12 @@ using MovieReservation.OpenApi;
 using MovieReservation.OpenApi.Transformers;
 using ApplicationLogic.Services;
 using ApplicationLogic.ViewModels;
+using Asp.Versioning;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(1.0)]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {

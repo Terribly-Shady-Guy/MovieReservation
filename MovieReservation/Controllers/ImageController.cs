@@ -1,11 +1,13 @@
 ﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.ViewModels;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(1.0)]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ImageController : ControllerBase
     {

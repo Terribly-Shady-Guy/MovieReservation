@@ -1,5 +1,6 @@
 ﻿using ApplicationLogic.Services;
 using ApplicationLogic.ViewModels;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.Startup;
@@ -7,7 +8,8 @@ using MovieReservation.Startup;
 namespace MovieReservation.Controllers
 {
     [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
-    [Route("api/[controller]")]
+    [ApiVersion(1.0)]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase
     {

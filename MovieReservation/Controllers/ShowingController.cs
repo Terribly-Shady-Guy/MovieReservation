@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.Startup;
 
 namespace MovieReservation.Controllers
 {
+    [ApiVersion(1.0)]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ShowingController : ControllerBase
     {

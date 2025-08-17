@@ -1,6 +1,7 @@
 using DbInfrastructure;
 using MovieReservation.Startup;
 using ApplicationLogic;
+using Asp.Versioning;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,20 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApiServices();
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+    options.DefaultApiVersion = new ApiVersion(1);
+})
+    .AddMvc()
+    .AddApiExplorer(options =>
+    {
+        options.SubstituteApiVersionInUrl = true;
+        options.GroupNameFormat = "'v'V";
+    });
 
 builder.Services.AddIdentityJwtAuthentication(builder.Configuration.GetRequiredSection("Jwt"));
 

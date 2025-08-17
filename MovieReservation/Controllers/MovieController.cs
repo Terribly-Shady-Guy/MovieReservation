@@ -1,5 +1,6 @@
 ﻿using ApplicationLogic.Services;
 using ApplicationLogic.ViewModels;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
@@ -8,8 +9,9 @@ using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
+    [ApiVersion(1.0)]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class MovieController : ControllerBase
     {
@@ -66,7 +68,7 @@ namespace MovieReservation.Controllers
 
             if (imageLink is null)
             {
-                _logger.LogWarning("The image link using {ControllerName} and {ActionName} could not be created.", imagesControllerName, getImageActionName);
+                _logger.LogWarning("The image link using {ControllerName} and {ActionName} with id {Id} could not be created.", imagesControllerName, getImageActionName, id);
                 return Ok(movie);
             }
 

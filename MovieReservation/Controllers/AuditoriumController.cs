@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReservation.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion(1.0)]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AuditoriumController : ControllerBase
     {
