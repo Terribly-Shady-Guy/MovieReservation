@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250619022447_InitialCreate")]
+    [Migration("20250817183715_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace DbInfrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -239,12 +239,12 @@ namespace DbInfrastructure.Migrations
                         .HasColumnType("varchar(300)")
                         .HasColumnName("description");
 
-                    b.Property<string>("PosterImageName")
+                    b.Property<string>("ImageFileName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
-                        .HasColumnName("poster_image_name");
+                        .HasColumnName("image_file_name");
 
                     b.Property<string>("Title")
                         .IsRequired()

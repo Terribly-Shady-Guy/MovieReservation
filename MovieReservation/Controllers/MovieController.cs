@@ -62,7 +62,7 @@ namespace MovieReservation.Controllers
                 httpContext: HttpContext,
                 controller: imagesControllerName,
                 action: getImageActionName,
-                values: new { fileName = movie.PosterImageName });
+                values: new { fileName = movie.ImageFileName });
 
             if (imageLink is null)
             {

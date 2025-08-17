@@ -89,7 +89,7 @@ namespace DbInfrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     title = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "varchar(300)", unicode: false, maxLength: 300, nullable: false),
-                    poster_image_name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
+                    image_file_name = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

@@ -52,7 +52,7 @@ namespace ApplicationLogic.Services
             {
                 Description = movie.Description,
                 MovieId = movie.Id,
-                PosterImageName = movie.PosterImageName,
+                ImageFileName = movie.ImageFileName,
                 Title = movie.Title,
                 Genres = movie.Genres
                     .Select(g => g.Name)
@@ -69,7 +69,7 @@ namespace ApplicationLogic.Services
             {
                 Title = movie.Title,
                 Description = movie.Description,
-                PosterImageName = newUploadedFileName
+                ImageFileName = newUploadedFileName
             };
 
             Dictionary<string, Genre> genres = await _dbContext.Genres
@@ -108,7 +108,7 @@ namespace ApplicationLogic.Services
             _dbContext.Movies.Remove(movieToDelete);
             await _dbContext.SaveChangesAsync();
 
-            _fileHandler.DeleteFile(movieToDelete.PosterImageName);
+            _fileHandler.DeleteFile(movieToDelete.ImageFileName);
 
             return true;
         }

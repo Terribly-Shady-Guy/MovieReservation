@@ -20,10 +20,10 @@ namespace DbInfrastructure.ModelConfiguration
                 .IsUnicode(false)
                 .HasMaxLength(100);
 
-            builder.Property(e => e.PosterImageName)
+            builder.Property(e => e.ImageFileName)
                 .IsRequired()
                 .IsUnicode(false)
-                .HasColumnName("poster_image_name")
+                .HasColumnName("image_file_name")
                 .HasMaxLength(100);
 
             builder.Property(e => e.Description)
