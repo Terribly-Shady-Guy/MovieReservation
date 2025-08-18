@@ -1,6 +1,7 @@
 ﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.Services;
-using Microsoft.AspNetCore.OpenApi;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +23,12 @@ namespace MovieReservation.Startup
         {
             services.AddOpenApi("v1", options =>
             {
+                options.ShouldInclude = (description) =>
+                {
+                    ApiVersion? version = description.GetApiVersion();
+                    return version is not null && version.MajorVersion == 1;
+                };
+
                 options.AddDocumentTransformer<VersionedDocumentTransformer>();
 
                 // This is a temporary workaround until the new description property is added to ProducesResponseType.

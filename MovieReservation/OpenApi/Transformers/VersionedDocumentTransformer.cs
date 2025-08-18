@@ -17,7 +17,7 @@ namespace MovieReservation.OpenApi.Transformers
         {
            ApiVersionDescription description = _apiVersionDescriptionProvider.ApiVersionDescriptions
                 .Single(d => d.GroupName == context.DocumentName);
-
+            
             document.Info = new OpenApiInfo
             {
                 Version = $"v{description.ApiVersion}",
@@ -37,7 +37,7 @@ namespace MovieReservation.OpenApi.Transformers
                     Type = SecuritySchemeType.Http,
                     Name = HeaderNames.Authorization
                 });
-
+            
             return Task.CompletedTask;
         }
     }
