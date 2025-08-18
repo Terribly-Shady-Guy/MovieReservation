@@ -15,13 +15,8 @@ namespace MovieReservation.OpenApi.Transformers
 
         public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
         {
-           ApiVersionDescription? description = _apiVersionDescriptionProvider.ApiVersionDescriptions
-                .SingleOrDefault(d => d.GroupName == context.DocumentName);
-
-            if (description == null)
-            {
-                return Task.CompletedTask;
-            }
+           ApiVersionDescription description = _apiVersionDescriptionProvider.ApiVersionDescriptions
+                .Single(d => d.GroupName == context.DocumentName);
 
             document.Info = new OpenApiInfo
             {
