@@ -1,10 +1,9 @@
 ﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.Services;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
 using MovieReservation.OpenApi.Transformers;
 using Scalar.AspNetCore;
 using System.Security.Claims;
@@ -21,32 +20,9 @@ namespace MovieReservation.Startup
         /// <returns>The same service collection instance from paramater.</returns>
         public static IServiceCollection AddOpenApiServices(this IServiceCollection services)
         {
-            services.AddOpenApi(options =>
+            services.AddOpenApi("v1", options =>
             {
-                options.AddDocumentTransformer((document, context, cancellationToken) =>
-                {
-                    document.Info = new OpenApiInfo
-                    {
-                        Version = "V1",
-                        Title = "Movie Reservation API",
-                        Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
-                    };
-
-                    document.Components ??= new OpenApiComponents();
-                    document.Components.SecuritySchemes.Add(
-                        key: BearerSchemeKey,
-                        value: new OpenApiSecurityScheme
-                        {
-                            Description = $"Jwt bearer token using \"{HeaderNames.Authorization}\" header",
-                            Scheme = "bearer",
-                            BearerFormat = "JWT",
-                            In = ParameterLocation.Header,
-                            Type = SecuritySchemeType.Http,
-                            Name = HeaderNames.Authorization
-                        });
-                    
-                    return Task.CompletedTask;
-                });
+                options.AddDocumentTransformer<VersionedDocumentTransformer>();
 
                 // This is a temporary workaround until the new description property is added to ProducesResponseType.
                 options.AddOperationTransformer<EndpointResponseDescriptionTransformer>();
