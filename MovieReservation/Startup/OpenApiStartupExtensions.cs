@@ -23,11 +23,7 @@ namespace MovieReservation.Startup
         {
             services.AddOpenApi("v1", options =>
             {
-                options.ShouldInclude = (description) =>
-                {
-                    ApiVersion? version = description.GetApiVersion();
-                    return version is not null && version.MajorVersion == 1;
-                };
+                options.ShouldInclude = (description) => DoesDocumentMatchMajorVersion(description, 1);
 
                 options.AddDocumentTransformer<VersionedDocumentTransformer>();
 
@@ -38,6 +34,12 @@ namespace MovieReservation.Startup
             });
 
             return services;
+        }
+
+        private static bool DoesDocumentMatchMajorVersion(ApiDescription description, int majorVersion)
+        {
+            ApiVersion? version = description.GetApiVersion();
+            return version is not null && version.MajorVersion == majorVersion;
         }
 
         /// <summary>
