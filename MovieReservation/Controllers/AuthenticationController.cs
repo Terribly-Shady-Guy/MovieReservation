@@ -22,6 +22,7 @@ namespace MovieReservation.Controllers
             _authentication = authentication;
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Login")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Authentication was successful.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status202Accepted, Description = "Authentication was successful, but 2fa is required.")]
@@ -60,6 +61,7 @@ namespace MovieReservation.Controllers
             return Ok(login.AuthToken);
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Two factor login")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status401Unauthorized, Description = "The provided code is invalid or user doesn't exist.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status403Forbidden, Description = "The user account is locked.")]
@@ -88,6 +90,7 @@ namespace MovieReservation.Controllers
             return Ok(login.AuthToken);
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Refresh tokens")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "The token was successfully refreshed.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Refresh or access token is invalid")]
@@ -109,6 +112,7 @@ namespace MovieReservation.Controllers
             return Ok(token);
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Logout")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "User successfully logged out.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Access or refresh token is missing.")]

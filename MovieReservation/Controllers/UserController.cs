@@ -20,6 +20,7 @@ namespace MovieReservation.Controllers
             _userService = userService;
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Add user")]
         [EndpointDescription("An endpoint to create a new user account with User role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
@@ -40,6 +41,7 @@ namespace MovieReservation.Controllers
             return Created(id, new { Message = "Account created sucessfully." });
         }
 
+        [MapToApiVersion(1.0)]
         [Authorize]
         [HttpPost("Change-Password")]
         public async Task<ActionResult> ChangePassword()
@@ -47,6 +49,7 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
+        [MapToApiVersion(1.0)]
         [HttpPost("Confirm-Email")]
         public async Task<ActionResult> ConfirmEmail(string id, string token)
         {
@@ -62,6 +65,7 @@ namespace MovieReservation.Controllers
             return Ok(new {Message = "Email is confirmed."});
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Promote user to admin")]
         [EndpointDescription("An endpoint that allows admin ussers to promote a user to Admin role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was successfully promoted to admin.")]

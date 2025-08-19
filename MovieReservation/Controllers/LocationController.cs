@@ -20,6 +20,7 @@ namespace MovieReservation.Controllers
             _locationService = locationService;
         }
 
+        [MapToApiVersion(1.0)]
         [HttpPost]
         public async Task<ActionResult> AddLocation(LocationDto location)
         {
@@ -27,6 +28,7 @@ namespace MovieReservation.Controllers
             return CreatedAtAction("AddLocation", new { Message = "New location added. " });
         }
 
+        [MapToApiVersion(1.0)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteLocation(int id)
         {

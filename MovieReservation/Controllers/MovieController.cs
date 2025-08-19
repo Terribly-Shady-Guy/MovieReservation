@@ -26,6 +26,7 @@ namespace MovieReservation.Controllers
             _logger = logger;
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("List movies")]
         [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by genre.")]
         [ProducesResponseTypeWithDescription<List<MovieListItem>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
@@ -38,6 +39,7 @@ namespace MovieReservation.Controllers
             return Ok(movies);
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Get movie by id")]
         [EndpointDescription("Gets a movie by id and either returns null if it does not exist or the movie with a link to get its image. Use the posterImageName property if imageLink is not available.")]
         [ProducesResponseTypeWithDescription<MovieDto>(StatusCodes.Status200OK, Description = "The object containing the movie info.")]
@@ -77,6 +79,7 @@ namespace MovieReservation.Controllers
             return Ok(movie);
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Add new movie.")]
         [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
         [Consumes("multipart/form-data")]
@@ -93,6 +96,7 @@ namespace MovieReservation.Controllers
                 value: new { Message = "New movie added" });
         }
 
+        [MapToApiVersion(1.0)]
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
         [HttpPut]
         public async Task<ActionResult> EditMovie()
@@ -100,6 +104,7 @@ namespace MovieReservation.Controllers
             throw new NotImplementedException();
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Delete movie")]
         [EndpointDescription("An endpoint that allows an admin user to delete a movie.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was successfully deleted.")]

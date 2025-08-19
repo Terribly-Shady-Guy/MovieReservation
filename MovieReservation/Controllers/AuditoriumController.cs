@@ -8,6 +8,7 @@ namespace MovieReservation.Controllers
     [ApiController]
     public class AuditoriumController : ControllerBase
     {
+        [MapToApiVersion(1.0)]
         [HttpPost]
         public async Task<ActionResult> AddNewAuditoriumToLocation()
         {

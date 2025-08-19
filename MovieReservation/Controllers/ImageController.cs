@@ -18,6 +18,7 @@ namespace MovieReservation.Controllers
             _fileHandler = fileHandler;
         }
 
+        [MapToApiVersion(1.0)]
         [EndpointSummary("Get Images")]
         [EndpointDescription("Gets the image based on the provided file name in the url.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The file was successfully located.")]
