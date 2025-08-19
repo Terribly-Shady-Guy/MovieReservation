@@ -19,7 +19,7 @@ namespace MovieReservation.Startup
         /// </summary>
         /// <param name="services">The application service collection instance.</param>
         /// <returns>The same service collection instance from paramater.</returns>
-        public static IServiceCollection AddOpenApiServices(this IServiceCollection services)
+        public static IServiceCollection AddOpenApiDocuments(this IServiceCollection services)
         {
             services.AddOpenApi("v1", options =>
             {
