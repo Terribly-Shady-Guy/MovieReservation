@@ -13,7 +13,6 @@ namespace MovieReservation.Startup
 {
     public static class OpenApiStartupExtensions
     {
-        private const string BearerSchemeKey = "JWT Bearer";
         /// <summary>
         /// Adds the OpenAPI services for generating documents.
         /// </summary>
@@ -23,7 +22,7 @@ namespace MovieReservation.Startup
         {
             services.AddOpenApi("v1", options =>
             {
-                options.ShouldInclude = (description) => DoesDocumentMatchMajorVersion(description, 1);
+                options.ShouldInclude = description => description.MatchesMajorVersion(1);
 
                 options.AddDocumentTransformer<VersionedDocumentTransformer>();
 
@@ -36,10 +35,10 @@ namespace MovieReservation.Startup
             return services;
         }
 
-        private static bool DoesDocumentMatchMajorVersion(ApiDescription description, int majorVersion)
+        private static bool MatchesMajorVersion(this ApiDescription description, int majorVersion)
         {
             ApiVersion? version = description.GetApiVersion();
-            return version is not null && version.MajorVersion == majorVersion;
+            return version?.MajorVersion == majorVersion;
         }
 
         /// <summary>
@@ -69,6 +68,8 @@ namespace MovieReservation.Startup
 
             var tokenHandler = new JsonWebTokenHandler();
             string token = tokenHandler.CreateToken(descriptor);
+
+            const string BearerSchemeKey = "JWT Bearer";
 
             RouteGroupBuilder openApiReferenceGroup = routeBuilder.MapGroup("/api-reference")
                 .ExcludeFromDescription();
