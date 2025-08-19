@@ -12,7 +12,10 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddOpenApiDocuments();
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddOpenApiDocuments();
+}
 
 builder.Services.AddApiVersioning(options =>
 {
