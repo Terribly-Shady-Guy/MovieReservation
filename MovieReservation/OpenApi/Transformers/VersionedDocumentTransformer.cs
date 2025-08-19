@@ -8,6 +8,7 @@ namespace MovieReservation.OpenApi.Transformers
     public class VersionedDocumentTransformer : IOpenApiDocumentTransformer
     {
         private readonly IApiVersionDescriptionProvider _apiVersionDescriptionProvider;
+
         public VersionedDocumentTransformer(IApiVersionDescriptionProvider descriptionProvider)
         {
             _apiVersionDescriptionProvider = descriptionProvider;
@@ -17,13 +18,16 @@ namespace MovieReservation.OpenApi.Transformers
         {
            ApiVersionDescription description = _apiVersionDescriptionProvider.ApiVersionDescriptions
                 .Single(d => d.GroupName == context.DocumentName);
-            
-            document.Info = new OpenApiInfo
+
+            document.Info.Version = $"v{description.ApiVersion}";
+            document.Info.Title = "Movie Reservation API";
+            document.Info.Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports.";
+
+            if (description.IsDeprecated)
             {
-                Version = $"v{description.ApiVersion}",
-                Title = "Movie Reservation API",
-                Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports."
-            };
+                document.Info.Title += " (deprecated)";
+                document.Info.Description += $" This version of the API is deprecated.{(description.SunsetPolicy is not null ? $" It will be removed on {description.SunsetPolicy.Date}." : string.Empty)}";
+            }
             
             document.Components ??= new OpenApiComponents();
             document.Components.SecuritySchemes.Add(
