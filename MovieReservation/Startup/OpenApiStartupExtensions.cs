@@ -12,10 +12,10 @@ namespace MovieReservation.Startup
     public static class OpenApiStartupExtensions
     {
         /// <summary>
-        /// Adds the OpenAPI services for generating documents.
+        /// Registers the OpenAPI documents for each API version.
         /// </summary>
         /// <param name="services">The application service collection instance.</param>
-        /// <returns>The same service collection instance from paramater.</returns>
+        /// <returns>The same service collection instance.</returns>
         public static IServiceCollection AddOpenApiDocuments(this IServiceCollection services)
         {
             services.AddOpenApi("v1", options =>
