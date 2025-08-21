@@ -1,5 +1,6 @@
 ﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.Services;
+using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -41,6 +42,7 @@ namespace MovieReservation.Startup
         {
             var rsaKeyHandler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
             var options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
+            var descriptionProvider = routeBuilder.ServiceProvider.GetRequiredService<IApiVersionDescriptionProvider>();
 
             RsaSecurityKey securityKey = rsaKeyHandler.LoadPrivateAsync()
                 .GetAwaiter()
@@ -77,7 +79,8 @@ namespace MovieReservation.Startup
                     .WithSearchHotKey("s")
                     .AddPreferredSecuritySchemes(BearerSchemeKey)
                     .WithPersistentAuthentication()
-                    .AddHttpAuthentication(BearerSchemeKey, scheme => scheme.Token = token);
+                    .AddHttpAuthentication(BearerSchemeKey, scheme => scheme.Token = token)
+                    .AddDocuments(descriptionProvider.ApiVersionDescriptions.Select(d => d.GroupName));
             });
         }
     }
