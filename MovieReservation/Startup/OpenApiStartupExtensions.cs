@@ -24,8 +24,10 @@ namespace MovieReservation.Startup
 
                 // This is a temporary workaround until the new description property is added to ProducesResponseType.
                 options.AddOperationTransformer<EndpointResponseDescriptionTransformer>();
+
                 options.AddOperationTransformer<EndpointOperationTransformer>();
                 options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
+                options.AddOperationTransformer<OperationDeprecatedTransformer>();
             });
 
             return services;
