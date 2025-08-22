@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OpenApi;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 
 namespace MovieReservation.OpenApi.Transformers
@@ -32,7 +33,7 @@ namespace MovieReservation.OpenApi.Transformers
 
             operation.Responses.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
             {
-                Description = "The access token has not been provided in \"Authorization\" header."
+                Description = $"The access token has not been provided in ```{HeaderNames.Authorization}``` header."
             });
 
             var requirementSecurityScheme = new OpenApiSecurityScheme
