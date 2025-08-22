@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace MovieReservation.Controllers
 {
-    [ApiVersion(1.0, Deprecated = true)]
+    [ApiVersion(1.0)]
     [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
