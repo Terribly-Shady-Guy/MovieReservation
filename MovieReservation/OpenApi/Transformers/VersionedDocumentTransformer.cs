@@ -25,8 +25,7 @@ namespace MovieReservation.OpenApi.Transformers
 
             if (description.IsDeprecated)
             {
-                document.Info.Title += " (DEPRECATED)";
-                document.Info.Description += $" \n> [!warning] This version of the API is deprecated and {(description.SunsetPolicy is not null ? $"will be removed on **{description.SunsetPolicy.Date}**" : "may be removed in the future")}.";
+                document.Info.Description += $"\n> [!warning] This version of the API is deprecated and {(description.SunsetPolicy is not null ? $"will be removed on **{description.SunsetPolicy.Date}**" : "may be removed in the future")}.";
             }
             
             document.Components ??= new OpenApiComponents();
