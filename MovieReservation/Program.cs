@@ -38,7 +38,8 @@ builder.Services.AddDbInfrastructure(builder.Configuration.GetConnectionString("
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks()
+   .AddCheck<SqlServerHealthCheck>("SqlServer");
 
 var app = builder.Build();
 
