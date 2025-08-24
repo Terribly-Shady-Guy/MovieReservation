@@ -39,7 +39,7 @@ builder.Services.AddDbInfrastructure(builder.Configuration.GetConnectionString("
 builder.Services.AddProblemDetails();
 
 builder.Services.AddHealthChecks()
-   .AddCheck<SqlServerHealthCheck>("SqlServer");
+   .AddCheck<SqlServerHealthCheck>("dbconnection", null, ["db", "sql"]);
 
 var app = builder.Build();
 
