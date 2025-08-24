@@ -25,18 +25,18 @@ namespace MovieReservation.Startup
 
                 await connection.OpenAsync(cancellationToken);
 
-                using var command = connection.CreateCommand();
+                using SqlCommand command = connection.CreateCommand();
 
                 command.CommandText = "SELECT 1";
                 int value = (int)await command.ExecuteScalarAsync(cancellationToken);
 
-                return HealthCheckResult.Healthy();
+                return HealthCheckResult.Healthy("db connected and executed query successfully.");
             }
             catch (SqlException ex) when (ex.Number == -2)
             {  
                 return HealthCheckResult.Degraded("The connection timed out", ex);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return HealthCheckResult.Unhealthy("An error has occured when connecting to db.", ex);
             }

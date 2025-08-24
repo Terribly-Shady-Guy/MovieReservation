@@ -49,17 +49,10 @@ namespace ApplicationLogic.Services
                 FileStream stream = File.OpenRead(filePath);
                 return FileHandlerResult.Succeeded(stream, fileName);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is IOException)
             {
-                if (ex is UnauthorizedAccessException || ex is IOException)
-                {
-                    _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {FileName} at {FilePath}", fileName, _path);
-                    return FileHandlerResult.Failed();
-                }
-                else
-                {
-                    throw;
-                }
+                _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {FileName} at {FilePath}", fileName, _path);
+                return FileHandlerResult.Failed();
             }
         }
     }
