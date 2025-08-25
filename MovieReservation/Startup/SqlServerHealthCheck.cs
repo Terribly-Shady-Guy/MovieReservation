@@ -22,12 +22,11 @@ namespace MovieReservation.Startup
             try
             {
                 using var connection = new SqlConnection(_connectionString);
-
                 await connection.OpenAsync(cancellationToken);
 
                 using SqlCommand command = connection.CreateCommand();
-
                 command.CommandText = "SELECT 1";
+
                 int value = (int)await command.ExecuteScalarAsync(cancellationToken);
 
                 return HealthCheckResult.Healthy("db connected and executed query successfully.");
