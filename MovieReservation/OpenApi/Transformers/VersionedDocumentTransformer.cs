@@ -16,16 +16,16 @@ namespace MovieReservation.OpenApi.Transformers
 
         public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
         {
-           ApiVersionDescription description = _apiVersionDescriptionProvider.ApiVersionDescriptions
+           ApiVersionDescription versionDescription = _apiVersionDescriptionProvider.ApiVersionDescriptions
                 .Single(d => d.GroupName == context.DocumentName);
 
-            document.Info.Version = $"v{description.ApiVersion}";
+            document.Info.Version = $"v{versionDescription.ApiVersion}";
             document.Info.Title = "Movie Reservation API";
             document.Info.Description = "An API for customers to view and reserve movies. Admin users can manage showings and view reservation reports.";
 
-            if (description.IsDeprecated)
+            if (versionDescription.IsDeprecated)
             {
-                document.Info.Description += $"\n> [!warning] This version of the API is deprecated and {(description.SunsetPolicy is not null ? $"will be removed on **{description.SunsetPolicy.Date}**" : "may be removed in the future")}.";
+                document.Info.Description += $"\n> [!warning] This version of the API is deprecated and {(versionDescription.SunsetPolicy is not null ? $"will be removed on **{versionDescription.SunsetPolicy.Date}**" : "may be removed in the future")}.";
             }
             
             document.Components ??= new OpenApiComponents();
