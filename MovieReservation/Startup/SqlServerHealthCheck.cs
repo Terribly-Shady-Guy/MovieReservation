@@ -33,7 +33,7 @@ namespace MovieReservation.Startup
             }
             catch (SqlException ex) when (ex.Number == -2)
             {  
-                return HealthCheckResult.Degraded("The connection timed out", ex);
+                return HealthCheckResult.Degraded("The connection timed out.", ex);
             }
             catch (Exception ex)
             {
