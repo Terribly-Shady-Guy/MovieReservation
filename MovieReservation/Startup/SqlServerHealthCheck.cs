@@ -27,7 +27,7 @@ namespace MovieReservation.Startup
                 using SqlCommand command = connection.CreateCommand();
                 command.CommandText = "SELECT 1";
 
-                int value = (int)await command.ExecuteScalarAsync(cancellationToken);
+                _ = await command.ExecuteScalarAsync(cancellationToken);
 
                 return HealthCheckResult.Healthy("db connected and executed query successfully.");
             }
