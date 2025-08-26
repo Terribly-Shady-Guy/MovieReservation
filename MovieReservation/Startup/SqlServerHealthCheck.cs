@@ -29,7 +29,7 @@ namespace MovieReservation.Startup
 
                 _ = await command.ExecuteScalarAsync(cancellationToken);
 
-                return HealthCheckResult.Healthy("db connected and executed query successfully.");
+                return HealthCheckResult.Healthy("Db connected and executed query successfully.");
             }
             catch (SqlException ex) when (ex.Number == -2)
             {  
