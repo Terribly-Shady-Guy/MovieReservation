@@ -26,15 +26,6 @@ namespace MovieReservation.OpenApi.Transformers
 
             if (!hasBearerAuthData) return;
 
-            operation.Parameters ??= [];
-            operation.Parameters.Add(new OpenApiParameter
-            {
-                Name = HeaderNames.Authorization,
-                In = ParameterLocation.Header,
-                Required = true,
-                Schema = new OpenApiSchema { Type = "string" }
-            });
-
             operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {
                 Description = "User does not have required role or token is invalid."
