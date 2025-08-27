@@ -4,6 +4,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
+using MovieReservation.OpenApi.Transformers;
 using MovieReservation.Startup;
 using System.ComponentModel;
 
@@ -83,6 +84,7 @@ namespace MovieReservation.Controllers
         [EndpointSummary("Add new movie.")]
         [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
         [Consumes("multipart/form-data")]
+        [OperationTransformer<AddNewMovieTransformer>]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
         [HttpPost]
