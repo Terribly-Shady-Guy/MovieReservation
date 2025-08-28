@@ -8,6 +8,7 @@ namespace MovieReservation.OpenApi
 #if NET10_0_OR_GREATER
        [Obsolete("Please use Description property in ProducesResponseType instead")]
 #endif
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ProducesResponseTypeWithDescriptionAttribute : ProducesResponseTypeAttribute
     {
         public ProducesResponseTypeWithDescriptionAttribute(int statusCode) : base(statusCode)
@@ -37,6 +38,7 @@ namespace MovieReservation.OpenApi
 #if NET10_0_OR_GREATER
        [Obsolete("Please use Description property in ProducesResponseType instead")]
 #endif
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ProducesResponseTypeWithDescriptionAttribute<TResponseType> : ProducesResponseTypeWithDescriptionAttribute
     {
         public ProducesResponseTypeWithDescriptionAttribute(int statusCode) : base(typeof(TResponseType), statusCode)
