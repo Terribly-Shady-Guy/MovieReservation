@@ -3,6 +3,7 @@ using ApplicationLogic.ViewModels;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
+using System.Net.Mime;
 
 namespace MovieReservation.Controllers
 {
@@ -21,6 +22,7 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Get Images")]
         [EndpointDescription("Gets the image based on the provided file name in the url.")]
+        [Produces(MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png)]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The file was successfully located.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The file type is not supported.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status404NotFound, Description = "The file does not exist.")]
@@ -29,9 +31,9 @@ namespace MovieReservation.Controllers
         {
             var contentTypes = new Dictionary<string, string>
             {
-                [".jpg"] = "image/jpeg",
-                [".jpeg"] = "image/jpeg",
-                [".png"] = "image/png"
+                [".jpg"] = MediaTypeNames.Image.Jpeg,
+                [".jpeg"] = MediaTypeNames.Image.Jpeg,
+                [".png"] = MediaTypeNames.Image.Png
             };
 
             string? ext = Path.GetExtension(fileName);

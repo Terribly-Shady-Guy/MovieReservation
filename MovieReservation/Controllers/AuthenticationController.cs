@@ -7,6 +7,7 @@ using MovieReservation.OpenApi.Transformers;
 using ApplicationLogic.Services;
 using ApplicationLogic.ViewModels;
 using Asp.Versioning;
+using System.Net.Mime;
 
 namespace MovieReservation.Controllers
 {
@@ -28,7 +29,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status202Accepted, Description = "Authentication was successful, but 2fa is required.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status401Unauthorized, Description = "The user does not exist or password is incorrect.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status403Forbidden, Description = "The user account is locked.")]
-        [Produces("application/json")]
+        [Produces(MediaTypeNames.Application.Json)]
         [OperationTransformer<LoginEndpointTransformer>]
         [EndpointDescription("An endpoint for user login. This endpoint handles authentication using a jwt access token and a randomly generated refresh token.")]
         [HttpPost("Login")]
@@ -66,7 +67,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status401Unauthorized, Description = "The provided code is invalid or user doesn't exist.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status403Forbidden, Description = "The user account is locked.")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "Two factor authentication is successful.")]
-        [Produces("application/json")]
+        [Produces(MediaTypeNames.Application.Json)]
         [HttpPost("Two-Factor-Login")]
         public async Task<ActionResult<AuthenticationToken>> LoginWithTwoFactor(string twoFactorCode, string userId)
         {
@@ -94,7 +95,7 @@ namespace MovieReservation.Controllers
         [EndpointSummary("Refresh tokens")]
         [ProducesResponseTypeWithDescription<AuthenticationToken>(StatusCodes.Status200OK, Description = "The token was successfully refreshed.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status401Unauthorized, Description = "Refresh or access token is invalid")]
-        [Produces("application/json")]
+        [Produces(MediaTypeNames.Application.Json)]
         [EndpointDescription("An endpoint for refreshing the access token. This endpoint will validate the access token and matches refresh token to database login.")]
         [HttpPatch]
         public async Task<ActionResult<AuthenticationToken>> RefreshTokens([Description("An object containing the expired access token and valid refresh token.")] AuthenticationTokenRequestBody expiredToken)

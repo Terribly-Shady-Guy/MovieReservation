@@ -7,6 +7,7 @@ using MovieReservation.OpenApi;
 using MovieReservation.OpenApi.Transformers;
 using MovieReservation.Startup;
 using System.ComponentModel;
+using System.Net.Mime;
 
 namespace MovieReservation.Controllers
 {
@@ -31,7 +32,7 @@ namespace MovieReservation.Controllers
         [EndpointSummary("List movies")]
         [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by genre.")]
         [ProducesResponseTypeWithDescription<List<MovieListItem>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
-        [Produces("application/json")]
+        [Produces(MediaTypeNames.Application.Json)]
         [HttpGet]
         public async Task<ActionResult<List<MovieListItem>>> GetMovieList([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
         {
@@ -83,7 +84,7 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Add new movie.")]
         [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
-        [Consumes("multipart/form-data")]
+        [Consumes(MediaTypeNames.Multipart.FormData)]
         [OperationTransformer<AddNewMovieTransformer>]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]

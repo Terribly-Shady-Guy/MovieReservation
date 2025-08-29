@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 
 namespace ApplicationLogic.ValidationAttributes
 {
@@ -7,9 +8,9 @@ namespace ApplicationLogic.ValidationAttributes
     {
         private readonly Dictionary<string, string> _validTypes = new()
         {
-            [".jpg"] = "image/jpeg",
-            [".jpeg"] = "image/jpeg",
-            [".png"] = "image/png"
+            [".jpg"] = MediaTypeNames.Image.Jpeg,
+            [".jpeg"] = MediaTypeNames.Image.Jpeg,
+            [".png"] = MediaTypeNames.Image.Png
         };
 
         private const int _fileSizeLimitInMB = 10;
