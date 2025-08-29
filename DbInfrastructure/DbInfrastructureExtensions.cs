@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DbInfrastructure.DataSeeding;
+using DbInfrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -14,7 +16,7 @@ namespace DbInfrastructure
         /// <returns>The same service collection passed as a parameter</returns>
         public static IServiceCollection AddDbInfrastructure(this IServiceCollection services, string? connectionString)
         {
-            services.AddDbContext<MovieReservationDbContext>(options =>
+            services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
             {
                 options.UseSqlServer(connectionString, config =>
                 {
@@ -23,18 +25,28 @@ namespace DbInfrastructure
 
                 options.UseSeeding((context, _) =>
                 {
-                    var helper = new DataSeedingHelper(context);
-                    helper.AddRootUser();
-                    helper.AddEnums();
+                    var authHelper = new AuthenticationSeedingHelper(context);
+                    authHelper.Add();
+                    
+                    var reservationStatusHelper = new EnumSeedingHelper<ReservationStatus, ReservationStatusLookup>(context);
+                    reservationStatusHelper.Add();
+
+                    var theaterTypesHelper = new EnumSeedingHelper<TheaterType, TheaterTypeLookup>(context);
+                    theaterTypesHelper.Add();
 
                     context.SaveChanges();
                 });
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    var helper = new DataSeedingHelper(context);
-                    await helper.AddRootUserAsync(cancellationToken);
-                    await helper.AddEnumsAsync(cancellationToken);
+                    var authHelper = new AuthenticationSeedingHelper(context);
+                    await authHelper.AddAsync(cancellationToken);
+
+                    var reservationStatusHelper = new EnumSeedingHelper<ReservationStatus, ReservationStatusLookup>(context);
+                    await reservationStatusHelper.AddAsync(cancellationToken);
+
+                    var theaterTypeHelper = new EnumSeedingHelper<TheaterType, TheaterTypeLookup>(context);
+                    await theaterTypeHelper.AddAsync(cancellationToken);
 
                     await context.SaveChangesAsync(cancellationToken);
                 });

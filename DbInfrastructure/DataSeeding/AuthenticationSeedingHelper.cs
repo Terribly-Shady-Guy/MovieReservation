@@ -2,17 +2,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DbInfrastructure
+namespace DbInfrastructure.DataSeeding
 {
-    internal class DataSeedingHelper
+    internal class AuthenticationSeedingHelper : IDataSeedingHelper
     {
         private readonly IdentityRole[] _newRoles; 
         private readonly AppUser _seededAdmin;
-        private readonly ReservationStatusLookup[] _reservationStatuses;
-        private readonly TheaterTypeLookup[] _theaterTypes;
         private readonly DbContext _context;
 
-        public DataSeedingHelper(DbContext context)
+        public AuthenticationSeedingHelper(DbContext context)
         {
             _context = context;
 
@@ -39,17 +37,9 @@ namespace DbInfrastructure
             seededAdmin.PasswordHash = hasher.HashPassword(seededAdmin, "Admin246810@");
 
             _seededAdmin = seededAdmin;
-
-            _reservationStatuses = Enum.GetValues<ReservationStatus>()
-                .Select(status => new ReservationStatusLookup(status))
-                .ToArray();
-
-            _theaterTypes = Enum.GetValues<TheaterType>()
-                .Select(type => new TheaterTypeLookup(type))
-                .ToArray();
         }
 
-        public void AddRootUser()
+        public void Add()
         {
             var roles = _context.Set<IdentityRole>()
                    .ToList();
@@ -82,7 +72,7 @@ namespace DbInfrastructure
             }
         }
 
-        public async Task AddRootUserAsync(CancellationToken cancellationToken)
+        public async Task AddAsync(CancellationToken cancellationToken)
         {
             var roles = await _context.Set<IdentityRole>()
                     .ToListAsync(cancellationToken);
@@ -91,7 +81,7 @@ namespace DbInfrastructure
             {
                 if (!roles.Any(r => r.Name == role.Name))
                 {
-                    _context.Add(role);
+                    await _context.AddAsync(role, cancellationToken);
                 }
             }
 
@@ -110,59 +100,9 @@ namespace DbInfrastructure
                     UserId = _seededAdmin.Id
                 };
 
-                _context.Add(seededAdminRole);
-                _context.Add(_seededAdmin);
+                await _context.AddAsync(seededAdminRole, cancellationToken);
+                await _context.AddAsync(_seededAdmin, cancellationToken);
             }
         }
-
-        public void AddEnums()
-        {
-            var statuses = _context.Set<ReservationStatusLookup>()
-                   .ToList();
-
-            foreach (var status in _reservationStatuses)
-            {
-                if (!statuses.Any(s => s.Name == status.Name && s.Id == status.Id))
-                {
-                    _context.Add(status);
-                }
-            }
-
-            var types = _context.Set<TheaterTypeLookup>()
-                .ToList();
-
-            foreach (var type in _theaterTypes)
-            {
-                if (!types.Any(t => t.Name == type.Name && t.Id == type.Id))
-                {
-                    _context.Add(type);
-                }
-            }
-        }
-
-        public async Task AddEnumsAsync(CancellationToken cancellationToken)
-        {
-            var statuses = await _context.Set<ReservationStatusLookup>()
-                  .ToListAsync(cancellationToken);
-
-            foreach (var status in _reservationStatuses)
-            {
-                if (!statuses.Any(s => s.Name == status.Name && s.Id == status.Id))
-                {
-                    _context.Add(status);
-                }
-            }
-
-            var types = await _context.Set<TheaterTypeLookup>()
-                .ToListAsync(cancellationToken);
-
-            foreach (var type in _theaterTypes)
-            {
-                if (!types.Any(t => t.Name == type.Name && t.Id == type.Id))
-                {
-                    _context.Add(type);
-                }
-            }
-        }
-    }
+    } 
 }

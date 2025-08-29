@@ -3,13 +3,13 @@
     public abstract class EnumLookupBase<TEnum>
         where TEnum : struct, Enum
     {
-        protected EnumLookupBase(TEnum value)
+        public EnumLookupBase(TEnum value)
         {
             Id = value;
             Name = value.ToString();
         }
 
-        protected EnumLookupBase() { }
+        public EnumLookupBase() { }
 
         public TEnum Id { get; set; }
         public string Name { get; set; } = string.Empty;
