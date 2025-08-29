@@ -20,28 +20,27 @@ namespace DbInfrastructure.DataSeeding
 
         public void Add()
         {
-            var statuses = _context.Set<TLookup>()
+            var storedLookups = _context.Set<TLookup>()
                    .ToList();
 
-            foreach (var lookup in _lookups)
-            {
-                if (!statuses.Any(s => s.Name == lookup.Name))
-                {
-                    _context.Add(lookup);
-                }
-            }
+           AddEnums(storedLookups);
         }
 
         public async Task AddAsync(CancellationToken cancellationToken)
         {
-            var statuses = await _context.Set<TLookup>()
+            var storedLookups = await _context.Set<TLookup>()
                   .ToListAsync(cancellationToken);
 
+            AddEnums(storedLookups);
+        }
+
+        private void AddEnums(List<TLookup> storedLookups)
+        {
             foreach (var lookup in _lookups)
             {
-                if (!statuses.Any(s => s.Name == lookup.Name))
+                if (!storedLookups.Any(s => s.Id.Equals(lookup.Id)))
                 {
-                    await _context.AddAsync(lookup, cancellationToken);
+                    _context.Add(lookup);
                 }
             }
         }

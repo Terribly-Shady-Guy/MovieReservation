@@ -44,31 +44,14 @@ namespace DbInfrastructure.DataSeeding
             var roles = _context.Set<IdentityRole>()
                    .ToList();
 
-            foreach (var role in _newRoles)
-            {
-                if (!roles.Any(r => r.Name == role.Name))
-                {
-                    _context.Add(role);
-                }
-            }
+            AddRoles(roles);
 
             var user = _context.Set<AppUser>()
                 .FirstOrDefault(a => a.UserName == "root" && a.Email == "root@example.com");
 
             if (user is null)
             {
-                string adminRoleId = _newRoles.Where(r => r.Name == "SuperAdmin")
-                    .Select(r => r.Id)
-                    .First();
-
-                var seededAdminRole = new IdentityUserRole<string>
-                {
-                    RoleId = adminRoleId,
-                    UserId = _seededAdmin.Id
-                };
-
-                _context.Add(_seededAdmin);
-                _context.Add(seededAdminRole);
+                AddUser();
             }
         }
 
@@ -77,32 +60,42 @@ namespace DbInfrastructure.DataSeeding
             var roles = await _context.Set<IdentityRole>()
                     .ToListAsync(cancellationToken);
 
-            foreach (var role in _newRoles)
-            {
-                if (!roles.Any(r => r.Name == role.Name))
-                {
-                    await _context.AddAsync(role, cancellationToken);
-                }
-            }
+           AddRoles(roles);
 
             var user = await _context.Set<AppUser>()
                 .FirstOrDefaultAsync(a => a.UserName == "root" && a.Email == "root@example.com", cancellationToken: cancellationToken);
 
             if (user is null)
             {
-                string adminRoleId = _newRoles.Where(r => r.Name == "SuperAdmin")
+                AddUser();
+            }
+        }
+
+        private void AddRoles(List<IdentityRole> roles)
+        {
+            foreach (var role in _newRoles)
+            {
+                if (!roles.Any(r => r.Name == role.Name))
+                {
+                    _context.Add(role);
+                }
+            }
+        }
+
+        private void AddUser()
+        {
+            string adminRoleId = _newRoles.Where(r => r.Name == "SuperAdmin")
                     .Select(r => r.Id)
                     .First();
 
-                var seededAdminRole = new IdentityUserRole<string>
-                {
-                    RoleId = adminRoleId,
-                    UserId = _seededAdmin.Id
-                };
+            var seededAdminRole = new IdentityUserRole<string>
+            {
+                RoleId = adminRoleId,
+                UserId = _seededAdmin.Id
+            };
 
-                await _context.AddAsync(seededAdminRole, cancellationToken);
-                await _context.AddAsync(_seededAdmin, cancellationToken);
-            }
+            _context.Add(_seededAdmin);
+            _context.Add(seededAdminRole);
         }
     } 
 }
