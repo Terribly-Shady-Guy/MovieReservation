@@ -4,16 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DbInfrastructure.DataSeeding
 {
-    internal class AuthenticationSeedingHelper : IDataSeedingHelper
+    internal class AuthenticationDataSeeder : IDataSeeder
     {
         private readonly IdentityRole[] _newRoles; 
         private readonly AppUser _seededAdmin;
-        private readonly DbContext _context;
 
-        public AuthenticationSeedingHelper(DbContext context)
+        public AuthenticationDataSeeder()
         {
-            _context = context;
-
             _newRoles = [
                 new IdentityRole("User") { NormalizedName = "User".ToUpper() },
                 new IdentityRole("Admin") { NormalizedName = "Admin".ToUpper() },
@@ -39,50 +36,50 @@ namespace DbInfrastructure.DataSeeding
             _seededAdmin = seededAdmin;
         }
 
-        public void Add()
+        public void Add(DbContext context)
         {
-            var roles = _context.Set<IdentityRole>()
+            var roles = context.Set<IdentityRole>()
                    .ToList();
 
-            AddRoles(roles);
+            AddRoles(context, roles);
 
-            var user = _context.Set<AppUser>()
+            var user = context.Set<AppUser>()
                 .FirstOrDefault(a => a.UserName == "root" && a.Email == "root@example.com");
 
             if (user is null)
             {
-                AddUser();
+                AddUser(context);
             }
         }
 
-        public async Task AddAsync(CancellationToken cancellationToken)
+        public async Task AddAsync(DbContext context, CancellationToken cancellationToken)
         {
-            var roles = await _context.Set<IdentityRole>()
+            var roles = await context.Set<IdentityRole>()
                     .ToListAsync(cancellationToken);
 
-           AddRoles(roles);
+           AddRoles(context, roles);
 
-            var user = await _context.Set<AppUser>()
+            var user = await context.Set<AppUser>()
                 .FirstOrDefaultAsync(a => a.UserName == "root" && a.Email == "root@example.com", cancellationToken: cancellationToken);
 
             if (user is null)
             {
-                AddUser();
+                AddUser(context);
             }
         }
 
-        private void AddRoles(List<IdentityRole> roles)
+        private void AddRoles(DbContext context, List<IdentityRole> roles)
         {
             foreach (var role in _newRoles)
             {
                 if (!roles.Any(r => r.Name == role.Name))
                 {
-                    _context.Add(role);
+                    context.Add(role);
                 }
             }
         }
 
-        private void AddUser()
+        private void AddUser(DbContext context)
         {
             string adminRoleId = _newRoles.Where(r => r.Name == "SuperAdmin")
                     .Select(r => r.Id)
@@ -94,8 +91,8 @@ namespace DbInfrastructure.DataSeeding
                 UserId = _seededAdmin.Id
             };
 
-            _context.Add(_seededAdmin);
-            _context.Add(seededAdminRole);
+            context.Add(_seededAdmin);
+            context.Add(seededAdminRole);
         }
     } 
 }

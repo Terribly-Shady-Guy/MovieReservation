@@ -3,44 +3,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DbInfrastructure.DataSeeding
 {
-    internal class EnumSeedingHelper<TEnum, TLookup> : IDataSeedingHelper
+    internal class EnumDataSeeder<TEnum, TLookup> : IDataSeeder
         where TEnum : struct, Enum
         where TLookup : EnumLookupBase<TEnum>, new()
     {
         private readonly TLookup[] _lookups;
-        private readonly DbContext _context;
-        public EnumSeedingHelper(DbContext context)
+        public EnumDataSeeder()
         {
-            _context = context;
-
            _lookups = Enum.GetValues<TEnum>()
                 .Select(e => new TLookup { Id = e, Name = e.ToString()})
                 .ToArray();
         }
 
-        public void Add()
+        public void Add(DbContext context)
         {
-            var storedLookups = _context.Set<TLookup>()
+            var storedLookups = context.Set<TLookup>()
                    .ToList();
 
-           AddEnums(storedLookups);
+           AddEnums(storedLookups, context);
         }
 
-        public async Task AddAsync(CancellationToken cancellationToken)
+        public async Task AddAsync(DbContext context, CancellationToken cancellationToken)
         {
-            var storedLookups = await _context.Set<TLookup>()
+            var storedLookups = await context.Set<TLookup>()
                   .ToListAsync(cancellationToken);
 
-            AddEnums(storedLookups);
+            AddEnums(storedLookups, context);
         }
 
-        private void AddEnums(List<TLookup> storedLookups)
+        private void AddEnums(List<TLookup> storedLookups, DbContext context)
         {
             foreach (var lookup in _lookups)
             {
                 if (!storedLookups.Any(s => s.Id.Equals(lookup.Id)))
                 {
-                    _context.Add(lookup);
+                    context.Add(lookup);
                 }
             }
         }

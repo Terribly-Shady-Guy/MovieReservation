@@ -23,30 +23,28 @@ namespace DbInfrastructure
                     config.EnableRetryOnFailure();
                 });
 
+                IDataSeeder[] dataSeeders = [
+                        new AuthenticationDataSeeder(),
+                        new EnumDataSeeder<TheaterType, TheaterTypeLookup>(),
+                        new EnumDataSeeder<ReservationStatus, ReservationStatusLookup>()
+                    ];
+
                 options.UseSeeding((context, _) =>
                 {
-                    var authHelper = new AuthenticationSeedingHelper(context);
-                    authHelper.Add();
-                    
-                    var reservationStatusHelper = new EnumSeedingHelper<ReservationStatus, ReservationStatusLookup>(context);
-                    reservationStatusHelper.Add();
-
-                    var theaterTypesHelper = new EnumSeedingHelper<TheaterType, TheaterTypeLookup>(context);
-                    theaterTypesHelper.Add();
+                    foreach (var helper in dataSeeders)
+                    {
+                        helper.Add(context);
+                    }
 
                     context.SaveChanges();
                 });
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    var authHelper = new AuthenticationSeedingHelper(context);
-                    await authHelper.AddAsync(cancellationToken);
-
-                    var reservationStatusHelper = new EnumSeedingHelper<ReservationStatus, ReservationStatusLookup>(context);
-                    await reservationStatusHelper.AddAsync(cancellationToken);
-
-                    var theaterTypeHelper = new EnumSeedingHelper<TheaterType, TheaterTypeLookup>(context);
-                    await theaterTypeHelper.AddAsync(cancellationToken);
+                    foreach(var helper in dataSeeders)
+                    {
+                        await helper.AddAsync(context, cancellationToken);
+                    }
 
                     await context.SaveChangesAsync(cancellationToken);
                 });
