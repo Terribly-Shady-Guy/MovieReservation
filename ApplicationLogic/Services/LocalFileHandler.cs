@@ -47,7 +47,7 @@ namespace ApplicationLogic.Services
             try
             {
                 FileStream stream = File.OpenRead(filePath);
-                return FileHandlerResult.Succeeded(stream, fileName);
+                return FileHandlerResult.Succeeded(stream);
             }
             catch (Exception ex) when (ex is UnauthorizedAccessException || ex is IOException)
             {

@@ -4,25 +4,23 @@ namespace ApplicationLogic.ViewModels
 {
     public sealed class FileHandlerResult
     {
-        private FileHandlerResult(Stream? fileStream, string? fileName)
+        private FileHandlerResult(Stream? fileStream)
         {
             FileStream = fileStream;
-            FileName = fileName;
         }
 
-        [MemberNotNullWhen(true, nameof(FileStream), nameof(FileName))]
+        [MemberNotNullWhen(true, nameof(FileStream))]
         public bool IsSuccess => FileStream is not null;
         public Stream? FileStream { get; }
-        public string? FileName { get; }
 
-        public static FileHandlerResult Succeeded(Stream stream, string filename)
+        public static FileHandlerResult Succeeded(Stream stream)
         {
-            return new FileHandlerResult(stream, filename);
+            return new FileHandlerResult(stream);
         }
 
         public static FileHandlerResult Failed()
         {
-            return new FileHandlerResult(null, null);
+            return new FileHandlerResult(null);
         }
     }
 }
