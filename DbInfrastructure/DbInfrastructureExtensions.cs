@@ -21,7 +21,23 @@ namespace DbInfrastructure
                     config.EnableRetryOnFailure();
                 });
 
-                options.UseDataSeeding();
+                options.UseSeeding((context, _) =>
+                {
+                    var helper = new DataSeedingHelper(context);
+                    helper.AddRootUser();
+                    helper.AddEnums();
+
+                    context.SaveChanges();
+                });
+
+                options.UseAsyncSeeding(async (context, _, cancellationToken) =>
+                {
+                    var helper = new DataSeedingHelper(context);
+                    await helper.AddRootUserAsync(cancellationToken);
+                    await helper.AddEnumsAsync(cancellationToken);
+
+                    await context.SaveChangesAsync(cancellationToken);
+                });
             });
 
             return services;

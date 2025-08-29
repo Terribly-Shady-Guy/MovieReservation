@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbInfrastructure.Migrations
 {
     [DbContext(typeof(MovieReservationDbContext))]
-    [Migration("20250817183715_InitialCreate")]
+    [Migration("20250829213146_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
