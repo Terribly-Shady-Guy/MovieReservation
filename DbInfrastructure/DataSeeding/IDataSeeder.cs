@@ -2,7 +2,7 @@
 
 namespace DbInfrastructure.DataSeeding
 {
-    internal interface IDataSeeder
+    public interface IDataSeeder
     {
         public void Add(DbContext context);
         public Task AddAsync(DbContext context, CancellationToken cancellationToken);

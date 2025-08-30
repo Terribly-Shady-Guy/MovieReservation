@@ -20,14 +20,14 @@ namespace DbInfrastructure
             services.AddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
             services.AddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
 
-            services.AddScoped((serviceProvider) =>
+            services.AddScoped(static (serviceProvider) =>
             {
                 List<IDataSeeder> seeders = serviceProvider.GetServices<IDataSeeder>()
                     .ToList();
 
                 return new DataSeedingProvider(seeders);
             });
-
+            
             services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
             {
                 options.UseSqlServer(connectionString, config =>
@@ -38,23 +38,15 @@ namespace DbInfrastructure
                 options.UseSeeding((context, _) =>
                 {
                     var seedingProvider = serviceProvider.GetRequiredService<DataSeedingProvider>();
-
-                    foreach (IDataSeeder seeder in seedingProvider.DataSeeders)
-                    {
-                        seeder.Add(context);
-                    }
+                    seedingProvider.Seed(context);
 
                     context.SaveChanges();
                 });
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
-
-                    foreach (IDataSeeder seeder in provider.DataSeeders)
-                    {
-                        await seeder.AddAsync(context, cancellationToken);
-                    }
+                    var seedingProvider = serviceProvider.GetRequiredService<DataSeedingProvider>();
+                    await seedingProvider.SeedAsync(context, cancellationToken);
 
                     await context.SaveChangesAsync(cancellationToken);
                 });
