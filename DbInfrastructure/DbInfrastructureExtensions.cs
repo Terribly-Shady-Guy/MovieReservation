@@ -48,7 +48,7 @@ namespace DbInfrastructure
                 {
                     var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
 
-                    foreach (var helper in provider.DataSeeders)
+                    foreach (IDataSeeder helper in provider.DataSeeders)
                     {
                         helper.Add(context);
                     }
@@ -60,7 +60,7 @@ namespace DbInfrastructure
                 {
                     var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
 
-                    foreach (var helper in provider.DataSeeders)
+                    foreach (IDataSeeder helper in provider.DataSeeders)
                     {
                         await helper.AddAsync(context, cancellationToken);
                     }
