@@ -6,6 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DbInfrastructure
 {
+    internal class DataSeedingProvider
+    {
+        public DataSeedingProvider(List<IDataSeeder> seeders)
+        {
+            DataSeeders = seeders;
+        }
+
+        public IReadOnlyList<IDataSeeder> DataSeeders { get; }
+    }
+
     public static class DbInfrastructureExtensions
     {
         /// <summary>
@@ -16,6 +26,17 @@ namespace DbInfrastructure
         /// <returns>The same service collection passed as a parameter</returns>
         public static IServiceCollection AddDbInfrastructure(this IServiceCollection services, string? connectionString)
         {
+            services.AddScoped((serviceProvider) =>
+            {
+                List<IDataSeeder> seeders = [
+                        new AuthenticationDataSeeder(),
+                        new EnumDataSeeder<TheaterType, TheaterTypeLookup>(),
+                        new EnumDataSeeder<ReservationStatus, ReservationStatusLookup>()
+                    ];
+
+                return new DataSeedingProvider(seeders);
+            });
+
             services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
             {
                 options.UseSqlServer(connectionString, config =>
@@ -23,15 +44,11 @@ namespace DbInfrastructure
                     config.EnableRetryOnFailure();
                 });
 
-                IDataSeeder[] dataSeeders = [
-                        new AuthenticationDataSeeder(),
-                        new EnumDataSeeder<TheaterType, TheaterTypeLookup>(),
-                        new EnumDataSeeder<ReservationStatus, ReservationStatusLookup>()
-                    ];
-
                 options.UseSeeding((context, _) =>
                 {
-                    foreach (var helper in dataSeeders)
+                    var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
+
+                    foreach (var helper in provider.DataSeeders)
                     {
                         helper.Add(context);
                     }
@@ -41,7 +58,9 @@ namespace DbInfrastructure
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    foreach(var helper in dataSeeders)
+                    var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
+
+                    foreach (var helper in provider.DataSeeders)
                     {
                         await helper.AddAsync(context, cancellationToken);
                     }
