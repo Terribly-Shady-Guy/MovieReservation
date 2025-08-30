@@ -8,10 +8,11 @@ namespace DbInfrastructure.DataSeeding
         where TLookup : EnumLookupBase<TEnum>, new()
     {
         private readonly TLookup[] _lookups;
+
         public EnumDataSeeder()
         {
            _lookups = Enum.GetValues<TEnum>()
-                .Select(e => new TLookup { Id = e, Name = e.ToString()})
+                .Select(e => new TLookup { Id = e, Name = e.ToString() })
                 .ToArray();
         }
 

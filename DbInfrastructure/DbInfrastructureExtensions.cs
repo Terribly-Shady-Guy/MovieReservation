@@ -6,16 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DbInfrastructure
 {
-    internal class DataSeedingProvider
-    {
-        public DataSeedingProvider(List<IDataSeeder> seeders)
-        {
-            DataSeeders = seeders;
-        }
-
-        public IReadOnlyList<IDataSeeder> DataSeeders { get; }
-    }
-
     public static class DbInfrastructureExtensions
     {
         /// <summary>
@@ -37,7 +27,7 @@ namespace DbInfrastructure
                 return new DataSeedingProvider(seeders);
             });
 
-            services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
+            services.AddDbContext<MovieReservationDbContext>((services, options) =>
             {
                 options.UseSqlServer(connectionString, config =>
                 {
@@ -46,11 +36,11 @@ namespace DbInfrastructure
 
                 options.UseSeeding((context, _) =>
                 {
-                    var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
+                    var seedingProvider = services.GetRequiredService<DataSeedingProvider>();
 
-                    foreach (IDataSeeder helper in provider.DataSeeders)
+                    foreach (IDataSeeder seeder in seedingProvider.DataSeeders)
                     {
-                        helper.Add(context);
+                        seeder.Add(context);
                     }
 
                     context.SaveChanges();
@@ -58,11 +48,11 @@ namespace DbInfrastructure
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
+                    var provider = services.GetRequiredService<DataSeedingProvider>();
 
-                    foreach (IDataSeeder helper in provider.DataSeeders)
+                    foreach (IDataSeeder seeder in provider.DataSeeders)
                     {
-                        await helper.AddAsync(context, cancellationToken);
+                        await seeder.AddAsync(context, cancellationToken);
                     }
 
                     await context.SaveChangesAsync(cancellationToken);
