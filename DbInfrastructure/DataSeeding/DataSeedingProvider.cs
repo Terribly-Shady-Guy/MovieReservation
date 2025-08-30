@@ -1,8 +1,7 @@
-﻿using DbInfrastructure.DataSeeding;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 
-namespace DbInfrastructure
+namespace DbInfrastructure.DataSeeding
 {
     internal sealed class DataSeedingProvider : IDataSeedingProvider
     {

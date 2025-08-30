@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using DbInfrastructure.DataSeeding;
 
-namespace DbInfrastructure
+namespace DbInfrastructure.DataSeeding
 {
     /// <summary>
     /// Orchestrates the execution of provided <see cref="IDataSeeder"/> implementations, enabling modular data seeding.
