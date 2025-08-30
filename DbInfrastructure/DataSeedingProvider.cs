@@ -8,7 +8,7 @@ namespace DbInfrastructure
     {
         private readonly IReadOnlyList<IDataSeeder> _dataSeeders;
 
-        public DataSeedingProvider(List<IDataSeeder> seeders)
+        public DataSeedingProvider(IReadOnlyList<IDataSeeder> seeders)
         {
             _dataSeeders = seeders;
         }
