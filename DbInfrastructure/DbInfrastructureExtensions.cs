@@ -16,18 +16,19 @@ namespace DbInfrastructure
         /// <returns>The same service collection passed as a parameter</returns>
         public static IServiceCollection AddDbInfrastructure(this IServiceCollection services, string? connectionString)
         {
+            services.AddScoped<IDataSeeder, AuthenticationDataSeeder>();
+            services.AddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
+            services.AddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
+
             services.AddScoped((serviceProvider) =>
             {
-                List<IDataSeeder> seeders = [
-                        new AuthenticationDataSeeder(),
-                        new EnumDataSeeder<TheaterType, TheaterTypeLookup>(),
-                        new EnumDataSeeder<ReservationStatus, ReservationStatusLookup>()
-                    ];
+                List<IDataSeeder> seeders = serviceProvider.GetServices<IDataSeeder>()
+                    .ToList();
 
                 return new DataSeedingProvider(seeders);
             });
 
-            services.AddDbContext<MovieReservationDbContext>((services, options) =>
+            services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
             {
                 options.UseSqlServer(connectionString, config =>
                 {
@@ -36,7 +37,7 @@ namespace DbInfrastructure
 
                 options.UseSeeding((context, _) =>
                 {
-                    var seedingProvider = services.GetRequiredService<DataSeedingProvider>();
+                    var seedingProvider = serviceProvider.GetRequiredService<DataSeedingProvider>();
 
                     foreach (IDataSeeder seeder in seedingProvider.DataSeeders)
                     {
@@ -48,7 +49,7 @@ namespace DbInfrastructure
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    var provider = services.GetRequiredService<DataSeedingProvider>();
+                    var provider = serviceProvider.GetRequiredService<DataSeedingProvider>();
 
                     foreach (IDataSeeder seeder in provider.DataSeeders)
                     {
