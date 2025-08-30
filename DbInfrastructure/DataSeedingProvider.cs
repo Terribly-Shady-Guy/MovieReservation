@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DbInfrastructure
 {
-    internal class DataSeedingProvider
+    internal sealed class DataSeedingProvider : IDataSeedingProvider
     {
         private readonly IReadOnlyList<IDataSeeder> _dataSeeders;
 
@@ -21,10 +21,13 @@ namespace DbInfrastructure
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="OperationCanceledException"/>
         public async Task SeedAsync(DbContext context, CancellationToken cancellationToken)
         {
             foreach (IDataSeeder seeder in _dataSeeders)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 await seeder.AddAsync(context, cancellationToken);
             }
         }
