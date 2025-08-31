@@ -2,6 +2,7 @@
 using DbInfrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 
 namespace DbInfrastructure
@@ -22,9 +23,12 @@ namespace DbInfrastructure
 
             services.AddScoped<IDataSeedingProvider>(static (serviceProvider) =>
             {
+                ILogger<IDataSeedingProvider> logger = serviceProvider.GetRequiredService<ILogger<IDataSeedingProvider>>();
+
                 List<IDataSeeder> seeders = serviceProvider.GetServices<IDataSeeder>()
                     .ToList();
 
+                logger.LogInformation("Found {SeederCount} data seeders.", seeders.Count);
                 return new DataSeedingProvider(seeders);
             });
             
