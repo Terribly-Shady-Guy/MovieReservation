@@ -28,7 +28,6 @@ namespace Tests.Integration
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            
             builder.ConfigureServices((context, services) =>
             {
                 services.RemoveAll<IDataSeeder>();
