@@ -21,7 +21,7 @@ namespace Tests.Integration
             await executionStrategy.ExecuteAsync(async () =>
             {
                 await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
+                await context.Database.MigrateAsync();
             });
             
         }
