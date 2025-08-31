@@ -1,7 +1,9 @@
 ﻿using DbInfrastructure;
+using DbInfrastructure.DataSeeding;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -15,14 +17,21 @@ namespace Tests.Integration
             using IServiceScope scope = Services.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
 
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
+            IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
+            await executionStrategy.ExecuteAsync(async () =>
+            {
+                await context.Database.EnsureDeletedAsync();
+                await context.Database.EnsureCreatedAsync();
+            });
+            
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            
             builder.ConfigureServices((context, services) =>
             {
+                services.RemoveAll<IDataSeeder>();
                 services.RemoveAll<DbContextOptions<MovieReservationDbContext>>();
                 services.AddDbInfrastructure(context.Configuration.GetConnectionString("testing"));
             });
@@ -35,12 +44,16 @@ namespace Tests.Integration
             using IServiceScope scope = Services.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
 
-            await context.Database.EnsureDeletedAsync();
+            IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
+            await executionStrategy.ExecuteAsync(async () =>
+            {
+                await context.Database.EnsureDeletedAsync();
+            });
 
             await base.DisposeAsync();
         }
     }
 
-    [CollectionDefinition]
+    [CollectionDefinition("Integration")]
     public class WebApplicationFactoryCollectionFixture : ICollectionFixture<MovieReservationWebApplicationFactory>;
 }

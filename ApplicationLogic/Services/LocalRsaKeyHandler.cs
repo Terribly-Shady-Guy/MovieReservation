@@ -1,4 +1,5 @@
 ﻿using ApplicationLogic.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 
@@ -10,9 +11,9 @@ namespace ApplicationLogic.Services
         private readonly string _rsaPrivateKeyPath;
         private readonly string _rsaPublicKeyPath;
 
-        public LocalRsaKeyHandler()
+        public LocalRsaKeyHandler(IWebHostEnvironment environment)
         {
-            string rsaDirectoryPath = Path.Combine(Environment.CurrentDirectory, "..", "Rsa");
+            string rsaDirectoryPath = Path.Combine(environment.ContentRootPath, "..", "Rsa");
             rsaDirectoryPath = Path.GetFullPath(rsaDirectoryPath);
 
             _rsaDirectoryPath = rsaDirectoryPath;
