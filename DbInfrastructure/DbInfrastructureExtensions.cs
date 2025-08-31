@@ -18,9 +18,9 @@ namespace DbInfrastructure
         /// <returns>The same service collection passed as a parameter</returns>
         public static IServiceCollection AddDbInfrastructure(this IServiceCollection services, string? connectionString)
         {
-            services.TryAddScoped<IDataSeeder, AuthenticationDataSeeder>();
-            services.TryAddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
-            services.TryAddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
+            services.AddScoped<IDataSeeder, AuthenticationDataSeeder>();
+            services.AddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
+            services.AddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
 
             services.TryAddScoped<IDataSeedingProvider>(static (serviceProvider) =>
             {
