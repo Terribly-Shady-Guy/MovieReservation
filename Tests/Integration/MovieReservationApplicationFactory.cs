@@ -15,6 +15,7 @@ namespace Tests.Integration
             using IServiceScope scope = Services.CreateScope();
             using var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
 
+            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
         }
 
