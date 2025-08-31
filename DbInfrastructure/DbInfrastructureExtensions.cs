@@ -2,6 +2,7 @@
 using DbInfrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 
@@ -17,11 +18,11 @@ namespace DbInfrastructure
         /// <returns>The same service collection passed as a parameter</returns>
         public static IServiceCollection AddDbInfrastructure(this IServiceCollection services, string? connectionString)
         {
-            services.AddScoped<IDataSeeder, AuthenticationDataSeeder>();
-            services.AddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
-            services.AddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
+            services.TryAddScoped<IDataSeeder, AuthenticationDataSeeder>();
+            services.TryAddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
+            services.TryAddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
 
-            services.AddScoped<IDataSeedingProvider>(static (serviceProvider) =>
+            services.TryAddScoped<IDataSeedingProvider>(static (serviceProvider) =>
             {
                 ILogger<IDataSeedingProvider> logger = serviceProvider.GetRequiredService<ILogger<IDataSeedingProvider>>();
 
