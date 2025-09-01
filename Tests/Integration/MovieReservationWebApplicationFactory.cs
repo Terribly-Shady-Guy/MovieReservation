@@ -52,14 +52,13 @@ namespace Tests.Integration
 
         public override async ValueTask DisposeAsync()
         {
-            using IServiceScope scope = Services.CreateScope();
-            using var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
-
-            IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
-            await executionStrategy.ExecuteAsync(async () =>
+            using (IServiceScope scope = Services.CreateScope())
             {
-                await context.Database.EnsureDeletedAsync();
-            });
+                var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
+
+                IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
+                await executionStrategy.ExecuteAsync(async () => await context.Database.EnsureDeletedAsync());
+            }
 
             await base.DisposeAsync();
         }
