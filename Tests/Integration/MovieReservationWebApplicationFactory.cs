@@ -24,7 +24,6 @@ namespace Tests.Integration
                 await context.Database.EnsureDeletedAsync();
                 await context.Database.MigrateAsync();
             });
-            
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
