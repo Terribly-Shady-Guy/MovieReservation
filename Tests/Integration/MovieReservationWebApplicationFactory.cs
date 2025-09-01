@@ -30,6 +30,8 @@ namespace Tests.Integration
         {
             builder.ConfigureServices((context, services) =>
             {
+                services.AddTransient<IStartupFilter, TransactionIsolationMiddlewareInjector>();
+
                 services.RemoveAll<IDataSeeder>();
                 services.RemoveAll<DbContextOptions<MovieReservationDbContext>>();
                 services.AddDbInfrastructure(context.Configuration.GetConnectionString("testing"));
