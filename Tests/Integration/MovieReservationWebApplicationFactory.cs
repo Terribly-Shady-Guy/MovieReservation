@@ -28,7 +28,7 @@ namespace Tests.Integration
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration((context, config) =>
+            builder.ConfigureAppConfiguration((config) =>
             {
                 string testAppSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Testing.json");
                 config.AddJsonFile(testAppSettingsPath, false, false);
