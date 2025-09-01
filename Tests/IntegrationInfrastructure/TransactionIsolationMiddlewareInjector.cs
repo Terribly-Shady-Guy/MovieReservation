@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Tests.Integration
+namespace Tests.IntegrationInfrastructure
 {
     internal class TransactionIsolationMiddlewareInjector : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
         {
-            return (IApplicationBuilder app) =>
+            return (app) =>
             {
                 app.Use(static async (HttpContext context, RequestDelegate next) =>
                 {

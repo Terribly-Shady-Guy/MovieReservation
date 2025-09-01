@@ -1,6 +1,7 @@
 ﻿using ApplicationLogic.ViewModels;
 using System.Net;
 using System.Net.Http.Json;
+using Tests.IntegrationInfrastructure;
 
 namespace Tests.Integration
 {

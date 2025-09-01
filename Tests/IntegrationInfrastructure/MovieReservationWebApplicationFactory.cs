@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Tests.Integration
+namespace Tests.IntegrationInfrastructure
 {
     public class MovieReservationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
