@@ -16,7 +16,7 @@ namespace Tests.Integration
             {
                 app.Use(static async (HttpContext context, RequestDelegate next) =>
                 {
-                    using MovieReservationDbContext dbContext = context.RequestServices.GetRequiredService<MovieReservationDbContext>();
+                    MovieReservationDbContext dbContext = context.RequestServices.GetRequiredService<MovieReservationDbContext>();
 
                     IExecutionStrategy executionStrategy = dbContext.Database.CreateExecutionStrategy();
 

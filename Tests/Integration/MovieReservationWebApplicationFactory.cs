@@ -16,7 +16,7 @@ namespace Tests.Integration
         public async ValueTask InitializeAsync()
         {
             using IServiceScope scope = Services.CreateScope();
-            using var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
 
             IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
             await executionStrategy.ExecuteAsync(async () =>
@@ -34,7 +34,7 @@ namespace Tests.Integration
                 string testAppSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Testing.json");
                 config.AddJsonFile(testAppSettingsPath, false, false);
             });
-
+            
             builder.ConfigureServices((context, services) =>
             {
                 services.RemoveAll<IDataSeeder>();
