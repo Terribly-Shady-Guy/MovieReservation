@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,18 +18,15 @@ namespace Tests.Integration
                 {
                     using MovieReservationDbContext dbContext = context.RequestServices.GetRequiredService<MovieReservationDbContext>();
 
-                    using IDbContextTransaction transaction = dbContext.Database.BeginTransaction();
+                    IExecutionStrategy executionStrategy = dbContext.Database.CreateExecutionStrategy();
 
-                    try
+                    await executionStrategy.ExecuteAsync(async () =>
                     {
+                        using IDbContextTransaction transaction = dbContext.Database.BeginTransaction();
+
                         await next(context);
                         await transaction.RollbackAsync();
-                    }
-                    catch (Exception)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
+                    });
                 });
 
                 next(app);

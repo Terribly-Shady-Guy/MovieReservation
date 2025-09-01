@@ -2,6 +2,7 @@
 using DbInfrastructure.DataSeeding;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
@@ -28,13 +29,21 @@ namespace Tests.Integration
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddJsonFile(Path.Combine(AppContext.BaseDirectory, "appsettings.Testing.json"), false, false);
+            });
+
             builder.ConfigureServices((context, services) =>
             {
-                services.AddTransient<IStartupFilter, TransactionIsolationMiddlewareInjector>();
-
                 services.RemoveAll<IDataSeeder>();
                 services.RemoveAll<DbContextOptions<MovieReservationDbContext>>();
                 services.AddDbInfrastructure(context.Configuration.GetConnectionString("testing"));
+            });
+
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddTransient<IStartupFilter, TransactionIsolationMiddlewareInjector>();
             });
 
             builder.UseEnvironment("Development");

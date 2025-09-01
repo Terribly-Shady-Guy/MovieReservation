@@ -27,7 +27,7 @@ namespace Tests.Integration
                 Email = email,
                 Password = password
             };
-
+            
             HttpResponseMessage response = await client.PostAsJsonAsync("/api/v1/Authentication/Login", loginModel, TestContext.Current.CancellationToken);
 
             Assert.Equal(expectedStatus, response.StatusCode);
