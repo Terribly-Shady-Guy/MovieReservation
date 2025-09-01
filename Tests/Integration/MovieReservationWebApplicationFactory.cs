@@ -31,7 +31,8 @@ namespace Tests.Integration
         {
             builder.ConfigureAppConfiguration((context, config) =>
             {
-                config.AddJsonFile(Path.Combine(AppContext.BaseDirectory, "appsettings.Testing.json"), false, false);
+                string testAppSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Testing.json");
+                config.AddJsonFile(testAppSettingsPath, false, false);
             });
 
             builder.ConfigureServices((context, services) =>
