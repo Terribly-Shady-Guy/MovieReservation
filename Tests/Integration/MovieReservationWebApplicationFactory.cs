@@ -65,6 +65,6 @@ namespace Tests.Integration
         }
     }
 
-    [CollectionDefinition("Integration")]
+    [CollectionDefinition]
     public class WebApplicationFactoryCollectionFixture : ICollectionFixture<MovieReservationWebApplicationFactory>;
 }

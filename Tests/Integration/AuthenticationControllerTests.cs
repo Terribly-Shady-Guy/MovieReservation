@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace Tests.Integration
 {
-    [Collection("Integration")]
+    [Collection<WebApplicationFactoryCollectionFixture>]
     public class AuthenticationControllerTests
     {
         private readonly MovieReservationWebApplicationFactory _factory;
