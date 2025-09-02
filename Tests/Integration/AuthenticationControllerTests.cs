@@ -33,5 +33,46 @@ namespace Tests.Integration
 
             Assert.Equal(expectedStatus, response.StatusCode);
         }
+
+        [Fact]
+        public async Task Workflow_Authentication_Succeeds()
+        {
+            HttpClient client = _factory.CreateClient();
+            client.DefaultRequestHeaders.Add(IntegrationTestCustomHeaders.BypassTransactionIsolation, "true");
+
+            var loginModel = new UserLoginDto
+            {
+                Email = "root@example.com",
+                Password = "Admin246810@",
+            };
+
+            CancellationToken cancellationToken = TestContext.Current.CancellationToken;
+
+            HttpResponseMessage loginResponse = await client.PostAsJsonAsync("/api/v1/authentication/login", loginModel, cancellationToken);
+
+            Assert.Equal(HttpStatusCode.OK, loginResponse.StatusCode);
+
+            var token = await loginResponse.Content.ReadFromJsonAsync<AuthenticationToken>(cancellationToken);
+            Assert.NotNull(token);
+
+            var refreshBody = new AuthenticationTokenRequestBody
+            {
+                AccessToken = token.AccessToken,
+                RefreshToken = token.RefreshToken
+            };
+
+            HttpResponseMessage refreshResponse = await client.PatchAsJsonAsync("/api/v1/authentication", refreshBody, cancellationToken);
+            Assert.Equal(HttpStatusCode.OK, refreshResponse.StatusCode);
+
+            token = await refreshResponse.Content.ReadFromJsonAsync<AuthenticationToken>(cancellationToken);
+            Assert.NotNull(token);
+
+            var logoutRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/v1/authentication?refreshToken={token.RefreshToken}");
+
+            logoutRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token.AccessToken);
+
+            HttpResponseMessage logoutResponse = await client.SendAsync(logoutRequest, cancellationToken);
+            Assert.Equal(HttpStatusCode.NoContent, logoutResponse.StatusCode);
+        }
     }
 }
