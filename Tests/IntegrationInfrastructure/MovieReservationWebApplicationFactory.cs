@@ -1,4 +1,6 @@
-﻿using DbInfrastructure;
+﻿using ApplicationLogic.Interfaces;
+using ApplicationLogic.ViewModels;
+using DbInfrastructure;
 using DbInfrastructure.DataSeeding;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -8,22 +10,47 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 
 namespace Tests.IntegrationInfrastructure
 {
     public class MovieReservationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
+        private AuthenticationToken? _authToken;
+
         public async ValueTask InitializeAsync()
         {
-            using IServiceScope scope = Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
-
-            IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
-            await executionStrategy.ExecuteAsync(async () =>
+            using (IServiceScope scope = Services.CreateScope())
             {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.MigrateAsync();
-            });
+                var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
+
+                IExecutionStrategy executionStrategy = context.Database.CreateExecutionStrategy();
+                await executionStrategy.ExecuteAsync(async () =>
+                {
+                    await context.Database.EnsureDeletedAsync();
+                    await context.Database.MigrateAsync();
+                });
+            }
+
+            var provider = Services.GetRequiredService<IAuthenticationTokenProvider>();
+
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(new Claim(ClaimTypes.Role, "SuperAdmin"));
+
+            _authToken = await provider.GenerateTokens(identity);
+        }
+
+        protected override void ConfigureClient(HttpClient client)
+        {
+            base.ConfigureClient(client);
+
+            if (_authToken is null)
+            {
+                return;
+            }
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _authToken.AccessToken);
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
