@@ -36,14 +36,12 @@ namespace Tests.IntegrationInfrastructure
             
             builder.ConfigureServices((context, services) =>
             {
+                services.AddTransient<IStartupFilter, TransactionIsolationMiddlewareInjector>();
+                services.AddScoped<TransactionIsolationMiddleware>();
+
                 services.RemoveAll<IDataSeeder>();
                 services.RemoveAll<DbContextOptions<MovieReservationDbContext>>();
                 services.AddDbInfrastructure(context.Configuration.GetConnectionString("testing"));
-            });
-
-            builder.ConfigureTestServices(services =>
-            {
-                services.AddTransient<IStartupFilter, TransactionIsolationMiddlewareInjector>();
             });
 
             builder.UseEnvironment("Development");

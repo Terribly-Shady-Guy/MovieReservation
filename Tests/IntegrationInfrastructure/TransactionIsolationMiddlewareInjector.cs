@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests.IntegrationInfrastructure
 {
@@ -17,19 +16,24 @@ namespace Tests.IntegrationInfrastructure
                 app.UseMiddleware<TransactionIsolationMiddleware>();
                 next(app);
             };
-        }
+        }  
     }
 
-    public class TransactionIsolationMiddleware : IMiddleware
+    internal class TransactionIsolationMiddleware : IMiddleware
     {
+        private readonly MovieReservationDbContext _dbContext;
+
+        public TransactionIsolationMiddleware(MovieReservationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            MovieReservationDbContext dbContext = context.RequestServices.GetRequiredService<MovieReservationDbContext>();
-
-            IExecutionStrategy executionStrategy = dbContext.Database.CreateExecutionStrategy();
+            IExecutionStrategy executionStrategy = _dbContext.Database.CreateExecutionStrategy();
             await executionStrategy.ExecuteAsync(async () =>
             {
-                using IDbContextTransaction transaction = dbContext.Database.BeginTransaction();
+                using IDbContextTransaction transaction = _dbContext.Database.BeginTransaction();
 
                 await next(context);
 
@@ -40,6 +44,7 @@ namespace Tests.IntegrationInfrastructure
                 else
                 {
                     await transaction.RollbackAsync();
+
                 }
             });
         }
@@ -54,6 +59,6 @@ namespace Tests.IntegrationInfrastructure
 
     internal static class IntegrationTestCustomHeaders
     {
-        public const string BypassTransactionIsolation = "X-Transaction-Bypass";
+        public const string BypassTransactionIsolation = "X-Test-Isolation-Bypass";
     }
 }
