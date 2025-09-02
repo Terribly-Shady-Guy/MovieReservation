@@ -14,23 +14,46 @@ namespace Tests.IntegrationInfrastructure
         {
             return (app) =>
             {
-                app.Use(static async (HttpContext context, RequestDelegate next) =>
-                {
-                    MovieReservationDbContext dbContext = context.RequestServices.GetRequiredService<MovieReservationDbContext>();
-
-                    IExecutionStrategy executionStrategy = dbContext.Database.CreateExecutionStrategy();
-
-                    await executionStrategy.ExecuteAsync(async () =>
-                    {
-                        using IDbContextTransaction transaction = dbContext.Database.BeginTransaction();
-
-                        await next(context);
-                        await transaction.RollbackAsync();
-                    });
-                });
-
+                app.UseMiddleware<TransactionIsolationMiddleware>();
                 next(app);
             };
         }
+    }
+
+    public class TransactionIsolationMiddleware : IMiddleware
+    {
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        {
+            MovieReservationDbContext dbContext = context.RequestServices.GetRequiredService<MovieReservationDbContext>();
+
+            IExecutionStrategy executionStrategy = dbContext.Database.CreateExecutionStrategy();
+            await executionStrategy.ExecuteAsync(async () =>
+            {
+                using IDbContextTransaction transaction = dbContext.Database.BeginTransaction();
+
+                await next(context);
+
+                if (ShouldBypassTransactionIsolation(context))
+                {
+                    await transaction.CommitAsync();
+                }
+                else
+                {
+                    await transaction.RollbackAsync();
+                }
+            });
+        }
+
+        private static bool ShouldBypassTransactionIsolation(HttpContext context)
+        {
+            return context.Request.Headers.TryGetValue(IntegrationTestCustomHeaders.BypassTransactionIsolation, out var value)
+               && bool.TryParse(value, out bool result)
+               && result;
+        }
+    }
+
+    internal static class IntegrationTestCustomHeaders
+    {
+        public const string BypassTransactionIsolation = "X-Transaction-Bypass";
     }
 }
