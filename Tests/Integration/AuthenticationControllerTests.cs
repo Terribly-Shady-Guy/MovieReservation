@@ -6,13 +6,18 @@ using Tests.IntegrationInfrastructure;
 namespace Tests.Integration
 {
     [Collection<WebApplicationFactoryCollectionFixture>]
-    public class AuthenticationControllerTests
+    public class AuthenticationControllerTests : IAsyncDisposable
     {
         private readonly MovieReservationWebApplicationFactory _factory;
 
         public AuthenticationControllerTests(MovieReservationWebApplicationFactory factory)
         {
             _factory = factory;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await _factory.ResetDb(TestContext.Current.CancellationToken);
         }
 
         [Theory]
@@ -38,7 +43,6 @@ namespace Tests.Integration
         public async Task Workflow_Authentication_Succeeds()
         {
             HttpClient client = _factory.CreateClient();
-            client.DefaultRequestHeaders.Add(IntegrationTestCustomHeaders.BypassTransactionIsolation, "true");
 
             var loginModel = new UserLoginDto
             {

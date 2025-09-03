@@ -35,10 +35,7 @@ namespace DbInfrastructure
             
             services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
             {
-                options.UseSqlServer(connectionString, config =>
-                {
-                    config.EnableRetryOnFailure();
-                });
+                options.UseSqlServer(connectionString);
 
                 options.UseSeeding((context, _) =>
                 {
