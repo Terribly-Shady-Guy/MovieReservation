@@ -3,7 +3,7 @@
 
 namespace DbInfrastructure.DataSeeding
 {
-    internal sealed class DataSeedingProvider : IDataSeedingProvider
+    public sealed class DataSeedingProvider : IDataSeedingProvider
     {
         private readonly IReadOnlyList<IDataSeeder> _dataSeeders;
 
