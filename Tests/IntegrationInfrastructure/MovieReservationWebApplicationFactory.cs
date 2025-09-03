@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Text;
 
 namespace Tests.IntegrationInfrastructure
 {
@@ -44,7 +43,7 @@ namespace Tests.IntegrationInfrastructure
                 services.AddDbInfrastructure(context.Configuration.GetConnectionString("testing"));
             });
 
-            builder.UseEnvironment("Development");
+            builder.UseEnvironment("Testing");
         }
 
         public override async ValueTask DisposeAsync()
