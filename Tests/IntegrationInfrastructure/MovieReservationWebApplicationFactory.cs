@@ -1,5 +1,6 @@
 ﻿using DbInfrastructure;
 using DbInfrastructure.DataSeeding;
+using DbInfrastructure.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Respawn;
+using Respawn.Graph;
 
 namespace Tests.IntegrationInfrastructure
 {
@@ -34,10 +36,12 @@ namespace Tests.IntegrationInfrastructure
                 WithReseed = true,
                 DbAdapter = DbAdapter.SqlServer,
                 TablesToIgnore = [
-                    "__EFMigrationsHistory",
-                    "ReservationStatus",
-                    "TheaterTypes"
-                    ]
+                    ..context.Model.GetEntityTypes()
+                                   .Where(et => et.ClrType.BaseType == typeof(EnumLookupBase<>))
+                                   .Select(et => new Table(et.GetTableName())), 
+                    "__EFMigrationsHistory"
+                ]
+                
             });
         }
 
