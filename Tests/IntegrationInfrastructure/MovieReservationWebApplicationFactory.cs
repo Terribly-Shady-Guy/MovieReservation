@@ -37,7 +37,7 @@ namespace Tests.IntegrationInfrastructure
             });
         }
 
-        public async Task ResetDb(CancellationToken token)
+        public async ValueTask ResetDb(CancellationToken token)
         {
             if (_respawner == null) 
             {
