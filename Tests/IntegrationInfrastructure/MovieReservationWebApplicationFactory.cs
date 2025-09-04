@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Respawn;
-using Respawn.Graph;
 
 namespace Tests.IntegrationInfrastructure
 {
