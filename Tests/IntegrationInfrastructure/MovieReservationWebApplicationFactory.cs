@@ -1,6 +1,5 @@
 ﻿using DbInfrastructure;
 using DbInfrastructure.DataSeeding;
-using DbInfrastructure.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +30,9 @@ namespace Tests.IntegrationInfrastructure
             }
 
             var tablesToIgnore = context.Model.GetEntityTypes()
-                .Where(et => et.ClrType.BaseType is not null
-                                && et.ClrType.BaseType.IsGenericType
-                                && et.ClrType.BaseType.GetGenericTypeDefinition() == typeof(EnumLookupBase<>))
+                .Where(et => (bool)(et.FindAnnotation("Test:DoNotReset")?.Value ?? false))
                 .Select(et => et.GetTableName())
                 .OfType<string>();
-
 
             _respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
             {

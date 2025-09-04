@@ -9,6 +9,8 @@ namespace DbInfrastructure.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<ReservationStatusLookup> builder)
         {
+            builder.HasAnnotation("Test:DoNotReset", true);
+
             builder.HasKey(e => e.Id)
                 .HasName("PK_ReservationStatus");
 
@@ -35,6 +37,8 @@ namespace DbInfrastructure.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<TheaterTypeLookup> builder)
         {
+            builder.HasAnnotation("Test:DoNotReset", true);
+
             builder.HasKey(e => e.Id)
                 .HasName("PK_TheaterType");
 
