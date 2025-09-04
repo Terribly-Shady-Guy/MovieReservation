@@ -9,6 +9,7 @@ namespace Tests.Integration
     public class AuthenticationControllerTests : IAsyncDisposable
     {
         private readonly MovieReservationWebApplicationFactory _factory;
+        private readonly CancellationToken _token = TestContext.Current.CancellationToken;
 
         public AuthenticationControllerTests(MovieReservationWebApplicationFactory factory)
         {
@@ -17,7 +18,7 @@ namespace Tests.Integration
 
         public async ValueTask DisposeAsync()
         {
-            await _factory.ResetDb(TestContext.Current.CancellationToken);
+            await _factory.ResetDb(_token);
         }
 
         [Theory]
@@ -34,7 +35,7 @@ namespace Tests.Integration
                 Password = password
             };
             
-            HttpResponseMessage response = await client.PostAsJsonAsync("/api/v1/Authentication/Login", loginModel, TestContext.Current.CancellationToken);
+            HttpResponseMessage response = await client.PostAsJsonAsync("/api/v1/Authentication/Login", loginModel, _token);
 
             Assert.Equal(expectedStatus, response.StatusCode);
         }
@@ -50,13 +51,11 @@ namespace Tests.Integration
                 Password = "Admin246810@",
             };
 
-            CancellationToken cancellationToken = TestContext.Current.CancellationToken;
-
-            HttpResponseMessage loginResponse = await client.PostAsJsonAsync("/api/v1/authentication/login", loginModel, cancellationToken);
+            HttpResponseMessage loginResponse = await client.PostAsJsonAsync("/api/v1/authentication/login", loginModel, _token);
 
             Assert.Equal(HttpStatusCode.OK, loginResponse.StatusCode);
 
-            var token = await loginResponse.Content.ReadFromJsonAsync<AuthenticationToken>(cancellationToken);
+            var token = await loginResponse.Content.ReadFromJsonAsync<AuthenticationToken>(_token);
             Assert.NotNull(token);
 
             var refreshBody = new AuthenticationTokenRequestBody
@@ -65,17 +64,17 @@ namespace Tests.Integration
                 RefreshToken = token.RefreshToken
             };
 
-            HttpResponseMessage refreshResponse = await client.PatchAsJsonAsync("/api/v1/authentication", refreshBody, cancellationToken);
+            HttpResponseMessage refreshResponse = await client.PatchAsJsonAsync("/api/v1/authentication", refreshBody, _token);
             Assert.Equal(HttpStatusCode.OK, refreshResponse.StatusCode);
 
-            token = await refreshResponse.Content.ReadFromJsonAsync<AuthenticationToken>(cancellationToken);
+            token = await refreshResponse.Content.ReadFromJsonAsync<AuthenticationToken>(_token);
             Assert.NotNull(token);
 
             var logoutRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/v1/authentication?refreshToken={token.RefreshToken}");
 
             logoutRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token.AccessToken);
 
-            HttpResponseMessage logoutResponse = await client.SendAsync(logoutRequest, cancellationToken);
+            HttpResponseMessage logoutResponse = await client.SendAsync(logoutRequest, _token);
             Assert.Equal(HttpStatusCode.NoContent, logoutResponse.StatusCode);
         }
     }
