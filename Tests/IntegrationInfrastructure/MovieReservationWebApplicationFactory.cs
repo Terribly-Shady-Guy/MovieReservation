@@ -34,10 +34,10 @@ namespace Tests.IntegrationInfrastructure
                 WithReseed = true,
                 DbAdapter = DbAdapter.SqlServer,
                 TablesToIgnore = [
-               "__EFMigrationsHistory",
+                    "__EFMigrationsHistory",
                     "ReservationStatus",
                     "TheaterTypes"
-               ]
+                    ]
             });
         }
 
