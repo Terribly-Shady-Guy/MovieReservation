@@ -30,7 +30,7 @@ namespace Tests.IntegrationInfrastructure
             }
 
             var tablesToIgnore = context.Model.GetEntityTypes()
-                .Where(et => (bool)(et.FindAnnotation("Test:DoNotReset")?.Value ?? false))
+                .Where(et => (bool)(et.FindAnnotation(CustomAnnotations.TestingDoNotReset)?.Value ?? false))
                 .Select(et => et.GetTableName())
                 .OfType<string>();
 
@@ -38,10 +38,7 @@ namespace Tests.IntegrationInfrastructure
             {
                 WithReseed = true,
                 DbAdapter = DbAdapter.SqlServer,
-                TablesToIgnore = [
-                    ..tablesToIgnore,
-                    "__EFMigrationsHistory"
-                    ],
+                TablesToIgnore = [..tablesToIgnore, "__EFMigrationsHistory"],
             });
         }
 
