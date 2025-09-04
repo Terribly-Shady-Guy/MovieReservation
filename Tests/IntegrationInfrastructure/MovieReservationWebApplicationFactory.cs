@@ -13,7 +13,6 @@ namespace Tests.IntegrationInfrastructure
     public class MovieReservationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private Respawner? _respawner;
-        private string _connectionString = string.Empty;
 
         public async ValueTask InitializeAsync()
         {
@@ -23,17 +22,22 @@ namespace Tests.IntegrationInfrastructure
             await context.Database.EnsureDeletedAsync();
             await context.Database.MigrateAsync();
 
-            _connectionString = context.Database.GetConnectionString() ?? throw new InvalidOperationException("The connection string is null.");
+            var connection = context.Database.GetDbConnection();
 
-            _respawner = await Respawner.CreateAsync(_connectionString, new RespawnerOptions
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            _respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
             {
                 WithReseed = true,
                 DbAdapter = DbAdapter.SqlServer,
                 TablesToIgnore = [
-                    "__EFMigrationsHistory",
+               "__EFMigrationsHistory",
                     "ReservationStatus",
                     "TheaterTypes"
-                    ]
+               ]
             });
         }
 
@@ -47,7 +51,14 @@ namespace Tests.IntegrationInfrastructure
             using IServiceScope scope = Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<MovieReservationDbContext>();
 
-            await _respawner.ResetAsync(_connectionString);
+            var connection = context.Database.GetDbConnection();
+
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                await connection.OpenAsync();
+            }
+
+            await _respawner.ResetAsync(connection);
 
             var seedingProvider = scope.ServiceProvider.GetRequiredService<IDataSeedingProvider>();
             await seedingProvider.SeedAsync(context, token);
