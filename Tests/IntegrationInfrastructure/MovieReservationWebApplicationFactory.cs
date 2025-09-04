@@ -55,7 +55,7 @@ namespace Tests.IntegrationInfrastructure
 
             if (connection.State != System.Data.ConnectionState.Open)
             {
-                await connection.OpenAsync();
+                await connection.OpenAsync(token);
             }
 
             await _respawner.ResetAsync(connection);
