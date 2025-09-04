@@ -5,21 +5,12 @@ using Tests.IntegrationInfrastructure;
 
 namespace Tests.Integration
 {
-    [Collection<WebApplicationFactoryCollectionFixture>]
-    public class AuthenticationControllerTests : IAsyncDisposable
+    public class AuthenticationControllerTests : IntegrationTestBase
     {
-        private readonly MovieReservationWebApplicationFactory _factory;
         private readonly CancellationToken _token = TestContext.Current.CancellationToken;
 
-        public AuthenticationControllerTests(MovieReservationWebApplicationFactory factory)
-        {
-            _factory = factory;
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await _factory.ResetDb(_token);
-        }
+        public AuthenticationControllerTests(MovieReservationWebApplicationFactory factory) : base(factory)
+        { }
 
         [Theory]
         [InlineData("root@example.com", "Admin246810@", HttpStatusCode.OK, TestDisplayName = "Successful login")]
