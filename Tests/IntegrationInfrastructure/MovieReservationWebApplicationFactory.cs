@@ -31,17 +31,22 @@ namespace Tests.IntegrationInfrastructure
                 await connection.OpenAsync();
             }
 
+            var tablesToIgnore = context.Model.GetEntityTypes()
+                .Where(et => et.ClrType.BaseType is not null
+                                && et.ClrType.BaseType.IsGenericType
+                                && et.ClrType.BaseType.GetGenericTypeDefinition() == typeof(EnumLookupBase<>))
+                .Select(et => et.GetTableName())
+                .OfType<string>();
+
+
             _respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
             {
                 WithReseed = true,
                 DbAdapter = DbAdapter.SqlServer,
                 TablesToIgnore = [
-                    ..context.Model.GetEntityTypes()
-                                   .Where(et => et.ClrType.BaseType == typeof(EnumLookupBase<>))
-                                   .Select(et => new Table(et.GetTableName())), 
+                    ..tablesToIgnore,
                     "__EFMigrationsHistory"
-                ]
-                
+                    ],
             });
         }
 
