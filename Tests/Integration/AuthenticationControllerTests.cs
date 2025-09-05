@@ -32,7 +32,7 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task Workflow_Authentication_Succeeds()
+        public async Task Workflow_AuthenticationLifecycle_Succeeds()
         {
             HttpClient client = _factory.CreateClient();
 
