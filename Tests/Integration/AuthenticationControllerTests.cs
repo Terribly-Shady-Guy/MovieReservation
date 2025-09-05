@@ -19,7 +19,7 @@ namespace Tests.Integration
         [InlineData("notanemail", "ValidPassword1@", HttpStatusCode.BadRequest, TestDisplayName = "Failed with invalid email string")]
         public async Task Post_LoginHandler_ReturnsExpectedStatus(string email, string password, HttpStatusCode expectedStatus)
         {
-            HttpClient client = _factory.CreateClient();
+            HttpClient client = Factory.CreateClient();
             var loginModel = new UserLoginDto
             {
                 Email = email,
@@ -34,7 +34,7 @@ namespace Tests.Integration
         [Fact]
         public async Task Workflow_AuthenticationLifecycle_Succeeds()
         {
-            HttpClient client = _factory.CreateClient();
+            HttpClient client = Factory.CreateClient();
 
             var loginModel = new UserLoginDto
             {

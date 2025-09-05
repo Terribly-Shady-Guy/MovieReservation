@@ -3,16 +3,16 @@
     [Collection<WebApplicationFactoryCollectionFixture>]
     public abstract class IntegrationTestBase : IAsyncDisposable
     {
-        protected readonly MovieReservationWebApplicationFactory _factory;
+        protected MovieReservationWebApplicationFactory Factory { get; }
 
         public IntegrationTestBase(MovieReservationWebApplicationFactory factory)
         {
-            _factory = factory;
+            Factory = factory;
         }
 
         public virtual async ValueTask DisposeAsync()
         {
-            await _factory.ResetDb(TestContext.Current.CancellationToken);
+            await Factory.ResetDb(TestContext.Current.CancellationToken);
         }
     }
 }
