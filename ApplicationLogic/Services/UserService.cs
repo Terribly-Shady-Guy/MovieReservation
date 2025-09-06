@@ -31,11 +31,16 @@ namespace ApplicationLogic.Services
             var result = await _userManager.CreateAsync(user, newUser.Password);
             if (!result.Succeeded)
             {
+                await transaction.RollbackAsync();
                 return null;
             }
 
             result = await _userManager.AddToRoleAsync(user, Roles.User);
-            if (!result.Succeeded) { return null; }
+            if (!result.Succeeded) 
+            { 
+                await transaction.RollbackAsync();
+                return null; 
+            }
 
             await transaction.CommitAsync();
 
