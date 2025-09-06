@@ -34,7 +34,7 @@ namespace ApplicationLogic.Services
                 return null;
             }
 
-            result = await _userManager.AddToRoleAsync(user, "User");
+            result = await _userManager.AddToRoleAsync(user, Roles.User);
             if (!result.Succeeded) { return null; }
 
             await transaction.CommitAsync();
@@ -64,13 +64,13 @@ namespace ApplicationLogic.Services
                 return false;
             }
 
-            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            if (await _userManager.IsInRoleAsync(user, Roles.Admin))
             {
                 return true;
             }
 
-            await _userManager.RemoveFromRoleAsync(user, "User");
-            IdentityResult result = await _userManager.AddToRoleAsync(user, "Admin");
+            await _userManager.RemoveFromRoleAsync(user, Roles.User);
+            IdentityResult result = await _userManager.AddToRoleAsync(user, Roles.Admin);
 
             return result.Succeeded;
         }

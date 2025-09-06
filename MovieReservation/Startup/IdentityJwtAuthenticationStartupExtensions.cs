@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using ApplicationLogic.Services;
 using ApplicationLogic.Interfaces;
+using ApplicationLogic;
 
 namespace MovieReservation.Startup
 {
@@ -52,7 +53,7 @@ namespace MovieReservation.Startup
                 .AddJwtBearer();
 
             services.AddAuthorizationBuilder()
-                .AddPolicy(RegisteredAuthorizationPolicyNames.IsAdmin, policy => policy.RequireRole("Admin", "SuperAdmin"));
+                .AddPolicy(RegisteredAuthorizationPolicyNames.IsAdmin, policy => policy.RequireRole(Roles.Admin, Roles.SuperAdmin));
             
             services.AddIdentityCore<AppUser>(options =>
             {
