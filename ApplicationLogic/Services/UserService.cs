@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using DbInfrastructure.Models;
 using ApplicationLogic.ViewModels;
+using DbInfrastructure;
 
 namespace ApplicationLogic.Services
 {
     public class UserService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly MovieReservationDbContext _dbContext;
 
-        public UserService(UserManager<AppUser> userManager)
+        public UserService(UserManager<AppUser> userManager, MovieReservationDbContext dbContext)
         {
             _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         public async Task<string?> AddNewUserAsync(NewUserDto newUser)
@@ -23,6 +26,8 @@ namespace ApplicationLogic.Services
                 UserName = newUser.Username,
             };
 
+            using var transaction = _dbContext.Database.BeginTransaction();
+
             var result = await _userManager.CreateAsync(user, newUser.Password);
             if (!result.Succeeded)
             {
@@ -31,6 +36,8 @@ namespace ApplicationLogic.Services
 
             result = await _userManager.AddToRoleAsync(user, "User");
             if (!result.Succeeded) { return null; }
+
+            await transaction.CommitAsync();
 
             return user.Id;
         }
