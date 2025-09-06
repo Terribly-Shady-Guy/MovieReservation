@@ -26,7 +26,7 @@ namespace ApplicationLogic.Services
                 UserName = newUser.Username,
             };
 
-            using var transaction = _dbContext.Database.BeginTransaction();
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             var result = await _userManager.CreateAsync(user, newUser.Password);
             if (!result.Succeeded)
@@ -41,7 +41,7 @@ namespace ApplicationLogic.Services
                 await transaction.RollbackAsync();
                 return null; 
             }
-
+            
             await transaction.CommitAsync();
 
             return user.Id;
