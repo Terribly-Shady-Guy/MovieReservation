@@ -8,12 +8,14 @@ namespace ApplicationLogic.Services
     public class UserService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly MovieReservationDbContext _dbContext;
 
-        public UserService(UserManager<AppUser> userManager, MovieReservationDbContext dbContext)
+        public UserService(UserManager<AppUser> userManager, MovieReservationDbContext dbContext, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _dbContext = dbContext;
+            _roleManager = roleManager;
         }
 
         public async Task<Result<string>> AddNewUserAsync(NewUserDto newUser)
@@ -35,13 +37,19 @@ namespace ApplicationLogic.Services
                 return Result<string>.Fail("Could not create user.");
             }
 
-            result = await _userManager.AddToRoleAsync(user, Roles.User);
-            if (!result.Succeeded) 
-            { 
+            if (!await _roleManager.RoleExistsAsync(Roles.User))
+            {
                 await transaction.RollbackAsync();
-                return Result<string>.Fail("Could not add user to role \"User\""); 
+                return Result<string>.Fail($"Could not find \"{Roles.User}\"");
             }
-            
+
+            result = await _userManager.AddToRoleAsync(user, Roles.User);
+            if (!result.Succeeded)
+            {
+                await transaction.RollbackAsync();
+                return Result<string>.Fail($"Could not add user to role \"{Roles.User}\"");
+            }
+
             await transaction.CommitAsync();
 
             return Result<string>.Success(user.Id);
