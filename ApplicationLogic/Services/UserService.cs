@@ -82,14 +82,34 @@ namespace ApplicationLogic.Services
                 return Result.Success();
             }
 
-            await _userManager.RemoveFromRoleAsync(user, Roles.User);
-            IdentityResult result = await _userManager.AddToRoleAsync(user, Roles.Admin);
-
-            if (!result.Succeeded)
+            if (!await _roleManager.RoleExistsAsync(Roles.User))
             {
-                return Result.Fail("Could not assign Admin role to user.");
+                return Result.Fail($"The role {Roles.User} does not exist.");
             }
 
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+            IdentityResult result = await _userManager.RemoveFromRoleAsync(user, Roles.User);
+            if (!result.Succeeded)
+            {
+                await transaction.RollbackAsync();
+                return Result.Fail("Could not remove user's role.");
+            }
+
+            if (!await _roleManager.RoleExistsAsync(Roles.Admin))
+            {
+                await transaction.RollbackAsync();
+                return Result.Fail($"The role {Roles.Admin} does not exist.");
+            }
+
+            result = await _userManager.AddToRoleAsync(user, Roles.Admin);
+            if (!result.Succeeded)
+            {
+                await transaction.RollbackAsync();
+                return Result.Fail($"Could not add {Roles.Admin} to this user.");
+            }
+
+            await transaction.CommitAsync();
             return Result.Success();
         }
     }
