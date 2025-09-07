@@ -6,6 +6,6 @@ namespace ApplicationLogic.Interfaces
     {
         Task CreateFile(IFormFile file, string fileName);
         void DeleteFile(string fileName);
-        FileHandlerResult GetFile(string fileName);
+        Result<Stream> GetFile(string fileName);
     }
 }

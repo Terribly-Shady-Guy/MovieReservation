@@ -16,7 +16,7 @@ namespace ApplicationLogic.Services
             _dbContext = dbContext;
         }
 
-        public async Task<string?> AddNewUserAsync(NewUserDto newUser)
+        public async Task<Result<string>> AddNewUserAsync(NewUserDto newUser)
         {
             var user = new AppUser()
             {
@@ -32,19 +32,19 @@ namespace ApplicationLogic.Services
             if (!result.Succeeded)
             {
                 await transaction.RollbackAsync();
-                return null;
+                return Result<string>.Fail("Could not create user.");
             }
 
             result = await _userManager.AddToRoleAsync(user, Roles.User);
             if (!result.Succeeded) 
             { 
                 await transaction.RollbackAsync();
-                return null; 
+                return Result<string>.Fail("Could not add user to role \"User\""); 
             }
             
             await transaction.CommitAsync();
 
-            return user.Id;
+            return Result<string>.Success(user.Id);
         }
 
         public async Task<bool> ConfirmEmail(string id, string token)
@@ -60,24 +60,29 @@ namespace ApplicationLogic.Services
             return result.Succeeded;
         }
 
-        public async Task<bool> PromoteToAdmin(string id)
+        public async Task<Result> PromoteToAdmin(string id)
         {
             AppUser? user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
-                return false;
+                return Result.Fail("Could not find user.");
             }
 
             if (await _userManager.IsInRoleAsync(user, Roles.Admin))
             {
-                return true;
+                return Result.Success();
             }
 
             await _userManager.RemoveFromRoleAsync(user, Roles.User);
             IdentityResult result = await _userManager.AddToRoleAsync(user, Roles.Admin);
 
-            return result.Succeeded;
+            if (!result.Succeeded)
+            {
+                return Result.Fail("Could not assign Admin role to user.");
+            }
+
+            return Result.Success();
         }
     }
 }

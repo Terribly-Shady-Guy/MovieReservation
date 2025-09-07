@@ -34,25 +34,25 @@ namespace ApplicationLogic.Services
             }
         }
 
-        public FileHandlerResult GetFile(string fileName)
+        public Result<Stream> GetFile(string fileName)
         {
             fileName = Path.GetFileName(fileName);
             string filePath = Path.Combine(_path, fileName);
 
             if (!File.Exists(filePath))
             {
-                return FileHandlerResult.Failed();
+                return Result<Stream>.Fail("Could not find file.");
             }
 
             try
             {
                 FileStream stream = File.OpenRead(filePath);
-                return FileHandlerResult.Succeeded(stream);
+                return Result<Stream>.Success(stream);
             }
             catch (Exception ex) when (ex is UnauthorizedAccessException || ex is IOException)
             {
                 _logger.LogWarning(ex, "Exception handled but logged for possible issue. file name: {FileName} at {FilePath}", fileName, _path);
-                return FileHandlerResult.Failed();
+                return Result<Stream>.Fail("There was an issue when opening file.");
             }
         }
     }

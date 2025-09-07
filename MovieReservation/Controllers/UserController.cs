@@ -29,9 +29,9 @@ namespace MovieReservation.Controllers
         [HttpPost("Add")]
         public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")] NewUserDto user)
         {
-            string? id = await _userService.AddNewUserAsync(user);
+            Result<string> userResult = await _userService.AddNewUserAsync(user);
 
-            if (id is null)
+            if (userResult.Failure)
             {
                 return Problem(
                     title: "Bad Request",
@@ -39,7 +39,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return Created(id, new { Message = "Account created sucessfully." });
+            return Created(userResult.Value, new { Message = "Account created sucessfully." });
         }
 
         [MapToApiVersion(1.0)]
@@ -75,9 +75,9 @@ namespace MovieReservation.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult> PromoteUser([Description("The id for an existing user to promote.")] string id)
         {
-            bool isSucessful = await _userService.PromoteToAdmin(id);
+            Result promotionResult = await _userService.PromoteToAdmin(id);
 
-            if (!isSucessful)
+            if (promotionResult.Failure)
             {
                 return Problem(
                     title: "Bad Request",
