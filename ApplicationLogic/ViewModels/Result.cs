@@ -2,9 +2,17 @@
 
 namespace ApplicationLogic.ViewModels
 {
-    public class Result
+    public interface IAppResult
     {
-        public virtual bool Successful { get; }
+        public bool Successful { get; }
+        public bool Failure { get; }
+        public string? Error { get; }
+    }
+
+    public class Result : IAppResult
+    {
+        [MemberNotNullWhen(false, nameof(Error))]
+        public bool Successful { get; }
 
         [MemberNotNullWhen(true, nameof(Error))]
         public bool Failure => !Successful;
@@ -33,28 +41,34 @@ namespace ApplicationLogic.ViewModels
         }
     }
 
-    public sealed class Result<TValue> : Result
+    public sealed class Result<TValue> : IAppResult
     {
-        // Workaround to handle nullability warnings
+        public TValue? Value { get; }
+
         [MemberNotNullWhen(true, nameof(Value))]
-        public override bool Successful => base.Successful;
+        [MemberNotNullWhen(false, nameof(Error))]
+        public bool Successful => Value != null;
+        [MemberNotNullWhen(true, nameof(Error))]
+        [MemberNotNullWhen(false, nameof(Value))]
+        public bool Failure => !Successful;
+        public string? Error { get; }
 
-        public TValue? Value {  get; }
-
-        private Result(TValue value) : base()
+        private Result(TValue value)
         {
             Value = value;
         }
 
-        private Result(string error) : base(error)
-        { }
+        private Result(string error)
+        { 
+            Error = error;
+        }
 
         public static Result<TValue> Success(TValue value)
         {
             return new Result<TValue>(value);
         }
 
-        public static new Result<TValue> Fail(string error)
+        public static Result<TValue> Fail(string error)
         {
             return new Result<TValue>(error);
         }
