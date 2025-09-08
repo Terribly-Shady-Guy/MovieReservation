@@ -11,7 +11,10 @@ namespace ApplicationLogic.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly MovieReservationDbContext _dbContext;
 
-        public UserService(UserManager<AppUser> userManager, MovieReservationDbContext dbContext, RoleManager<IdentityRole> roleManager)
+        public UserService(
+            UserManager<AppUser> userManager,
+            MovieReservationDbContext dbContext,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _dbContext = dbContext;
