@@ -3,12 +3,12 @@
     [Collection<WebApplicationFactoryCollectionFixture>]
     public abstract class IntegrationTestBase : IAsyncDisposable
     {
-        protected MovieReservationWebApplicationFactory Factory { get; }
-
         public IntegrationTestBase(MovieReservationWebApplicationFactory factory)
         {
             Factory = factory;
         }
+
+        protected MovieReservationWebApplicationFactory Factory { get; }
 
         public virtual async ValueTask DisposeAsync()
         {
