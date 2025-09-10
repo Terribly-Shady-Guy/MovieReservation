@@ -62,5 +62,5 @@ app.MapControllers();
 
 app.Run();
 
-// added as I don't want to have to convert to program style main, but needed a type that is guaranteed to exist for tests.
+// Added as I don't want to have to convert to program style main, but needed a type that is guaranteed to exist for tests.
 public partial class Program;
