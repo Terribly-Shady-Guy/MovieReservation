@@ -1,5 +1,8 @@
 ﻿namespace Tests.IntegrationInfrastructure
 {
+    /// <summary>
+    /// Provides the base infrastructure for integration tests.
+    /// </summary>
     [Collection<WebApplicationFactoryCollectionFixture>]
     public abstract class IntegrationTestBase : IAsyncDisposable
     {
