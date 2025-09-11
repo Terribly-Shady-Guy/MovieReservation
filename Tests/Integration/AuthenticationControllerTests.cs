@@ -17,7 +17,7 @@ namespace Tests.Integration
         [InlineData("root@example.com", "SomePassword1@", HttpStatusCode.Unauthorized, TestDisplayName = "Failed with wrong password")]
         [InlineData("notauser@example.com", "NotAUser1@", HttpStatusCode.Unauthorized, TestDisplayName = "Failed with nonexistent user")]
         [InlineData("notanemail", "ValidPassword1@", HttpStatusCode.BadRequest, TestDisplayName = "Failed with invalid email string")]
-        public async Task Post_LoginHandler_ReturnsExpectedStatus(string email, string password, HttpStatusCode expectedStatus)
+        public async ValueTask Post_LoginHandler_ReturnsExpectedStatus(string email, string password, HttpStatusCode expectedStatus)
         {
             HttpClient client = Factory.CreateClient();
             var loginModel = new UserLoginDto
@@ -32,7 +32,7 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task Workflow_AuthenticationLifecycle_Succeeds()
+        public async ValueTask Workflow_AuthenticationLifecycle_Succeeds()
         {
             HttpClient client = Factory.CreateClient();
 
