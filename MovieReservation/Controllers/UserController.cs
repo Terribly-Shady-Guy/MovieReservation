@@ -39,7 +39,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return Created((string?)null, new { Message = "Account created sucessfully." });
+            return Created((string?)null, new { Message = "Account created successfully." });
         }
 
         [MapToApiVersion(1.0)]
@@ -68,7 +68,7 @@ namespace MovieReservation.Controllers
 
         [MapToApiVersion(1.0)]
         [EndpointSummary("Promote user to admin")]
-        [EndpointDescription("An endpoint that allows admin ussers to promote a user to Admin role.")]
+        [EndpointDescription("An endpoint that allows admin users to promote a user to Admin role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was successfully promoted to admin.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
         [Authorize(Roles = Roles.SuperAdmin)]
