@@ -68,9 +68,9 @@ namespace Tests.IntegrationInfrastructure
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration((config) =>
+            builder.ConfigureAppConfiguration((context, config) =>
             {
-                string testAppSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Testing.json");
+                string testAppSettingsPath = Path.Combine(AppContext.BaseDirectory, $"appsettings.{context.HostingEnvironment.EnvironmentName}.json");
                 config.AddJsonFile(testAppSettingsPath, false, false);
             });
             
