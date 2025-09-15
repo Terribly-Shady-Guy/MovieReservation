@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.JsonWebTokens;
-using DbInfrastructure.Models;
-using System.Security.Claims;
+﻿using ApplicationLogic.Interfaces;
 using ApplicationLogic.ViewModels;
-using ApplicationLogic.Interfaces;
+using DbInfrastructure.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Data;
+using System.Linq;
+using System.Security.Claims;
 
 namespace ApplicationLogic.Services
 {
@@ -174,14 +176,11 @@ namespace ApplicationLogic.Services
         private async Task<ClaimsIdentity> CreateClaimsIdentity(AppUser user)
         {
             IList<string> userRoles = await _userManager.GetRolesAsync(user);
-
-            var accessTokenIdentity = new ClaimsIdentity();
-            accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
             
-            foreach (string role in userRoles)
-            {
-                accessTokenIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
-            }
+            var accessTokenIdentity = new ClaimsIdentity();
+
+            accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
+            accessTokenIdentity.AddClaims(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             return accessTokenIdentity;
         }

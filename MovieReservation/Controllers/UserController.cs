@@ -39,13 +39,13 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return Created(userResult.Value, new { Message = "Account created sucessfully." });
+            return Created((string?)null, new { Message = "Account created sucessfully." });
         }
 
         [MapToApiVersion(1.0)]
         [Authorize]
         [HttpPost("Change-Password")]
-        public async Task<ActionResult> ChangePassword()
+        public async Task<ActionResult> ChangePassword(ChangePasswordBody passwordBody)
         {
             throw new NotImplementedException();
         }
