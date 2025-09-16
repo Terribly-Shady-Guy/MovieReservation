@@ -37,6 +37,7 @@ builder.Services.AddApplicationLogicServices(builder.Configuration, builder.Envi
 builder.Services.AddDbInfrastructure(builder.Configuration.GetConnectionString("default"));
 
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<NotImplementedExceptionHandler>();
 
 builder.Services.AddHealthChecks()
    .AddCheck<SqlServerHealthCheck>("dbconnection", null, ["db", "sql"]);
