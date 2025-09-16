@@ -26,7 +26,7 @@ namespace MovieReservation.Controllers
         [EndpointDescription("An endpoint to create a new user account with User role.")]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
         [OperationTransformer<NewUserEndpointTransformer>]
-        [HttpPost("Add")]
+        [HttpPost("Create")]
         public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")] NewUserDto user)
         {
             Result<string> userResult = await _userService.AddNewUserAsync(user);
@@ -39,7 +39,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return Created((string?)null, new { Message = "Account created successfully." });
+            return StatusCode(StatusCodes.Status201Created, new { Message = "Account created successfully." });
         }
 
         [MapToApiVersion(1.0)]
@@ -51,7 +51,7 @@ namespace MovieReservation.Controllers
         }
 
         [MapToApiVersion(1.0)]
-        [HttpPost("Confirm-Email")]
+        [HttpPost("{id}/Email-Confirmation")]
         public async Task<ActionResult> ConfirmEmail(string id, string token)
         {
             bool result = await _userService.ConfirmEmail(id, token);
@@ -63,7 +63,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return Ok(new {Message = "Email is confirmed."});
+            return Ok(new { Message = "Email is confirmed." });
         }
 
         [MapToApiVersion(1.0)]
@@ -80,12 +80,12 @@ namespace MovieReservation.Controllers
             if (promotionResult.Failure)
             {
                 return Problem(
-                    title: "Bad Request",
+                    title: "User Not Found",
                     detail: "The user with the provided id could not be found.",
                     statusCode: StatusCodes.Status404NotFound);
             }
 
-            return Ok(new {Message = $"Sucessfully promoted user {id} to \"Admin\"."});
+            return Ok(new {Message = $"Successfully promoted user {id} to \"{Roles.Admin}\"."});
         }
     }
 }
