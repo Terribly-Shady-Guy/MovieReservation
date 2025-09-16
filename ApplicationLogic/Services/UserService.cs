@@ -55,6 +55,9 @@ namespace ApplicationLogic.Services
 
             await transaction.CommitAsync();
 
+            string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            Console.WriteLine($"User Id: {user.Id}. Confirmation Token: {confirmationToken}");
+
             return Result<string>.Success(user.Id);
         }
 

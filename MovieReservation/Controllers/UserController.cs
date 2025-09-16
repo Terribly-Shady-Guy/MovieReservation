@@ -63,7 +63,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return Ok(new { Message = "Email is confirmed." });
+            return Ok(new { Message = "Your email has been successfully verified. Your account is now active." });
         }
 
         [MapToApiVersion(1.0)]
