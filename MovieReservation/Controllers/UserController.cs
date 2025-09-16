@@ -39,7 +39,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status201Created, new { Message = "Account created successfully." });
+            return StatusCode(StatusCodes.Status201Created, new { Message = "Account created successfully. A confirmation email has been sent. Please verify your email to activate your account." });
         }
 
         [MapToApiVersion(1.0)]
