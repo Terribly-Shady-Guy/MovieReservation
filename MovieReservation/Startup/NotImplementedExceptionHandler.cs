@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReservation.Startup
 {
@@ -23,7 +24,7 @@ namespace MovieReservation.Startup
             var context = new ProblemDetailsContext
             {
                 HttpContext = httpContext,
-                ProblemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails()
+                ProblemDetails = new ProblemDetails
                 {
                     Title = "Endpoint Not Implemented",
                     Detail = "This endpoint is currently not implemented and will be in the future."
