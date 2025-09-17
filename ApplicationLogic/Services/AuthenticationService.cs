@@ -46,7 +46,7 @@ namespace ApplicationLogic.Services
                     Result = SignInResult.Failed,
                 };
             }
-            
+
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, userCredentials.Password, true);
             
             if (!result.Succeeded)
@@ -91,6 +91,11 @@ namespace ApplicationLogic.Services
                 {
                     Result = SignInResult.Failed
                 };
+            }
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return new LoginDto { Result = SignInResult.NotAllowed };
             }
 
             bool isLockedOut = await _userManager.IsLockedOutAsync(user);
@@ -181,7 +186,7 @@ namespace ApplicationLogic.Services
 
             accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
             accessTokenIdentity.AddClaims(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
-
+            
             return accessTokenIdentity;
         }
 

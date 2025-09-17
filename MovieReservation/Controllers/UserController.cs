@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReservation.OpenApi;
 using MovieReservation.OpenApi.Transformers;
 using System.ComponentModel;
+using System.Security.Claims;
 
 namespace MovieReservation.Controllers
 {
@@ -47,7 +48,21 @@ namespace MovieReservation.Controllers
         [HttpPost("Change-Password")]
         public async Task<ActionResult> ChangePassword(ChangePasswordBody passwordBody)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string userId = User.Claims
+                    .Single(claim => claim.Type == ClaimTypes.NameIdentifier)
+                    .Value;
+
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                return Problem(
+                    title: "Invalid Token",
+                    detail: "The provided access token is invalid.",
+                    statusCode: StatusCodes.Status400BadRequest);
+            }
         }
 
         [MapToApiVersion(1.0)]
@@ -62,7 +77,7 @@ namespace MovieReservation.Controllers
                     detail: "The provided email token is invalid.",
                     statusCode: StatusCodes.Status400BadRequest);
             }
-
+            
             return Ok(new { Message = "Your email has been successfully verified. Your account is now active." });
         }
 
