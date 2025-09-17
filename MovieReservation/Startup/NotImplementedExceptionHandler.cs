@@ -19,7 +19,7 @@ namespace MovieReservation.Startup
                 return false;
             }
 
-            httpContext.Response.StatusCode = StatusCodes.Status501NotImplemented;
+            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var context = new ProblemDetailsContext
             {
