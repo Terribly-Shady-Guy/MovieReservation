@@ -66,8 +66,14 @@ namespace MovieReservation.Controllers
         }
 
         [MapToApiVersion(1.0)]
+        [EndpointSummary("Confirm Email")]
+        [EndpointDescription("An endpoint that confrims the user's email with a generated email verification token.")]
+        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user's email has been confirmed.")]
+        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The provided token is invalid.")]
         [HttpPost("{id}/Email-Confirmation")]
-        public async Task<ActionResult> ConfirmEmail(string id, string token)
+        public async Task<ActionResult> ConfirmEmail(
+            [Description("The user id to use for confirmation.")] string id,
+            [Description("The token provided from confirmation email.")] string token)
         {
             bool result = await _userService.ConfirmEmail(id, token);
             if (!result)
