@@ -31,29 +31,30 @@ namespace ApplicationLogic.Services
                 UserName = newUser.Username,
             };
 
-            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            var result = await _userManager.CreateAsync(user, newUser.Password);
-            if (!result.Succeeded)
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
-                await transaction.RollbackAsync();
-                return Result<string>.Fail("Could not create user.");
-            }
+                var result = await _userManager.CreateAsync(user, newUser.Password);
+                if (!result.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return Result<string>.Fail("Could not create user.");
+                }
 
-            if (!await _roleManager.RoleExistsAsync(Roles.User))
-            {
-                await transaction.RollbackAsync();
-                return Result<string>.Fail($"Could not find \"{Roles.User}\"");
-            }
+                if (!await _roleManager.RoleExistsAsync(Roles.User))
+                {
+                    await transaction.RollbackAsync();
+                    return Result<string>.Fail($"Could not find \"{Roles.User}\"");
+                }
 
-            result = await _userManager.AddToRoleAsync(user, Roles.User);
-            if (!result.Succeeded)
-            {
-                await transaction.RollbackAsync();
-                return Result<string>.Fail($"Could not add user to role \"{Roles.User}\"");
-            }
+                result = await _userManager.AddToRoleAsync(user, Roles.User);
+                if (!result.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return Result<string>.Fail($"Could not add user to role \"{Roles.User}\"");
+                }
 
-            await transaction.CommitAsync();
+                await transaction.CommitAsync();
+            }
 
             string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             Console.WriteLine($"User Id: {user.Id}. Confirmation Token: {confirmationToken}");
