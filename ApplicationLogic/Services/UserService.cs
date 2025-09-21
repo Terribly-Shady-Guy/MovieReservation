@@ -84,6 +84,11 @@ namespace ApplicationLogic.Services
                 return Result.Fail("Could not find user.");
             }
 
+            if (!await _roleManager.RoleExistsAsync(Roles.Admin))
+            {
+                return Result.Fail($"The role {Roles.Admin} does not exist.");
+            }
+
             if (await _userManager.IsInRoleAsync(user, Roles.Admin))
             {
                 return Result.Success();
@@ -101,12 +106,6 @@ namespace ApplicationLogic.Services
             {
                 await transaction.RollbackAsync();
                 return Result.Fail("Could not remove user's role.");
-            }
-
-            if (!await _roleManager.RoleExistsAsync(Roles.Admin))
-            {
-                await transaction.RollbackAsync();
-                return Result.Fail($"The role {Roles.Admin} does not exist.");
             }
 
             result = await _userManager.AddToRoleAsync(user, Roles.Admin);
