@@ -8,16 +8,20 @@ namespace MovieReservation.OpenApi.Transformers
     public class VersionedDocumentTransformer : IOpenApiDocumentTransformer
     {
         private readonly IApiVersionDescriptionProvider _apiVersionDescriptionProvider;
+        private readonly ILogger<VersionedDocumentTransformer> _logger;
 
-        public VersionedDocumentTransformer(IApiVersionDescriptionProvider descriptionProvider)
+        public VersionedDocumentTransformer(IApiVersionDescriptionProvider descriptionProvider, ILogger<VersionedDocumentTransformer> logger)
         {
             _apiVersionDescriptionProvider = descriptionProvider;
+            _logger = logger;
         }
 
         public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
         {
            ApiVersionDescription versionDescription = _apiVersionDescriptionProvider.ApiVersionDescriptions
                 .Single(d => d.GroupName == context.DocumentName);
+
+            _logger.LogInformation("Executing Transformer for api group {GroupName}.", versionDescription.GroupName);
 
             document.Info.Version = $"v{versionDescription.ApiVersion}";
             document.Info.Title = "Movie Reservation API";

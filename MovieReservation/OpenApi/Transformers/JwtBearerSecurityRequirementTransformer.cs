@@ -9,22 +9,34 @@ namespace MovieReservation.OpenApi.Transformers
     public sealed class JwtBearerSecurityRequirementTransformer : IOpenApiOperationTransformer
     {
         private readonly IAuthenticationSchemeProvider _schemeProvider;
+        private readonly ILogger<JwtBearerSecurityRequirementTransformer> _logger;
 
-        public JwtBearerSecurityRequirementTransformer(IAuthenticationSchemeProvider schemeProvider)
+        public JwtBearerSecurityRequirementTransformer(IAuthenticationSchemeProvider schemeProvider, ILogger<JwtBearerSecurityRequirementTransformer> logger)
         {
             _schemeProvider = schemeProvider;
+            _logger = logger;
         }
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
             AuthenticationScheme? jwtBearerScheme = await _schemeProvider.GetSchemeAsync("Bearer");
-            if (jwtBearerScheme is null) return;
+            if (jwtBearerScheme is null)
+            {
+                _logger.LogInformation("Skipped applying jwt auth scheme for {Operation}.", context.Description.ActionDescriptor.DisplayName);
+                return;
+            }
 
             bool hasBearerAuthData = context.Description.ActionDescriptor.EndpointMetadata
                  .OfType<IAuthorizeData>()
                  .Any(authData => authData.AuthenticationSchemes is null || authData.AuthenticationSchemes.Contains(jwtBearerScheme.Name));
 
-            if (!hasBearerAuthData) return;
+            if (!hasBearerAuthData)
+            {
+                _logger.LogInformation("Skipped applying jwt auth requirement for {Operation}.", context.Description.ActionDescriptor.DisplayName);
+                return;
+            }
+
+            _logger.LogInformation("Applying jwt authentication requirement for {Operation}.", context.Description.ActionDescriptor.DisplayName);
 
             operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {

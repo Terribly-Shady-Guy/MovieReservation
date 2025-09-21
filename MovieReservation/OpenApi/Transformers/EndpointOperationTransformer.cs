@@ -6,9 +6,17 @@ namespace MovieReservation.OpenApi.Transformers
     public class EndpointOperationTransformer : IOpenApiOperationTransformer
     {
         private readonly Dictionary<string, IOpenApiOperationTransformer> _transformerCache = [];
+        private readonly ILogger<EndpointOperationTransformer> _logger;
+
+        public EndpointOperationTransformer(ILogger<EndpointOperationTransformer> logger)
+        {
+            _logger = logger;
+        }
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Applying endpoint scoped operation transformers for {Operation}.", context.Description.ActionDescriptor.DisplayName);
+
             var endpointOperationTransformerMetadata = context.Description.ActionDescriptor.EndpointMetadata
                 .OfType<IEndpointOperationTransformerMetadata>();
                 
