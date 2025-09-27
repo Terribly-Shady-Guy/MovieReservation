@@ -57,6 +57,8 @@ namespace ApplicationLogic.Services
             }
 
             string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            // Remove this line when an email sender service is implemented.
             Console.WriteLine($"User Id: {user.Id}. Confirmation Token: {confirmationToken}");
 
             return Result<string>.Success(user.Id);
