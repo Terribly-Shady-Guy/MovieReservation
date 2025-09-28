@@ -42,10 +42,9 @@ builder.Services.AddRateLimiter(options =>
 
         ILogger logger = loggerFactory.CreateLogger("OnRejectedHandler");
 
-        string? rateLimiterPolicy = context.HttpContext.GetEndpoint()
-        ?.Metadata
-        .GetRequiredMetadata<EnableRateLimitingAttribute>()
-        .PolicyName;
+        string? rateLimiterPolicy = context.HttpContext
+            .GetEndpoint()?.Metadata
+            .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
         
         logger.LogInformation("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
         return ValueTask.CompletedTask;
