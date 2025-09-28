@@ -2,6 +2,7 @@ using DbInfrastructure;
 using MovieReservation.Startup;
 using ApplicationLogic;
 using Asp.Versioning;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,33 @@ builder.Services.AddApiVersioning(options =>
         options.GroupNameFormat = "'v'V";
     });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = (context, cancellationToken) =>
+    {
+        var clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString();
+        ILoggerFactory loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
+
+        ILogger logger = loggerFactory.CreateLogger("OnRejectedHandler");
+
+        string? rateLimiterPolicy = context.HttpContext.GetEndpoint()
+        ?.Metadata
+        .GetRequiredMetadata<EnableRateLimitingAttribute>()
+        .PolicyName;
+        
+        logger.LogInformation("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
+        return ValueTask.CompletedTask;
+    };
+
+    options.AddSlidingWindowLimiter("Authentication", policy =>
+    {
+        policy.AutoReplenishment = true;
+        policy.PermitLimit = 30;
+        policy.Window = TimeSpan.FromMinutes(10);
+    });
+});
+
 builder.Services.AddIdentityJwtAuthentication(builder.Configuration.GetRequiredSection("Jwt"));
 
 builder.Services.AddApplicationLogicServices(builder.Configuration, builder.Environment);
@@ -47,6 +75,8 @@ var app = builder.Build();
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 

@@ -8,10 +8,12 @@ using ApplicationLogic.Services;
 using ApplicationLogic.ViewModels;
 using Asp.Versioning;
 using System.Net.Mime;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MovieReservation.Controllers
 {
     [ApiVersion(1.0)]
+    [EnableRateLimiting("Authentication")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -120,6 +122,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "User does not exist.")]
         [EndpointDescription("An endpoint for handling logout. This endpoint will delete the login session from db when successful.")]
         [Authorize]
+        [DisableRateLimiting]
         [HttpDelete]
         public async Task<ActionResult> Logout(string refreshToken)
         {
