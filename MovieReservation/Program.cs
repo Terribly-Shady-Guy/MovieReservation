@@ -47,7 +47,7 @@ builder.Services.AddRateLimiter(options =>
             .GetEndpoint()?.Metadata
             .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
         
-        logger.LogInformation("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
+        logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
         return ValueTask.CompletedTask;
     };
 
