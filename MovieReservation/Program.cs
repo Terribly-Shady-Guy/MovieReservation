@@ -3,6 +3,7 @@ using MovieReservation.Startup;
 using ApplicationLogic;
 using Asp.Versioning;
 using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,11 +51,15 @@ builder.Services.AddRateLimiter(options =>
         return ValueTask.CompletedTask;
     };
 
-    options.AddSlidingWindowLimiter("Authentication", policy =>
+    options.AddPolicy("Authentication", context =>
     {
-        policy.AutoReplenishment = true;
-        policy.PermitLimit = 30;
-        policy.Window = TimeSpan.FromMinutes(10);
+        string clientIpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
+        return RateLimitPartition.GetSlidingWindowLimiter(clientIpAddress, _ => new SlidingWindowRateLimiterOptions
+        {
+            Window = TimeSpan.FromMinutes(10),
+            PermitLimit = 30,
+            AutoReplenishment = true,
+        });
     });
 });
 
