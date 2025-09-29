@@ -3,9 +3,11 @@ using Microsoft.OpenApi.Models;
 
 namespace MovieReservation.OpenApi.Transformers
 {
+    /// <summary>
+    /// An operation transformer to enable endpoint scoped operation transformations.
+    /// </summary>
     public class EndpointOperationTransformer : IOpenApiOperationTransformer
     {
-        private readonly Dictionary<string, IOpenApiOperationTransformer> _transformerCache = [];
         private readonly ILogger<EndpointOperationTransformer> _logger;
 
         public EndpointOperationTransformer(ILogger<EndpointOperationTransformer> logger)
@@ -22,24 +24,12 @@ namespace MovieReservation.OpenApi.Transformers
                 
             foreach (var transformerMetadata in endpointOperationTransformerMetadata)
             {
-                IOpenApiOperationTransformer transformer = GetOrCreateTransformer(context.ApplicationServices, transformerMetadata);
+                var transformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
+                    provider: context.ApplicationServices, 
+                    instanceType: transformerMetadata.TransformerType);
+
                 await transformer.TransformAsync(operation, context, cancellationToken);
             }
-        }
-
-        private IOpenApiOperationTransformer GetOrCreateTransformer(IServiceProvider serviceProvider, IEndpointOperationTransformerMetadata metadata)
-        {
-            string cacheKey = metadata.TransformerTypeName;
-
-            if (_transformerCache.TryGetValue(cacheKey, out IOpenApiOperationTransformer? transformer))
-            {
-                return transformer;
-            }
-
-            transformer = metadata.CreateTransformer(serviceProvider);
-
-            _transformerCache.Add(cacheKey, transformer);
-            return transformer;
         }
     }
 }

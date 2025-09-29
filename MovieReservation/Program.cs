@@ -2,8 +2,6 @@ using DbInfrastructure;
 using MovieReservation.Startup;
 using ApplicationLogic;
 using Asp.Versioning;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
