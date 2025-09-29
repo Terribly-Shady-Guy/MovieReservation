@@ -36,31 +36,7 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.OnRejected = (context, cancellationToken) =>
-    {
-        var clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString();
-        ILoggerFactory loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
-
-        ILogger logger = loggerFactory.CreateLogger("OnRejectedHandler");
-
-        string? rateLimiterPolicy = context.HttpContext
-            .GetEndpoint()?.Metadata
-            .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
-        
-        logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
-        return ValueTask.CompletedTask;
-    };
-
-    options.AddPolicy("Authentication", context =>
-    {
-        string clientIpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
-        return RateLimitPartition.GetSlidingWindowLimiter(clientIpAddress, _ => new SlidingWindowRateLimiterOptions
-        {
-            Window = TimeSpan.FromMinutes(10),
-            PermitLimit = 30,
-            AutoReplenishment = true,
-        });
-    });
+    options.AddPolicy<string, AuthenticationRateLimitPolicy>("Authentication");
 });
 
 builder.Services.AddIdentityJwtAuthentication(builder.Configuration.GetRequiredSection("Jwt"));
