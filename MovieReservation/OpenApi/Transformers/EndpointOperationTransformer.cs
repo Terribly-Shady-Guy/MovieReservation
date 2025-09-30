@@ -24,11 +24,18 @@ namespace MovieReservation.OpenApi.Transformers
                 
             foreach (var transformerMetadata in endpointOperationTransformerMetadata)
             {
-                var transformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
-                    provider: context.ApplicationServices, 
+                try
+                {
+                    var transformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
+                    provider: context.ApplicationServices,
                     instanceType: transformerMetadata.TransformerType);
 
-                await transformer.TransformAsync(operation, context, cancellationToken);
+                    await transformer.TransformAsync(operation, context, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "The transformer {TransformerName} could not be created or applied.", transformerMetadata.TransformerType.Name);
+                }
             }
         }
     }
