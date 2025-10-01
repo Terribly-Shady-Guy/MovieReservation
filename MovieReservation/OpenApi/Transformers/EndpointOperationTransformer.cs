@@ -27,8 +27,8 @@ namespace MovieReservation.OpenApi.Transformers
                 try
                 {
                     var transformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
-                    provider: context.ApplicationServices,
-                    instanceType: transformerMetadata.TransformerType);
+                        provider: context.ApplicationServices,
+                        instanceType: transformerMetadata.TransformerType);
 
                     await transformer.TransformAsync(operation, context, cancellationToken);
                 }
