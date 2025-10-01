@@ -3,9 +3,9 @@ using System.Threading.RateLimiting;
 
 namespace MovieReservation.Startup
 {
-    public class AuthenticationRateLimitPolicy : IRateLimiterPolicy<string>
+    public class AuthenticationRateLimiterPolicy : IRateLimiterPolicy<string>
     {
-        public AuthenticationRateLimitPolicy(ILogger<AuthenticationRateLimitPolicy> logger)
+        public AuthenticationRateLimiterPolicy(ILogger<AuthenticationRateLimiterPolicy> logger)
         {
             OnRejected = (context, cancellationToken) =>
             {

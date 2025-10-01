@@ -34,7 +34,7 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.AddPolicy<string, AuthenticationRateLimitPolicy>("Authentication");
+    options.AddPolicy<string, AuthenticationRateLimiterPolicy>("Authentication");
 });
 
 builder.Services.AddIdentityJwtAuthentication(builder.Configuration.GetRequiredSection("Jwt"));
