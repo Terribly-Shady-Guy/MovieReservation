@@ -89,14 +89,14 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
         [HttpPost]
-        public async Task<ActionResult> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
+        public async Task<ActionResult<ResponseMessage>> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
         {
             int movieId = await _movieService.AddMovie(movie);
 
             return CreatedAtAction(
                 actionName: nameof(GetMovie),
                 routeValues: new { id = movieId }, 
-                value: new { Message = "New movie added" });
+                value: new ResponseMessage { Message = "New movie added" });
         }
 
         [MapToApiVersion(1.0)]

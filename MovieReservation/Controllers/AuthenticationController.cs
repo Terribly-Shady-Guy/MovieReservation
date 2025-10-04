@@ -46,11 +46,12 @@ namespace MovieReservation.Controllers
                     detail: "The provided username or password is incorrect.",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
-            else if (login.Result.RequiresTwoFactor)
+            else if (login.Result.RequiresTwoFactor && login.UserId is not null)
             {
-                return Accepted(new { 
+                return Accepted(new TwoFactorMessage 
+                { 
                     Message = "Two factor authentication is required. Please check your email for code.",
-                    login.UserId
+                    UserId = login.UserId
                 });
             }
             else if (login.Result.IsLockedOut)

@@ -28,7 +28,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
         [OperationTransformer<NewUserEndpointTransformer>]
         [HttpPost("Create")]
-        public async Task<ActionResult> AddNewUser([Description("An object containing new user info for account.")] NewUserDto user)
+        public async Task<ActionResult<ResponseMessage>> AddNewUser([Description("An object containing new user info for account.")] NewUserDto user)
         {
             Result<string> userResult = await _userService.AddNewUserAsync(user);
 
@@ -40,7 +40,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            return StatusCode(StatusCodes.Status201Created, new { Message = "Account created successfully. A confirmation email has been sent. Please verify your email to activate your account." });
+            return StatusCode(StatusCodes.Status201Created, new ResponseMessage { Message = "Account created successfully. A confirmation email has been sent. Please verify your email to activate your account." });
         }
 
         [MapToApiVersion(1.0)]
@@ -71,7 +71,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user's email has been confirmed.")]
         [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The provided token is invalid.")]
         [HttpPost("{id}/Email-Confirmation")]
-        public async Task<ActionResult> ConfirmEmail(
+        public async Task<ActionResult<ResponseMessage>> ConfirmEmail(
             [Description("The user id to use for confirmation.")] string id,
             [Description("The token provided from confirmation email.")] string token)
         {
@@ -84,7 +84,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
             }
             
-            return Ok(new { Message = "Your email has been successfully verified. Your account is now active." });
+            return Ok(new ResponseMessage { Message = "Your email has been successfully verified. Your account is now active." });
         }
 
         [MapToApiVersion(1.0)]
@@ -94,7 +94,7 @@ namespace MovieReservation.Controllers
         [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
         [Authorize(Roles = Roles.SuperAdmin)]
         [HttpPatch("{id}")]
-        public async Task<ActionResult> PromoteUser([Description("The id for an existing user to promote.")] string id)
+        public async Task<ActionResult<ResponseMessage>> PromoteUser([Description("The id for an existing user to promote.")] string id)
         {
             Result promotionResult = await _userService.PromoteToAdmin(id);
 
@@ -106,7 +106,7 @@ namespace MovieReservation.Controllers
                     statusCode: StatusCodes.Status404NotFound);
             }
 
-            return Ok(new {Message = $"Successfully promoted user {id} to \"{Roles.Admin}\"."});
+            return Ok(new ResponseMessage {Message = $"Successfully promoted user {id} to \"{Roles.Admin}\"."});
         }
     }
 }

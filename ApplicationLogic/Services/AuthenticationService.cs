@@ -4,7 +4,6 @@ using DbInfrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Data;
-using System.Linq;
 using System.Security.Claims;
 
 namespace ApplicationLogic.Services
