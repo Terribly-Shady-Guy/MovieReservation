@@ -9,12 +9,10 @@ namespace MovieReservation.OpenApi.Transformers
     public sealed class JwtBearerSecurityRequirementTransformer : IOpenApiOperationTransformer
     {
         private readonly IAuthenticationSchemeProvider _schemeProvider;
-        private readonly ILogger<JwtBearerSecurityRequirementTransformer> _logger;
 
         public JwtBearerSecurityRequirementTransformer(IAuthenticationSchemeProvider schemeProvider, ILogger<JwtBearerSecurityRequirementTransformer> logger)
         {
             _schemeProvider = schemeProvider;
-            _logger = logger;
         }
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
@@ -22,7 +20,6 @@ namespace MovieReservation.OpenApi.Transformers
             AuthenticationScheme? jwtBearerScheme = await _schemeProvider.GetSchemeAsync("Bearer");
             if (jwtBearerScheme is null)
             {
-                _logger.LogInformation("Skipped applying jwt auth scheme for {Operation}.", context.Description.ActionDescriptor.DisplayName);
                 return;
             }
 
@@ -32,11 +29,8 @@ namespace MovieReservation.OpenApi.Transformers
 
             if (!hasBearerAuthData)
             {
-                _logger.LogInformation("Skipped applying jwt auth requirement for {Operation}.", context.Description.ActionDescriptor.DisplayName);
                 return;
             }
-
-            _logger.LogInformation("Applying jwt authentication requirement for {Operation}.", context.Description.ActionDescriptor.DisplayName);
 
             operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {

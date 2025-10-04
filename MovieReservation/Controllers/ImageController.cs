@@ -20,7 +20,7 @@ namespace MovieReservation.Controllers
         }
 
         [MapToApiVersion(1.0)]
-        [EndpointSummary("Get Images")]
+        [EndpointSummary("Get Image")]
         [EndpointDescription("Gets the image based on the provided file name in the url.")]
         [Produces(MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png)]
         [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The file was successfully located.")]
