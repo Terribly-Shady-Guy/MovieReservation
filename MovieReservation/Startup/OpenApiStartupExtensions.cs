@@ -65,17 +65,13 @@ namespace MovieReservation.Startup
 
             const string BearerSchemeKey = "JWT Bearer";
 
-            RouteGroupBuilder openApiReferenceGroup = routeBuilder.MapGroup("/api-reference")
-                .ExcludeFromDescription();
-
-            openApiReferenceGroup.MapOpenApi();
-            openApiReferenceGroup.MapScalarApiReference(options =>
+            routeBuilder.MapOpenApi();
+            routeBuilder.MapScalarApiReference(options =>
             {
                 options.WithTitle("Movie Reservation API")
                     .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
                     .WithClientButton(false)
-                    .WithOpenApiRoutePattern("/api-reference/openapi/{documentName}.json")
                     .WithSearchHotKey("s")
                     .AddPreferredSecuritySchemes(BearerSchemeKey)
                     .WithPersistentAuthentication()
