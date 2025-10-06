@@ -64,8 +64,10 @@ namespace MovieReservation.Startup
             string token = tokenHandler.CreateToken(descriptor);
 
             const string BearerSchemeKey = "JWT Bearer";
+            
+            routeBuilder.MapOpenApi()
+                .CacheOutput();
 
-            routeBuilder.MapOpenApi();
             routeBuilder.MapScalarApiReference(options =>
             {
                 options.WithTitle("Movie Reservation API")
