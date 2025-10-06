@@ -1,4 +1,5 @@
-﻿using ApplicationLogic.Interfaces;
+﻿using ApplicationLogic;
+using ApplicationLogic.Interfaces;
 using ApplicationLogic.Services;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
@@ -59,7 +60,7 @@ namespace MovieReservation.Startup
                     Expires = DateTime.UtcNow.AddDays(7),
                     Subject = new ClaimsIdentity(
                     [
-                        new Claim(ClaimTypes.Role, "Admin")
+                        new Claim(ClaimTypes.Role, Roles.Admin)
                     ]),
                     Audience = jwtOptions.Value.Audience,
                     Issuer = jwtOptions.Value.Issuer,
