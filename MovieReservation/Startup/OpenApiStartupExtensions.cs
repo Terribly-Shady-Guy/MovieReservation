@@ -40,36 +40,36 @@ namespace MovieReservation.Startup
         /// <param name="routeBuilder">A route builder from either <see cref="WebApplication"/> or a <see cref="RouteGroupBuilder"/>.</param>
         public static void MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
-            var rsaKeyHandler = routeBuilder.ServiceProvider.GetRequiredService<IRsaKeyHandler>();
-            var options = routeBuilder.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>();
-            var descriptionProvider = routeBuilder.ServiceProvider.GetRequiredService<IApiVersionDescriptionProvider>();
-
-            RsaSecurityKey securityKey = rsaKeyHandler.LoadPrivateAsync()
-                .GetAwaiter()
-                .GetResult();
-
-            var descriptor = new SecurityTokenDescriptor
-            {
-                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256),
-                Expires = DateTime.UtcNow.AddDays(7),
-                Subject = new ClaimsIdentity(
-                [
-                    new Claim(ClaimTypes.Role, "Admin")
-                ]),
-                Audience = options.Value.Audience,
-                Issuer = options.Value.Issuer,
-            };
-
-            var tokenHandler = new JsonWebTokenHandler();
-            string token = tokenHandler.CreateToken(descriptor);
-
-            const string BearerSchemeKey = "JWT Bearer";
-            
             routeBuilder.MapOpenApi()
                 .CacheOutput();
 
-            routeBuilder.MapScalarApiReference(options =>
+            routeBuilder.MapScalarApiReference((options, context) =>
             {
+                var rsaKeyHandler = context.RequestServices.GetRequiredService<IRsaKeyHandler>();
+                var jwtOptions = context.RequestServices.GetRequiredService<IOptions<JwtOptions>>();
+                var descriptionProvider = context.RequestServices.GetRequiredService<IApiVersionDescriptionProvider>();
+
+                RsaSecurityKey securityKey = rsaKeyHandler.LoadPrivateAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                var descriptor = new SecurityTokenDescriptor
+                {
+                    SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    Subject = new ClaimsIdentity(
+                    [
+                        new Claim(ClaimTypes.Role, "Admin")
+                    ]),
+                    Audience = jwtOptions.Value.Audience,
+                    Issuer = jwtOptions.Value.Issuer,
+                };
+
+                var tokenHandler = new JsonWebTokenHandler();
+                string token = tokenHandler.CreateToken(descriptor);
+
+                const string BearerSchemeKey = "JWT Bearer";
+
                 options.WithTitle("Movie Reservation API")
                     .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
