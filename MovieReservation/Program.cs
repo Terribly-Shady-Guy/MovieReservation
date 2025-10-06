@@ -10,12 +10,12 @@ builder.WebHost.ConfigureKestrel(options =>
     options.AddServerHeader = false;
 });
 
-builder.Services.AddControllers();
-
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddOpenApiDocuments();
 }
+
+builder.Services.AddControllers();
 
 builder.Services.AddApiVersioning(options =>
 {
