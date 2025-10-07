@@ -48,10 +48,7 @@ builder.Services.AddExceptionHandler<NotImplementedExceptionHandler>();
 builder.Services.AddHealthChecks()
    .AddCheck<SqlServerHealthCheck>("dbconnection", null, ["db", "sql"]);
 
-builder.Services.AddOutputCache(options =>
-{
-    options.AddPolicy("OpenApi", policy => policy.Expire(TimeSpan.FromSeconds(30)));
-});
+builder.Services.AddOutputCache();
 
 var app = builder.Build();
 

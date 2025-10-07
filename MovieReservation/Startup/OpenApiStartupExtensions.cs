@@ -42,7 +42,7 @@ namespace MovieReservation.Startup
         public static void MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
             routeBuilder.MapOpenApi()
-                .CacheOutput("OpenApi");
+                .CacheOutput(policy => policy.Expire(TimeSpan.FromSeconds(30)), true);
 
             routeBuilder.MapScalarApiReference((options, context) =>
             {
