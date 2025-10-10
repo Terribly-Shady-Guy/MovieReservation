@@ -32,7 +32,9 @@ namespace MovieReservation.OpenApi.Transformers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "The transformer {TransformerName} could not be created or applied.", transformerMetadata.TransformerType.Name);
+                    _logger.LogError(ex, "The transformer {TransformerName} for action {ActionName} was skipped due to an error.", 
+                        transformerMetadata.TransformerType.Name, 
+                        context.Description.ActionDescriptor.DisplayName);
                 }
             }
         }
