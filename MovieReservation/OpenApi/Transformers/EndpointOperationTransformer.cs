@@ -17,23 +17,23 @@ namespace MovieReservation.OpenApi.Transformers
 
         public async Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            var endpointOperationTransformerMetadata = context.Description.ActionDescriptor.EndpointMetadata
+            var endpointTransformerMetadata = context.Description.ActionDescriptor.EndpointMetadata
                 .OfType<IEndpointOperationTransformerMetadata>();
                 
-            foreach (var transformerMetadata in endpointOperationTransformerMetadata)
+            foreach (var transformerMetadataItem in endpointTransformerMetadata)
             {
                 try
                 {
-                    var transformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
+                    var endpointTransformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
                         provider: context.ApplicationServices,
-                        instanceType: transformerMetadata.TransformerType);
+                        instanceType: transformerMetadataItem.TransformerType);
 
-                    await transformer.TransformAsync(operation, context, cancellationToken);
+                    await endpointTransformer.TransformAsync(operation, context, cancellationToken);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "The transformer {TransformerName} for action {ActionName} was skipped due to an error.", 
-                        transformerMetadata.TransformerType.Name, 
+                        transformerMetadataItem.TransformerType.Name, 
                         context.Description.ActionDescriptor.DisplayName);
                 }
             }
