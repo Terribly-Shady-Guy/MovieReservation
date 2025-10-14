@@ -74,10 +74,10 @@ namespace MovieReservation.Startup
                 options.WithTitle("Movie Reservation API")
                     .WithTheme(ScalarTheme.Saturn)
                     .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
-                    .WithClientButton(false)
+                    .HideClientButton()
                     .WithSearchHotKey("s")
                     .AddPreferredSecuritySchemes(BearerSchemeKey)
-                    .WithPersistentAuthentication()
+                    .EnablePersistentAuthentication()
                     .AddHttpAuthentication(BearerSchemeKey, scheme => scheme.Token = token)
                     .AddDocuments(descriptionProvider.ApiVersionDescriptions.Select(d => d.GroupName));
             });
