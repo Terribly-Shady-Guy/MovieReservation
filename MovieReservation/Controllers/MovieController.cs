@@ -83,7 +83,7 @@ namespace MovieReservation.Controllers
 
         [MapToApiVersion(1.0)]
         [EndpointSummary("Add new movie.")]
-        [EndpointDescription("An endpoint that allows admins to add a new movie. The uploaded movie poster file must meet the following requirements: Type must beeither a jpg, jpeg, or png. Size must be 10 mb or smaller.")]
+        [EndpointDescription("An endpoint that allows admins to add a new movie.\n> [!note] The uploaded movie poster file must meet the following requirements:\n> 1. Type must be either a jpg, jpeg, or png.\n> 2. Size must be 10 mb or smaller.")]
         [Consumes(MediaTypeNames.Multipart.FormData)]
         [OperationTransformer<AddNewMovieTransformer>]
         [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
