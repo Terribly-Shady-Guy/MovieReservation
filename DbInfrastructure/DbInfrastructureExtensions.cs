@@ -26,11 +26,11 @@ namespace DbInfrastructure
             {
                 ILogger<IDataSeedingProvider> logger = serviceProvider.GetRequiredService<ILogger<IDataSeedingProvider>>();
 
-                List<IDataSeeder> seeders = serviceProvider.GetServices<IDataSeeder>()
+                List<IDataSeeder> dataSeeders = serviceProvider.GetServices<IDataSeeder>()
                     .ToList();
 
-                logger.LogInformation("Found {SeederCount} data seeders.", seeders.Count);
-                return new DataSeedingProvider(seeders);
+                logger.LogInformation("Found {SeederCount} data seeders.", dataSeeders.Count);
+                return new DataSeedingProvider(dataSeeders);
             });
             
             services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
