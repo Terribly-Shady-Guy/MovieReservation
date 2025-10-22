@@ -61,7 +61,7 @@ namespace Tests.IntegrationInfrastructure
 
             await _respawner.ResetAsync(connection);
 
-            var seedingProvider = scope.ServiceProvider.GetRequiredService<IDataSeedingProvider>();
+            var seedingProvider = scope.ServiceProvider.GetRequiredService<IDataSeedingExecutor>();
             await seedingProvider.SeedAsync(context, token);
             await context.SaveChangesAsync(token);
         }

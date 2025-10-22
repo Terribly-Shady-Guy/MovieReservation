@@ -3,11 +3,11 @@
 
 namespace DbInfrastructure.DataSeeding
 {
-    public sealed class DataSeedingProvider : IDataSeedingProvider
+    public sealed class DataSeedingExecutor : IDataSeedingExecutor
     {
         private readonly IReadOnlyList<IDataSeeder> _dataSeeders;
 
-        public DataSeedingProvider(IReadOnlyList<IDataSeeder> seeders)
+        public DataSeedingExecutor(IReadOnlyList<IDataSeeder> seeders)
         {
             _dataSeeders = seeders;
         }

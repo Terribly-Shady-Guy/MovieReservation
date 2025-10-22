@@ -22,15 +22,15 @@ namespace DbInfrastructure
             services.AddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
             services.AddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
 
-            services.TryAddScoped<IDataSeedingProvider>(static (serviceProvider) =>
+            services.TryAddScoped<IDataSeedingExecutor>(static (serviceProvider) =>
             {
-                ILogger<IDataSeedingProvider> logger = serviceProvider.GetRequiredService<ILogger<IDataSeedingProvider>>();
+                ILogger<IDataSeedingExecutor> logger = serviceProvider.GetRequiredService<ILogger<IDataSeedingExecutor>>();
 
                 List<IDataSeeder> dataSeeders = serviceProvider.GetServices<IDataSeeder>()
                     .ToList();
 
                 logger.LogInformation("Found {SeederCount} data seeders.", dataSeeders.Count);
-                return new DataSeedingProvider(dataSeeders);
+                return new DataSeedingExecutor(dataSeeders);
             });
             
             services.AddDbContext<MovieReservationDbContext>((serviceProvider, options) =>
@@ -39,7 +39,7 @@ namespace DbInfrastructure
 
                 options.UseSeeding((context, _) =>
                 {
-                    var seedingProvider = serviceProvider.GetRequiredService<IDataSeedingProvider>();
+                    var seedingProvider = serviceProvider.GetRequiredService<IDataSeedingExecutor>();
                     seedingProvider.Seed(context);
 
                     context.SaveChanges();
@@ -47,7 +47,7 @@ namespace DbInfrastructure
 
                 options.UseAsyncSeeding(async (context, _, cancellationToken) =>
                 {
-                    var seedingProvider = serviceProvider.GetRequiredService<IDataSeedingProvider>();
+                    var seedingProvider = serviceProvider.GetRequiredService<IDataSeedingExecutor>();
                     await seedingProvider.SeedAsync(context, cancellationToken);
 
                     await context.SaveChangesAsync(cancellationToken);

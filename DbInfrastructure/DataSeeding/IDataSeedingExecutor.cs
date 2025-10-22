@@ -5,7 +5,7 @@ namespace DbInfrastructure.DataSeeding
     /// <summary>
     /// Orchestrates the execution of provided <see cref="IDataSeeder"/> implementations, enabling modular data seeding.
     /// </summary>
-    public interface IDataSeedingProvider
+    public interface IDataSeedingExecutor
     {
         /// <summary>
         /// Executes the registered <see cref="IDataSeeder"/> types synchronously.
