@@ -5,7 +5,7 @@ using DbInfrastructure.Models;
 namespace DbInfrastructure
 {
     /// <summary>
-    /// DbContext class for interacting with the movie reservation db.
+    /// A <see cref="DbContext"/> for interacting with the movie reservation database.
     /// </summary>
     public class MovieReservationDbContext : IdentityDbContext<AppUser>
     {
