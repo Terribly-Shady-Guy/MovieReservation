@@ -30,7 +30,7 @@ namespace MovieReservation.OpenApi.Transformers
 
                     await endpointTransformer.TransformAsync(operation, context, cancellationToken);
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (ex is not OperationCanceledException)
                 {
                     _logger.LogError(ex, "The transformer {TransformerName} for action {ActionName} was skipped due to an error.", 
                         transformerMetadataItem.TransformerType.Name, 
