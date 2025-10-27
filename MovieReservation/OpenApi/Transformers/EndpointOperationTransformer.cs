@@ -6,6 +6,7 @@ namespace MovieReservation.OpenApi.Transformers
     /// <summary>
     /// An operation transformer to enable endpoint scoped operation transformations.
     /// </summary>
+    /// <remarks>This transformer will skip executing a transformer if an error occurs. It will log the issue when it skips instead.</remarks>
     public class EndpointOperationTransformer : IOpenApiOperationTransformer
     {
         private readonly ILogger<EndpointOperationTransformer> _logger;
