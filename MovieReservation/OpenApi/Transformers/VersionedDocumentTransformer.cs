@@ -34,7 +34,7 @@ namespace MovieReservation.OpenApi.Transformers
             
             document.Components ??= new OpenApiComponents();
             document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-            document.Components.SecuritySchemes?.Add(
+            document.Components.SecuritySchemes.Add(
                 key: "JWT Bearer",
                 value: new OpenApiSecurityScheme
                 {
