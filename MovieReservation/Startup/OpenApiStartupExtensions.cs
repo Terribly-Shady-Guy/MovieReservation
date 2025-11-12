@@ -24,9 +24,6 @@ namespace MovieReservation.Startup
             {
                 options.AddDocumentTransformer<VersionedDocumentTransformer>();
 
-                // This is a temporary workaround until the new description property is added to ProducesResponseTypeAttribute.
-                options.AddOperationTransformer<EndpointResponseDescriptionTransformer>();
-
                 options.AddOperationTransformer<EndpointOperationTransformer>();
                 options.AddOperationTransformer<JwtBearerSecurityRequirementTransformer>();
                 options.AddOperationTransformer<OperationDeprecatedTransformer>();

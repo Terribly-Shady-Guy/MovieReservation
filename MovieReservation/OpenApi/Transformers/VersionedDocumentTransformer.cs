@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Asp.Versioning.ApiExplorer;
 
 namespace MovieReservation.OpenApi.Transformers
@@ -33,7 +33,8 @@ namespace MovieReservation.OpenApi.Transformers
             }
             
             document.Components ??= new OpenApiComponents();
-            document.Components.SecuritySchemes.Add(
+            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+            document.Components.SecuritySchemes?.Add(
                 key: "JWT Bearer",
                 value: new OpenApiSecurityScheme
                 {

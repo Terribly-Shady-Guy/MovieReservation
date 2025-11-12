@@ -25,7 +25,7 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Add user")]
         [EndpointDescription("An endpoint to create a new user account with User role.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
+        [ProducesResponseType(StatusCodes.Status201Created, Description = "The new user account was successfully created.")]
         [OperationTransformer<NewUserEndpointTransformer>]
         [HttpPost("Create")]
         public async Task<ActionResult<ResponseMessage>> AddNewUser([Description("An object containing new user info for account.")] NewUserDto user)
@@ -68,8 +68,8 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Confirm Email")]
         [EndpointDescription("An endpoint that confrims the user's email with a generated email verification token.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user's email has been confirmed.")]
-        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The provided token is invalid.")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "The user's email has been confirmed.")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The provided token is invalid.")]
         [HttpPost("{id}/Email-Confirmation")]
         public async Task<ActionResult<ResponseMessage>> ConfirmEmail(
             [Description("The user id to use for confirmation.")] string id,
@@ -90,8 +90,8 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Promote user to admin")]
         [EndpointDescription("An endpoint that allows admin users to promote a user to Admin role.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The user was successfully promoted to admin.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "The user was successfully promoted to admin.")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Description = "The user with specified id does not exist.")]
         [Authorize(Roles = Roles.SuperAdmin)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<ResponseMessage>> PromoteUser([Description("The id for an existing user to promote.")] string id)

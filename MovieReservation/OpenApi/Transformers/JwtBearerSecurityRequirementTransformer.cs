@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace MovieReservation.OpenApi.Transformers
 {
@@ -32,28 +32,21 @@ namespace MovieReservation.OpenApi.Transformers
                 return;
             }
 
-            operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
+            operation.Responses?.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {
                 Description = "User does not have required role or token is invalid."
             });
 
-            operation.Responses.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
+            operation.Responses?.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
             {
                 Description = $"The access token has not been provided in ```{HeaderNames.Authorization}``` header."
             });
 
-            var requirementSecurityScheme = new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Id = jwtBearerScheme.Name,
-                    Type = ReferenceType.SecurityScheme
-                }
-            };
+            var requirementSecurityScheme = new OpenApiSecuritySchemeReference(jwtBearerScheme.Name, context.Document);
 
-            operation.Security.Add(new OpenApiSecurityRequirement
+            operation.Security?.Add(new OpenApiSecurityRequirement
             {
-                [requirementSecurityScheme] = Array.Empty<string>()
+                [requirementSecurityScheme] = []
             });
         }
     }

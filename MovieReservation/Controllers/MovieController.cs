@@ -31,7 +31,7 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("List movies")]
         [EndpointDescription("An endpoint that allows logged in users to retrieve list of movies optionally filtered by genre.")]
-        [ProducesResponseTypeWithDescription<List<MovieListItem>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
+        [ProducesResponseType<List<MovieListItem>>(StatusCodes.Status200OK, Description = "Successfully retrieved the list of movies")]
         [Produces(MediaTypeNames.Application.Json)]
         [HttpGet]
         public async Task<ActionResult<List<MovieListItem>>> GetMovieList([FromQuery, Description("Optional parameter to filter by genre.")] string? genre)
@@ -44,8 +44,8 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Get movie by id")]
         [EndpointDescription("Gets a movie by id and either returns null if it does not exist or the movie with a link to get its image. Use the posterImageName property if imageLink is not available.")]
-        [ProducesResponseTypeWithDescription<MovieDto>(StatusCodes.Status200OK, Description = "The object containing the movie info.")]
-        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status404NotFound, Description = "The movie with the provided id doesn't exist.")]
+        [ProducesResponseType<MovieDto>(StatusCodes.Status200OK, Description = "The object containing the movie info.")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, Description = "The movie with the provided id doesn't exist.")]
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> GetMovie(int id)
         {
@@ -86,7 +86,7 @@ namespace MovieReservation.Controllers
         [EndpointDescription("An endpoint that allows admins to add a new movie.\n> [!note] The uploaded movie poster file must meet the following requirements:\n> 1. Type must be either a jpg, jpeg, or png.\n> 2. Size must be 10 mb or smaller.")]
         [Consumes(MediaTypeNames.Multipart.FormData)]
         [OperationTransformer<AddNewMovieTransformer>]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
+        [ProducesResponseType(StatusCodes.Status201Created, Description = "Movie was successfully added.")]
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
         [HttpPost]
         public async Task<ActionResult<ResponseMessage>> AddNewMovie([FromForm, Description("Formdata object containing input for new movie.")] MovieFormDataBody movie)
@@ -110,8 +110,8 @@ namespace MovieReservation.Controllers
         [MapToApiVersion(1.0)]
         [EndpointSummary("Delete movie")]
         [EndpointDescription("An endpoint that allows an admin user to delete a movie.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status204NoContent, Description = "The movie was successfully deleted.")]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status400BadRequest, Description = "The id for the move does not exist.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Description = "The movie was successfully deleted.")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Description = "The id for the move does not exist.")]
         [Authorize(Policy = RegisteredAuthorizationPolicyNames.IsAdmin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovie([Description("The movie id.")] int id)

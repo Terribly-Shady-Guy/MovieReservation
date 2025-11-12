@@ -2,7 +2,6 @@
 using ApplicationLogic.ViewModels;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using MovieReservation.OpenApi;
 using System.Net.Mime;
 
 namespace MovieReservation.Controllers
@@ -23,9 +22,9 @@ namespace MovieReservation.Controllers
         [EndpointSummary("Get Image")]
         [EndpointDescription("Gets the image based on the provided file name in the url.")]
         [Produces(MediaTypeNames.Image.Jpeg, MediaTypeNames.Image.Png)]
-        [ProducesResponseTypeWithDescription(StatusCodes.Status200OK, Description = "The file was successfully located.")]
-        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The file type is not supported.")]
-        [ProducesResponseTypeWithDescription<ProblemDetails>(StatusCodes.Status404NotFound, Description = "The file does not exist.")]
+        [ProducesResponseType(StatusCodes.Status200OK, Description = "The file was successfully located.")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Description = "The file type is not supported.")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, Description = "The file does not exist.")]
         [HttpGet("{fileName}")]
         public ActionResult GetImage(string fileName)
         {

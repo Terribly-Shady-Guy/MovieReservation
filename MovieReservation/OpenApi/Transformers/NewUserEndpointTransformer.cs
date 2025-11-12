@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
+using System.Text.Json.Nodes;
+
 
 namespace MovieReservation.OpenApi.Transformers
 {
@@ -8,13 +9,17 @@ namespace MovieReservation.OpenApi.Transformers
     {
         public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            var requestExample = new OpenApiObject()
+            if (operation.RequestBody? .Content == null)
             {
-                ["username"] = new OpenApiString("johndoe"),
-                ["password"] = new OpenApiPassword("Password123@"),
-                ["firstName"] = new OpenApiString("John"),
-                ["lastName"] = new OpenApiString("Doe"),
-                ["email"] = new OpenApiString("john.doe@example.com")
+                return Task.CompletedTask;
+            }
+            var requestExample = new JsonObject()
+            {
+                ["username"] = "johndoe",
+                ["password"] = "Password123@",
+                ["firstName"] = "John",
+                ["lastName"] = "Doe",
+                ["email"] = "john.doe@example.com"
             };
 
             foreach (var content in operation.RequestBody.Content)

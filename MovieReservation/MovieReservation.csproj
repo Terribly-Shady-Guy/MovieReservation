@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>461f625b-b818-47a0-b7fd-636b2cc36660</UserSecretsId>
@@ -10,13 +10,13 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Scalar.AspNetCore" Version="2.10.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.10.3" />
   </ItemGroup>
 
   <ItemGroup>

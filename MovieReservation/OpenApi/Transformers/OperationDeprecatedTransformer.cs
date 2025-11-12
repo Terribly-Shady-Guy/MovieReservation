@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Asp.Versioning;
 
 namespace MovieReservation.OpenApi.Transformers
