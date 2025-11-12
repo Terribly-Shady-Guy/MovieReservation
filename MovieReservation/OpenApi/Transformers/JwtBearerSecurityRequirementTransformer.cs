@@ -10,7 +10,7 @@ namespace MovieReservation.OpenApi.Transformers
     {
         private readonly IAuthenticationSchemeProvider _schemeProvider;
 
-        public JwtBearerSecurityRequirementTransformer(IAuthenticationSchemeProvider schemeProvider, ILogger<JwtBearerSecurityRequirementTransformer> logger)
+        public JwtBearerSecurityRequirementTransformer(IAuthenticationSchemeProvider schemeProvider)
         {
             _schemeProvider = schemeProvider;
         }
