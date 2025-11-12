@@ -48,8 +48,6 @@ builder.Services.AddExceptionHandler<NotImplementedExceptionHandler>();
 builder.Services.AddHealthChecks()
    .AddCheck<SqlServerHealthCheck>("dbconnection", null, ["db", "sql"]);
 
-builder.Services.AddOutputCache();
-
 var app = builder.Build();
 
 app.UseExceptionHandler();
@@ -61,8 +59,6 @@ app.UseRateLimiter();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.UseOutputCache();
 
 if (app.Environment.IsDevelopment())
 {

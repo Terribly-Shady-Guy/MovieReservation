@@ -38,8 +38,7 @@ namespace MovieReservation.Startup
         /// <param name="routeBuilder">A route builder from either <see cref="WebApplication"/> or a <see cref="RouteGroupBuilder"/>.</param>
         public static void MapOpenApiReference(this IEndpointRouteBuilder routeBuilder)
         {
-            routeBuilder.MapOpenApi()
-                .CacheOutput(policy => policy.Expire(TimeSpan.FromSeconds(30)));
+            routeBuilder.MapOpenApi();
 
             routeBuilder.MapScalarApiReference((options, context) =>
             {
