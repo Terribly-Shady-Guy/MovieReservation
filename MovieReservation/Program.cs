@@ -70,6 +70,3 @@ app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
-
-// Added as I don't want to convert to program style main, but needed a type that is guaranteed to exist for tests.
-public partial class Program;
