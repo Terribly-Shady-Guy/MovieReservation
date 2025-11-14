@@ -32,11 +32,12 @@ namespace Tests.IntegrationInfrastructure
                 await connection.OpenAsync();
             }
 
-            var tablesToIgnore = context.Model.GetEntityTypes()
+            var tablesToIgnore = context.Model
+                .GetEntityTypes()
                 .Where(et => et.FindAnnotation(CustomAnnotations.TestingDoNotReset)?.Value as bool? == true)
                 .Select(et => et.GetTableName())
                 .OfType<string>();
-
+            
             _respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
             {
                 WithReseed = true,
