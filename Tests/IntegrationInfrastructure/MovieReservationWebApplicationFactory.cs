@@ -33,7 +33,7 @@ namespace Tests.IntegrationInfrastructure
             }
 
             var tablesToIgnore = context.Model.GetEntityTypes()
-                .Where(et => (bool)(et.FindAnnotation(CustomAnnotations.TestingDoNotReset)?.Value ?? false))
+                .Where(et => et.FindAnnotation(CustomAnnotations.TestingDoNotReset)?.Value as bool? == true)
                 .Select(et => et.GetTableName())
                 .OfType<string>();
 
