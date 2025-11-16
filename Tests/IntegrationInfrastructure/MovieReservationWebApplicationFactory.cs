@@ -13,7 +13,7 @@ namespace Tests.IntegrationInfrastructure
     /// <summary>
     /// Factory for bootstrapping the movie reservation API for integration testing.
     /// </summary>
-    public class MovieReservationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+    public sealed class MovieReservationWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private Respawner? _respawner;
 
