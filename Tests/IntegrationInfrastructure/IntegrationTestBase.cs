@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides the base infrastructure for integration tests.
     /// </summary>
-    [Collection<WebApplicationFactoryCollectionFixture>]
+    [Collection<MovieReservationIntegrationTestsFixture>]
     public abstract class IntegrationTestBase : IAsyncDisposable
     {
         public IntegrationTestBase(MovieReservationWebApplicationFactory factory)

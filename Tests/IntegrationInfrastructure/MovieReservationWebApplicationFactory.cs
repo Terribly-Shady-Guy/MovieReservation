@@ -101,5 +101,5 @@ namespace Tests.IntegrationInfrastructure
     }
 
     [CollectionDefinition]
-    public class WebApplicationFactoryCollectionFixture : ICollectionFixture<MovieReservationWebApplicationFactory>;
+    public class MovieReservationIntegrationTestsFixture : ICollectionFixture<MovieReservationWebApplicationFactory>;
 }
