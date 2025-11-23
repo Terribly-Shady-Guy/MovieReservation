@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ApplicationLogic/ApplicationLogic.csproj" />
+  <Project Path="DbInfrastructure/DbInfrastructure.csproj" />
+  <Project Path="MovieReservation/MovieReservation.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>
