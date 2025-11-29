@@ -32,7 +32,7 @@ namespace DbInfrastructure.DataSeeding
             AddEnums(storedLookups, context);
         }
 
-        private void AddEnums(List<TLookup> storedLookups, DbContext context)
+        private void AddEnums(IList<TLookup> storedLookups, DbContext context)
         {
             foreach (var lookup in _lookups)
             {
