@@ -15,7 +15,7 @@ namespace ApplicationLogic.Services
 
         public async Task AddLocation(LocationDto location)
         {
-            var newLocation = new Location
+            Location newLocation = new()
             {
                 City = location.City,
                 State = location.State,

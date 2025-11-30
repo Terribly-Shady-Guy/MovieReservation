@@ -20,7 +20,7 @@ namespace Tests.Integration
         public async ValueTask Post_LoginHandler_ReturnsExpectedStatus(string email, string password, HttpStatusCode expectedStatus)
         {
             HttpClient client = Factory.CreateClient();
-            var loginModel = new UserLoginDto
+            UserLoginDto loginModel = new()
             {
                 Email = email,
                 Password = password
@@ -36,7 +36,7 @@ namespace Tests.Integration
         {
             HttpClient client = Factory.CreateClient();
 
-            var loginModel = new UserLoginDto
+            UserLoginDto loginModel = new()
             {
                 Email = "root@example.com",
                 Password = "Admin246810@",
@@ -49,7 +49,7 @@ namespace Tests.Integration
             var token = await loginResponse.Content.ReadFromJsonAsync<AuthenticationToken>(_token);
             Assert.NotNull(token);
 
-            var refreshBody = new AuthenticationTokenRequestBody
+            AuthenticationTokenRequestBody refreshBody = new()
             {
                 AccessToken = token.AccessToken,
                 RefreshToken = token.RefreshToken
@@ -61,7 +61,7 @@ namespace Tests.Integration
             token = await refreshResponse.Content.ReadFromJsonAsync<AuthenticationToken>(_token);
             Assert.NotNull(token);
 
-            var logoutRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/v1/authentication?refreshToken={token.RefreshToken}");
+            HttpRequestMessage logoutRequest = new(HttpMethod.Delete, $"/api/v1/authentication?refreshToken={token.RefreshToken}");
 
             logoutRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token.AccessToken);
 

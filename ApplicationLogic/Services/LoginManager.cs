@@ -15,7 +15,7 @@ namespace ApplicationLogic.Services
 
         public async Task CreateLogin(AppUser user, AuthenticationToken token)
         {
-            var newLogin = new InternalLogin
+            InternalLogin newLogin = new()
             {
                 Id = Guid.NewGuid().ToString(),
                 RefreshToken = token.RefreshToken,

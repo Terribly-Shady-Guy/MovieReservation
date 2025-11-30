@@ -3,6 +3,7 @@ using ApplicationLogic.ViewModels;
 using DbInfrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.Security.Claims;
 
@@ -127,7 +128,7 @@ namespace ApplicationLogic.Services
 
         public async Task<AuthenticationToken?> RefreshTokens(string access, string refresh)
         {
-            var result = await _tokenProvider.ValidateExpiredToken(access);
+            TokenValidationResult result = await _tokenProvider.ValidateExpiredToken(access);
             if (!result.IsValid || result.SecurityToken is not JsonWebToken accessToken)
             {
                 return null;
@@ -154,7 +155,7 @@ namespace ApplicationLogic.Services
                 return null;
             }
 
-            var identity = new ClaimsIdentity(accessToken.Claims);
+            ClaimsIdentity identity = new(accessToken.Claims);
             AuthenticationToken newToken = await _tokenProvider.GenerateTokens(identity);
 
             await _login.UpdateTokens(login, newToken);
@@ -180,8 +181,8 @@ namespace ApplicationLogic.Services
         private async Task<ClaimsIdentity> CreateClaimsIdentity(AppUser user)
         {
             IList<string> userRoles = await _userManager.GetRolesAsync(user);
-            
-            var accessTokenIdentity = new ClaimsIdentity();
+
+            ClaimsIdentity accessTokenIdentity = new();
 
             accessTokenIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
             accessTokenIdentity.AddClaims(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));

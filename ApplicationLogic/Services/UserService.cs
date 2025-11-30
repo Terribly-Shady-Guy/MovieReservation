@@ -23,7 +23,7 @@ namespace ApplicationLogic.Services
 
         public async Task<Result<string>> AddNewUserAsync(NewUserDto newUser)
         {
-            var user = new AppUser()
+            AppUser user = new()
             {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,

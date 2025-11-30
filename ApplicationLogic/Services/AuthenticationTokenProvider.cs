@@ -29,7 +29,7 @@ namespace ApplicationLogic.Services
 
         public async Task<AuthenticationToken> GenerateTokens(ClaimsIdentity identity)
         {
-            var tokenModel = new AuthenticationToken
+            AuthenticationToken tokenModel = new()
             {
                 AccessToken = await GenerateAccessToken(identity)
             };
@@ -41,7 +41,7 @@ namespace ApplicationLogic.Services
         {
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPublicAsync();
 
-            var tokenParams = new TokenValidationParameters
+            TokenValidationParameters tokenParams = new()
             {
                 ValidateLifetime = false,
                 ValidateAudience = true,
@@ -54,7 +54,7 @@ namespace ApplicationLogic.Services
                 ValidIssuer = _options.Value.Issuer,
             };
 
-            var result = await _jwtHandler.ValidateTokenAsync(expiredToken, tokenParams);
+            TokenValidationResult result = await _jwtHandler.ValidateTokenAsync(expiredToken, tokenParams);
 
             return result;
         }
@@ -62,9 +62,9 @@ namespace ApplicationLogic.Services
         private async Task<string> GenerateAccessToken(ClaimsIdentity identity)
         {
             RsaSecurityKey securityKey = await _securityKeyHandler.LoadPrivateAsync();
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
-            
-            var tokenDescriptor = new SecurityTokenDescriptor
+            SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.RsaSha256);
+
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 SigningCredentials = signingCredentials,
                 Expires = DateTime.UtcNow.AddMinutes(_options.Value.LifetimeMinutes),

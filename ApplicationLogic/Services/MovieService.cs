@@ -65,7 +65,7 @@ namespace ApplicationLogic.Services
             string uploadedFileExtension = Path.GetExtension(movie.PosterImage.FileName);
             string newUploadedFileName = Path.ChangeExtension(Path.GetRandomFileName(), uploadedFileExtension);
 
-            var newMovie = new Movie
+            Movie newMovie = new()
             {
                 Title = movie.Title,
                 Description = movie.Description,
