@@ -21,7 +21,7 @@ namespace MovieReservation.Startup
 
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var context = new ProblemDetailsContext
+            ProblemDetailsContext context = new()
             {
                 HttpContext = httpContext,
                 ProblemDetails = new ProblemDetails

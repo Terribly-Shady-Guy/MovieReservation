@@ -21,7 +21,7 @@ namespace MovieReservation.Startup
             
             try
             {
-                using var connection = new SqlConnection(_connectionString);
+                using SqlConnection connection = new(_connectionString);
                 await connection.OpenAsync(cancellationToken);
 
                 using SqlCommand command = connection.CreateCommand();
