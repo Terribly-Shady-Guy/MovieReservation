@@ -10,7 +10,7 @@ namespace ApplicationLogic.ViewModels
         public required string LastName { get; set; }
         [EmailAddress]
         public required string Email { get; set; }
-        [MinLength(1)]
+        [MinLength(5)]
         public required string Username { get; set; }
         [RegularExpression(@"^(?:(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%&*+=]))[\da-zA-Z!@#$%&*+=]{8,}$",
             ErrorMessage = "Password does not contain an upercase letter, lowercase letter, number, or special character, or is not at least 8 characters long.")]
