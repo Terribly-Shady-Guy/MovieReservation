@@ -14,7 +14,7 @@ namespace MovieReservation.Startup
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            if (_connectionString == null)
+            if (string.IsNullOrWhiteSpace(_connectionString))
             {
                 return HealthCheckResult.Unhealthy("The connection string is missing.");
             }
