@@ -24,7 +24,7 @@ namespace ApplicationLogic.ValidationAttributes
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
             
-            if (!_validTypes.TryGetValue(file.ContentType, out string[]? fileTypes) || fileTypes.Contains(extension))
+            if (!_validTypes.TryGetValue(file.ContentType, out string[]? fileTypes) || !fileTypes.Contains(extension))
             {
                 ErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
                 return false;
