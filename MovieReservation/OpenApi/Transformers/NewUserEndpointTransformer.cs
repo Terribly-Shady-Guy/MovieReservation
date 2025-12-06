@@ -17,6 +17,7 @@ namespace MovieReservation.OpenApi.Transformers
             {
                 ["username"] = "johndoe",
                 ["password"] = "Password123@",
+                ["confirmPassword"] = "Password123@",
                 ["firstName"] = "John",
                 ["lastName"] = "Doe",
                 ["email"] = "john.doe@example.com"
