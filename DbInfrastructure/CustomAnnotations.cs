@@ -2,6 +2,6 @@
 {
     public static class CustomAnnotations
     {
-        public const string TestingDoNotReset = "Test:DoNotReset";
+        public const string TestingDoNotReset = "Testing:DoNotReset";
     }
 }
