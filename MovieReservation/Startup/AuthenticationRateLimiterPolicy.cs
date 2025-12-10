@@ -6,6 +6,8 @@ namespace MovieReservation.Startup
 {
     public class AuthenticationRateLimiterPolicy : IRateLimiterPolicy<string>
     {
+        private const string DefaultIpAddress = "Unknown IP Address";
+
         public AuthenticationRateLimiterPolicy()
         {
             OnRejected = async (context, cancellationToken) =>
@@ -14,7 +16,7 @@ namespace MovieReservation.Startup
                      .GetEndpoint()?.Metadata
                      .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
 
-                string clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
+                string clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
 
                 var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
                 if (logger.IsEnabled(LogLevel.Warning))
@@ -41,7 +43,7 @@ namespace MovieReservation.Startup
 
         public RateLimitPartition<string> GetPartition(HttpContext httpContext)
         {
-            string clientIpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
+            string clientIpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
             return RateLimitPartition.GetSlidingWindowLimiter(clientIpAddress, _ => new SlidingWindowRateLimiterOptions
             {
                 Window = TimeSpan.FromMinutes(10),
