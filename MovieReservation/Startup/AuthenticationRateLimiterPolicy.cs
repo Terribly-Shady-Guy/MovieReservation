@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReservation.Startup
 {
     public class AuthenticationRateLimiterPolicy : IRateLimiterPolicy<string>
     {
-        public AuthenticationRateLimiterPolicy(ILogger<AuthenticationRateLimiterPolicy> logger)
+        public AuthenticationRateLimiterPolicy()
         {
             OnRejected = async (context, cancellationToken) =>
             {
@@ -15,8 +16,24 @@ namespace MovieReservation.Startup
 
                 string clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
 
-                logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
-                await context.HttpContext.Response.WriteAsync("This request has been rate limited. Please try again later.", cancellationToken);
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
+                if (logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
+                }
+                
+                var detailsService = context.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
+                ProblemDetailsContext detailsContext = new()
+                { 
+                    HttpContext = context.HttpContext,
+                    ProblemDetails = new ProblemDetails
+                    {
+                        Title = "Request Rate Limited",
+                        Detail = "This request has been rate limited. Please try again later."
+                    }
+                };
+
+                await detailsService.WriteAsync(detailsContext);
             };
         }
 
