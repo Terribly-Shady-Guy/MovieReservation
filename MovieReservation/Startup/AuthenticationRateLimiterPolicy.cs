@@ -9,22 +9,14 @@ namespace MovieReservation.Startup
         {
             OnRejected = async (context, cancellationToken) =>
             {
-                try
-                {
-                    string? rateLimiterPolicy = context.HttpContext
-                    .GetEndpoint()?.Metadata
-                    .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
+                string? rateLimiterPolicy = context.HttpContext
+                     .GetEndpoint()?.Metadata
+                     .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
 
-                    string clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
+                string clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
 
-                    logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
-                    await context.HttpContext.Response.WriteAsync("This request has been rate limited. Please try again later.", cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error has occured when handling rate limiting rejection.");
-                    throw;
-                }
+                logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
+                await context.HttpContext.Response.WriteAsync("This request has been rate limited. Please try again later.", cancellationToken);
             };
         }
 
