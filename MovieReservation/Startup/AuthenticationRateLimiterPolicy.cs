@@ -30,7 +30,6 @@ namespace MovieReservation.Startup
                     HttpContext = context.HttpContext,
                     ProblemDetails = new ProblemDetails
                     {
-                        Title = "Request Rate Limited",
                         Detail = "This request has been rate limited. Please try again later."
                     }
                 };
