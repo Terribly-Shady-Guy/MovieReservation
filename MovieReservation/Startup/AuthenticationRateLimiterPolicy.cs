@@ -10,24 +10,24 @@ namespace MovieReservation.Startup
 
         public AuthenticationRateLimiterPolicy()
         {
-            OnRejected = async (context, cancellationToken) =>
+            OnRejected = async (rejectedContext, cancellationToken) =>
             {
-                string? rateLimiterPolicy = context.HttpContext
+                string? rateLimiterPolicy = rejectedContext.HttpContext
                      .GetEndpoint()?.Metadata
                      .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
 
-                string clientIpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
+                string clientIpAddress = rejectedContext.HttpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
 
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
+                var logger = rejectedContext.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
                 if (logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
                 }
                 
-                var detailsService = context.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
+                var detailsService = rejectedContext.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
                 ProblemDetailsContext detailsContext = new()
                 { 
-                    HttpContext = context.HttpContext,
+                    HttpContext = rejectedContext.HttpContext,
                     ProblemDetails = new ProblemDetails
                     {
                         Detail = "This request has been rate limited. Please try again later."
