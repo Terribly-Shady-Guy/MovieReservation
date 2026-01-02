@@ -12,16 +12,18 @@ namespace MovieReservation.Startup
         {
             OnRejected = async (rejectedContext, cancellationToken) =>
             {
-                string? rateLimiterPolicy = rejectedContext.HttpContext
-                     .GetEndpoint()?.Metadata
-                     .GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
+                Endpoint? rateLimitedEndpoint = rejectedContext.HttpContext.GetEndpoint();
+                string? rateLimiterPolicy = rateLimitedEndpoint?.Metadata.GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
 
                 string clientIpAddress = rejectedContext.HttpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
 
                 var logger = rejectedContext.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
                 if (logger.IsEnabled(LogLevel.Warning))
                 {
-                    logger.LogWarning("Request IP Address {IpAddress} was rate limited using {Policy} policy.", clientIpAddress, rateLimiterPolicy);
+                    logger.LogWarning("Request IP Address {IpAddress} was rate limited using {PolicyName} policy for {EndpointName}.",
+                                      clientIpAddress,
+                                      rateLimiterPolicy,
+                                      rateLimitedEndpoint?.DisplayName);
                 }
                 
                 var detailsService = rejectedContext.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
