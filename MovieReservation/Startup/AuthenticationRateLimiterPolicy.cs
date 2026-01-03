@@ -48,7 +48,6 @@ namespace MovieReservation.Startup
             {
                 Window = TimeSpan.FromMinutes(10),
                 PermitLimit = 30,
-                AutoReplenishment = true,
                 SegmentsPerWindow = 30
             });
         }
