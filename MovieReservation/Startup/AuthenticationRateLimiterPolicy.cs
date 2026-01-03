@@ -6,8 +6,6 @@ namespace MovieReservation.Startup
 {
     public class AuthenticationRateLimiterPolicy : IRateLimiterPolicy<string>
     {
-        private const string DefaultIpAddress = "Unknown IP Address";
-
         public AuthenticationRateLimiterPolicy()
         {
             OnRejected = async (rejectedContext, cancellationToken) =>
@@ -15,7 +13,7 @@ namespace MovieReservation.Startup
                 Endpoint? rateLimitedEndpoint = rejectedContext.HttpContext.GetEndpoint();
                 string? rateLimiterPolicy = rateLimitedEndpoint?.Metadata.GetRequiredMetadata<EnableRateLimitingAttribute>().PolicyName;
 
-                string clientIpAddress = rejectedContext.HttpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
+                string clientIpAddress = GetClientIpAddress(rejectedContext.HttpContext);
 
                 var logger = rejectedContext.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
                 if (logger.IsEnabled(LogLevel.Warning))
@@ -44,7 +42,7 @@ namespace MovieReservation.Startup
 
         public RateLimitPartition<string> GetPartition(HttpContext httpContext)
         {
-            string clientIpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
+            string clientIpAddress = GetClientIpAddress(httpContext);
             return RateLimitPartition.GetSlidingWindowLimiter(clientIpAddress, _ => new SlidingWindowRateLimiterOptions
             {
                 Window = TimeSpan.FromMinutes(10),
@@ -52,6 +50,12 @@ namespace MovieReservation.Startup
                 AutoReplenishment = true,
                 SegmentsPerWindow = 30
             });
+        }
+
+        private static string GetClientIpAddress(HttpContext httpContext)
+        {
+            const string DefaultIpAddress = "Unknown IP Address";
+            return httpContext.Connection?.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
         }
     }
 }
