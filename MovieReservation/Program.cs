@@ -1,5 +1,6 @@
 using DbInfrastructure;
 using MovieReservation.Startup;
+using MovieReservation.RateLimiting;
 using ApplicationLogic;
 using Asp.Versioning;
 
