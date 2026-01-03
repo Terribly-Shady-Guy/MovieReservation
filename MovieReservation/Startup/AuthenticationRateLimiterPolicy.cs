@@ -18,10 +18,11 @@ namespace MovieReservation.Startup
                 var logger = rejectedContext.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
                 if (logger.IsEnabled(LogLevel.Warning))
                 {
-                    logger.LogWarning("Request IP Address {IpAddress} was rate limited using {PolicyName} policy for {EndpointName}.",
+                    logger.LogWarning("Request IP Address {IpAddress} was rate limited using {PolicyName} policy for {EndpointName}. Request trace identifier: {TraceIdentifier}",
                                       clientIpAddress,
                                       rateLimiterPolicy,
-                                      rateLimitedEndpoint?.DisplayName);
+                                      rateLimitedEndpoint?.DisplayName,
+                                      rejectedContext.HttpContext.TraceIdentifier);
                 }
                 
                 var detailsService = rejectedContext.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
