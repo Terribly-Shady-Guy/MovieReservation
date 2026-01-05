@@ -43,6 +43,7 @@ namespace MovieReservation.RateLimiting
                 HttpContext = rejectedContext.HttpContext,
                 ProblemDetails = new ProblemDetails
                 {
+                    Title = "Too Many Requests",
                     Detail = "This request has been rate limited. Please try again later."
                 }
             };
