@@ -43,7 +43,7 @@ namespace MovieReservation.Controllers
             {
                 return Problem(
                     title: "Login failed",
-                    detail: "The provided username or password is incorrect.",
+                    detail: "The provided email or password is incorrect.",
                     statusCode: StatusCodes.Status401Unauthorized);
             }
             else if (login.Result.RequiresTwoFactor && login.UserId is not null)

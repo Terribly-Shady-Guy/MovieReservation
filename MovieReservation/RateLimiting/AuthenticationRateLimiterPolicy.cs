@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace MovieReservation.RateLimiting
 {
@@ -15,7 +16,8 @@ namespace MovieReservation.RateLimiting
             {
                 Window = TimeSpan.FromMinutes(10),
                 PermitLimit = 30,
-                SegmentsPerWindow = 10
+                SegmentsPerWindow = 10,
+                QueueLimit = 0
             });
         }
 
@@ -35,9 +37,9 @@ namespace MovieReservation.RateLimiting
 
             if (rejectedContext.Lease.TryGetMetadata(MetadataName.RetryAfter, out TimeSpan retryAfterTime))
             {
-                rejectedContext.HttpContext.Response.Headers.RetryAfter = ((int)retryAfterTime.TotalSeconds).ToString();
+                rejectedContext.HttpContext.Response.Headers.RetryAfter = ((int)retryAfterTime.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
             }
-
+            
             ProblemDetailsContext detailsContext = new()
             {
                 HttpContext = rejectedContext.HttpContext,
