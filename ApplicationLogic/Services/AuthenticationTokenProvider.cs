@@ -19,7 +19,7 @@ namespace ApplicationLogic.Services
     {
         private readonly IOptions<JwtOptions> _options;
         private readonly IRsaKeyHandler _securityKeyHandler;
-        private readonly JsonWebTokenHandler _jwtHandler = new JsonWebTokenHandler();
+        private readonly JsonWebTokenHandler _jwtHandler = new();
 
         public AuthenticationTokenProvider(IOptions<JwtOptions> options, IRsaKeyHandler securityKeyHandler)
         {
