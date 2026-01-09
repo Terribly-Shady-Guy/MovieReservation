@@ -46,7 +46,8 @@ namespace MovieReservation.RateLimiting
                 ProblemDetails = new ProblemDetails
                 {
                     Title = "Too Many Requests",
-                    Detail = "This request has been rate limited. Please try again later."
+                    Detail = "This request has been rate limited. Please try again later.",
+                    Type = "https://datatracker.ietf.org/doc/html/rfc6585#section-4"
                 }
             };
 
