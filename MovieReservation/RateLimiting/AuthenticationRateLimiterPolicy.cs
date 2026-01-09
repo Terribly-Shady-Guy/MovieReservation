@@ -24,7 +24,7 @@ namespace MovieReservation.RateLimiting
         private static async ValueTask HandleRejected(OnRejectedContext rejectedContext, CancellationToken cancellationToken)
         {
             Endpoint? rateLimitedEndpoint = rejectedContext.HttpContext.GetEndpoint();
-            var rateLimitingAttribute = rateLimitedEndpoint?.Metadata.GetRequiredMetadata<EnableRateLimitingAttribute>();
+            var rateLimitingAttribute = rateLimitedEndpoint?.Metadata.GetMetadata<EnableRateLimitingAttribute>();
 
             string clientIpAddress = GetClientIpAddress(rejectedContext.HttpContext);
 
