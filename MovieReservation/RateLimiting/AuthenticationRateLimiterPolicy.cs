@@ -51,8 +51,8 @@ namespace MovieReservation.RateLimiting
                 }
             };
 
-            var detailsService = rejectedContext.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
-            await detailsService.WriteAsync(detailsContext);
+            var problemDetailsService = rejectedContext.HttpContext.RequestServices.GetRequiredService<IProblemDetailsService>();
+            await problemDetailsService.WriteAsync(detailsContext);
         }
 
         private static string GetClientIpAddress(HttpContext httpContext)
