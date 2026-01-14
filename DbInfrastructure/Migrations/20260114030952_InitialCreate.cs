@@ -187,7 +187,7 @@ namespace DbInfrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "VARCHAR(450)", unicode: false, nullable: false),
                     UserId = table.Column<string>(type: "NVARCHAR(450)", unicode: false, nullable: false),
-                    refresh_token = table.Column<string>(type: "varchar(400)", unicode: false, nullable: false),
+                    refresh_token = table.Column<string>(type: "varchar(100)", unicode: false, nullable: false),
                     expiration_date = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     LoginDate = table.Column<DateTime>(type: "DATETIME", nullable: false)
                 },

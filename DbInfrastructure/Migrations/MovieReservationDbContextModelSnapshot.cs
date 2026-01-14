@@ -17,7 +17,7 @@ namespace DbInfrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -158,7 +158,7 @@ namespace DbInfrastructure.Migrations
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .IsUnicode(false)
-                        .HasColumnType("varchar(400)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("refresh_token");
 
                     b.Property<string>("UserId")
@@ -309,6 +309,8 @@ namespace DbInfrastructure.Migrations
                         .HasName("PK_ReservationStatus");
 
                     b.ToTable("ReservationStatus", (string)null);
+
+                    b.HasAnnotation("Testing:DoNotReset", true);
                 });
 
             modelBuilder.Entity("DbInfrastructure.Models.Seat", b =>
@@ -421,6 +423,8 @@ namespace DbInfrastructure.Migrations
                         .HasName("PK_TheaterType");
 
                     b.ToTable("TheaterType", (string)null);
+
+                    b.HasAnnotation("Testing:DoNotReset", true);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

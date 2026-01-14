@@ -14,7 +14,7 @@ namespace DbInfrastructure.ModelConfiguration
             builder.Property(e => e.RefreshToken)
                 .IsUnicode(false)
                 .HasColumnName("refresh_token")
-                .HasColumnType("varchar(400)");
+                .HasColumnType("varchar(100)");
 
             builder.Property(e => e.ExpirationDate)
                 .HasColumnType("DATETIME")

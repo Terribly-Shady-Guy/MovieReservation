@@ -79,7 +79,7 @@ namespace ApplicationLogic.Services
 
         private static AuthenticationToken GenerateRefreshToken(AuthenticationToken tokenModel)
         {
-            byte[] refreshTokenBytes = RandomNumberGenerator.GetBytes(200);
+            byte[] refreshTokenBytes = RandomNumberGenerator.GetBytes(64);
             tokenModel.RefreshToken = Convert.ToBase64String(refreshTokenBytes);
             tokenModel.RefreshExpiration = DateTime.UtcNow.AddDays(4);
 
