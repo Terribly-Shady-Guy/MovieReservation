@@ -30,10 +30,10 @@ namespace MovieReservation.RateLimiting
 
             var logger = rejectedContext.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
             logger.AuthenticationRequestRateLimited(
-                clientIpAddress,
-                rateLimitingAttribute?.PolicyName ?? "Unknown policy",
-                rateLimitedEndpoint?.DisplayName ?? "Unknown endpoint",
-                rejectedContext.HttpContext.TraceIdentifier);
+                ipAddress: clientIpAddress,
+                policyName: rateLimitingAttribute?.PolicyName ?? "Unknown policy",
+                endpointName: rateLimitedEndpoint?.DisplayName ?? "Unknown endpoint",
+                traceIdentifier: rejectedContext.HttpContext.TraceIdentifier);
 
             if (rejectedContext.Lease.TryGetMetadata(MetadataName.RetryAfter, out TimeSpan retryAfterTime))
             {
