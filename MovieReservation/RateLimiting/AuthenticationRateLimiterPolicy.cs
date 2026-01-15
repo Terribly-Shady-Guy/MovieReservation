@@ -30,7 +30,7 @@ namespace MovieReservation.RateLimiting
 
             var logger = rejectedContext.HttpContext.RequestServices.GetRequiredService<ILogger<AuthenticationRateLimiterPolicy>>();
             logger.AuthenticationRequestRateLimited(
-                ipAddress: clientIpAddress,
+                clientIpAddress: clientIpAddress,
                 policyName: rateLimitingAttribute?.PolicyName ?? "Unknown policy",
                 endpointName: rateLimitedEndpoint?.DisplayName ?? "Unknown endpoint",
                 traceIdentifier: rejectedContext.HttpContext.TraceIdentifier);
