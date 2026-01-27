@@ -37,7 +37,8 @@ namespace MovieReservation.RateLimiting
 
             if (rejectedContext.Lease.TryGetMetadata(MetadataName.RetryAfter, out TimeSpan retryAfterTime))
             {
-                rejectedContext.HttpContext.Response.Headers.RetryAfter = ((int)retryAfterTime.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
+                int retrySeconds = (int)Math.Ceiling(retryAfterTime.TotalSeconds);
+                rejectedContext.HttpContext.Response.Headers.RetryAfter = retrySeconds.ToString(NumberFormatInfo.InvariantInfo);
             }
             
             ProblemDetailsContext detailsContext = new()
