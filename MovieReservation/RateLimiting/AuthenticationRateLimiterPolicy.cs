@@ -58,8 +58,7 @@ namespace MovieReservation.RateLimiting
 
         private static string GetClientIpAddress(HttpContext httpContext)
         {
-            const string DefaultIpAddress = "Unknown IP Address";
-            return httpContext.Connection?.RemoteIpAddress?.ToString() ?? DefaultIpAddress;
+            return httpContext.Connection?.RemoteIpAddress?.ToString() ?? "Unknown IP Address";
         }
     }
 }
