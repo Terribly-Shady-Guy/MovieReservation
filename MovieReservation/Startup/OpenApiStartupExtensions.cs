@@ -75,7 +75,9 @@ namespace MovieReservation.Startup
                     .AddPreferredSecuritySchemes(BearerSchemeKey)
                     .EnablePersistentAuthentication()
                     .AddHttpAuthentication(BearerSchemeKey, scheme => scheme.Token = token)
-                    .AddDocuments(descriptionProvider.ApiVersionDescriptions.Select(d => d.GroupName));
+                    .AddDocuments(descriptionProvider.ApiVersionDescriptions.Select(d => d.GroupName))
+                    .WithOperationTitleSource(OperationTitleSource.Path)
+                    .DisableTelemetry();
             });
         }
     }
