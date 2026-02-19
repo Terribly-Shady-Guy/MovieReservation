@@ -22,6 +22,8 @@ namespace MovieReservation.OpenApi.Transformers
                 
             foreach (var transformerMetadataItem in endpointTransformerMetadata)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 try
                 {
                     var endpointTransformer = (IOpenApiOperationTransformer)ActivatorUtilities.CreateInstance(
