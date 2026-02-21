@@ -19,7 +19,7 @@ namespace DbInfrastructure.DataSeeding
         public void Add(DbContext context)
         {
             var storedLookups = context.Set<TLookup>()
-                   .ToList();
+                   .ToDictionary(l => l.Id);
 
            AddEnums(storedLookups, context);
         }
@@ -27,16 +27,16 @@ namespace DbInfrastructure.DataSeeding
         public async Task AddAsync(DbContext context, CancellationToken cancellationToken)
         {
             var storedLookups = await context.Set<TLookup>()
-                  .ToListAsync(cancellationToken);
+                  .ToDictionaryAsync(l => l.Id, cancellationToken);
 
             AddEnums(storedLookups, context);
         }
 
-        private void AddEnums(IList<TLookup> storedLookups, DbContext context)
+        private void AddEnums(Dictionary<TEnum, TLookup> storedLookups, DbContext context)
         {
             foreach (var lookup in _lookups)
             {
-                if (!storedLookups.Any(s => s.Id.Equals(lookup.Id)))
+                if (!storedLookups.ContainsKey(lookup.Id))
                 {
                     context.Add(lookup);
                 }
