@@ -32,19 +32,21 @@ namespace MovieReservation.OpenApi.Transformers
                 return;
             }
 
-            operation.Responses?.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
+            operation.Responses ??= [];
+            operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {
                 Description = "User does not have required role or token is invalid."
             });
 
-            operation.Responses?.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
+            operation.Responses.TryAdd(StatusCodes.Status401Unauthorized.ToString(), new OpenApiResponse
             {
                 Description = $"The access token has not been provided in ```{HeaderNames.Authorization}``` header."
             });
 
             var requirementSecurityScheme = new OpenApiSecuritySchemeReference(jwtBearerScheme.Name, context.Document);
 
-            operation.Security?.Add(new OpenApiSecurityRequirement
+            operation.Security ??= [];
+            operation.Security.Add(new OpenApiSecurityRequirement
             {
                 [requirementSecurityScheme] = []
             });
