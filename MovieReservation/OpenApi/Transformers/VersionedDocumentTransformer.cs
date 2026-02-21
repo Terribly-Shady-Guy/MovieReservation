@@ -38,7 +38,7 @@ namespace MovieReservation.OpenApi.Transformers
                 key: "JWT Bearer",
                 value: new OpenApiSecurityScheme
                 {
-                    Description = $"Jwt bearer token using ```{HeaderNames.Authorization}``` header",
+                    Description = $"Jwt bearer token using ```{HeaderNames.Authorization}``` header.",
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
