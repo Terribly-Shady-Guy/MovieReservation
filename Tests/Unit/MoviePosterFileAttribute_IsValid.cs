@@ -29,7 +29,7 @@ namespace Tests.Unit
             {
                 Headers = new HeaderDictionary(),
                 ContentType = contentType,
-                ContentDisposition = $"form-data; name={FormInputName}; filename={fileName}"
+                ContentDisposition = $"form-data; name=\"{FormInputName}\"; filename=\"{fileName}\""
             };
 
             var attribute = new MoviePosterFileAttribute();
