@@ -33,8 +33,8 @@ namespace Tests.Unit
                 ContentDisposition = $"form-data; name=\"{FormInputName}\"; filename=\"{fileName}\""
             };
 
-            var attribute = new MoviePosterFileAttribute();
-            bool result = attribute.IsValid(fakeUploadedFile);
+            var validationAttribute = new MoviePosterFileAttribute();
+            bool result = validationAttribute.IsValid(fakeUploadedFile);
 
             Assert.Equal(expected, result);
         }
@@ -44,8 +44,8 @@ namespace Tests.Unit
         {
             int invalidTypeTestValue = 0;
 
-            var attribute = new MoviePosterFileAttribute();
-            bool result = attribute.IsValid(invalidTypeTestValue);
+            var validationAttribute = new MoviePosterFileAttribute();
+            bool result = validationAttribute.IsValid(invalidTypeTestValue);
 
             Assert.False(result);
         }
@@ -55,8 +55,8 @@ namespace Tests.Unit
         {
             IFormFile? fakeUploadedFile = null;
             
-            var attribute = new MoviePosterFileAttribute();
-            bool result = attribute.IsValid(fakeUploadedFile);
+            var validationAttribute = new MoviePosterFileAttribute();
+            bool result = validationAttribute.IsValid(fakeUploadedFile);
 
             Assert.False(result);
         }
