@@ -43,8 +43,8 @@ namespace Tests.Unit
         public void IsValid_WithInvalidType_ReturnsFalse()
         {
             int invalidTypeTestValue = 0;
-            var attribute = new MoviePosterFileAttribute();
 
+            var attribute = new MoviePosterFileAttribute();
             bool result = attribute.IsValid(invalidTypeTestValue);
 
             Assert.False(result);
@@ -54,7 +54,7 @@ namespace Tests.Unit
         public void IsValid_WithNull_ReturnsFalse()
         {
             IFormFile? fakeUploadedFile = null;
-
+            
             var attribute = new MoviePosterFileAttribute();
             bool result = attribute.IsValid(fakeUploadedFile);
 
