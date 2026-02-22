@@ -23,11 +23,15 @@ namespace MovieReservation.OpenApi.Transformers
                 return;
             }
 
+            bool hasAllowAnonymous = context.Description.ActionDescriptor.EndpointMetadata
+                .OfType<IAllowAnonymous>()
+                .Any();
+
             bool hasBearerAuthData = context.Description.ActionDescriptor.EndpointMetadata
                  .OfType<IAuthorizeData>()
                  .Any(authData => authData.AuthenticationSchemes is null || authData.AuthenticationSchemes.Contains(jwtBearerScheme.Name));
 
-            if (!hasBearerAuthData)
+            if (hasAllowAnonymous || !hasBearerAuthData)
             {
                 return;
             }
