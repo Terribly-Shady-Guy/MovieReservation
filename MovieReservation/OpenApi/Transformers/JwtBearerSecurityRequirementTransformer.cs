@@ -37,7 +37,7 @@ namespace MovieReservation.OpenApi.Transformers
             }
 
             operation.Responses ??= [];
-            operation.Responses.Add(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
+            operation.Responses.TryAdd(StatusCodes.Status403Forbidden.ToString(), new OpenApiResponse
             {
                 Description = "User does not have required role or token is invalid."
             });
