@@ -12,13 +12,13 @@ namespace ApplicationLogic.ValidationAttributes
             [MediaTypeNames.Image.Png] = [".png"],
         };
 
-        private const int _fileSizeLimitInMB = 10;
+        private const int _FileSizeLimitInBytes = 10 * 1024 * 1024;
 
-        public override bool IsValid(object? value)
+        protected override ValidationResult? IsValid(object? value, ValidationContext context)
         {
-            if (value is null || value is not IFormFile file)
+            if (value is not IFormFile file)
             {
-                return false;
+                return new ValidationResult(null);
             }
 
             string extension = Path.GetExtension(file.FileName)
@@ -26,19 +26,15 @@ namespace ApplicationLogic.ValidationAttributes
             
             if (!_validTypes.TryGetValue(file.ContentType, out string[]? fileTypes) || !fileTypes.Contains(extension))
             {
-                ErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
-                return false;
+                return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
             }
-            
-            long imageSizeInMB = file.Length / (1024 * 1024);
 
-            if (imageSizeInMB > _fileSizeLimitInMB)
+            if (file.Length > _FileSizeLimitInBytes)
             {
-                ErrorMessage = $"The uploaded file must be {_fileSizeLimitInMB}mb or smaller.";
-                return false;
+                return new ValidationResult($"The uploaded file must be {_FileSizeLimitInBytes / (1024 * 1024)}mb or smaller.");
             }
 
-            return true;
+            return ValidationResult.Success;
         }
     }
 }
