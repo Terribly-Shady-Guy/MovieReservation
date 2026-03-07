@@ -1,5 +1,4 @@
 ﻿using ApplicationLogic.ValidationAttributes;
-using ApplicationLogic.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
@@ -10,39 +9,42 @@ namespace Tests.Unit
     public class MoviePosterFileAttributeTests
     {
         [Theory]
-        [InlineData("testfilename.jpeg", 30 * 1024, MediaTypeNames.Image.Jpeg, TestDisplayName = "Valid with jpeg")]
-        [InlineData("testfilename.png", 10 * 1024, MediaTypeNames.Image.Png, TestDisplayName = "Valid with png")]
-        [InlineData("testfilename.jpg", 10 * 1024 * 1024, MediaTypeNames.Image.Jpeg, TestDisplayName = "Valid with jpg and max file size")]
-        public void IsValid_WithFormFile_ReturnsNull(string fileName, int fileSize, string contentType)
+        [InlineData("validjpegfile.jpeg", 30 * 1024, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Valid with jpeg")]
+        [InlineData("validpngfile.png", 10 * 1024, MediaTypeNames.Image.Png, "89504E470D0A1A0A", TestDisplayName = "Valid with png")]
+        [InlineData("validjpgfile.jpg", 10 * 1024 * 1024, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Valid with jpg and max file size")]
+        public void IsValid_WithFormFile_ReturnsNull(string fileName, int fileSize, string contentType, string signature)
         {
-            MovieFormDataBody testModel = CreateTestModelInstance(fileName, fileSize, contentType);
-            var context = new ValidationContext(testModel);
+            byte[] fileSignature = Convert.FromHexString(signature);
+            IFormFile testFile = CreateTestFile(fileName, fileSize, contentType, fileSignature);
+            var context = new ValidationContext(new { PosterImage = testFile });
 
             var validationAttribute = new MoviePosterFileAttribute();
-            ValidationResult? result = validationAttribute.GetValidationResult(testModel.PosterImage, context);
-
+            ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
+            
             Assert.Null(result);
         }
 
         [Theory]
-        [InlineData("testfilename.txt", 30 * 1024, MediaTypeNames.Text.Plain, TestDisplayName = "Invalid extension and content type")]
-        [InlineData("testfilename.jpg", (10 * 1024 * 1024) + 1, MediaTypeNames.Image.Jpeg, TestDisplayName = "Invalid file size")]
-        [InlineData("testfilename.jpg", 11 * 1024, MediaTypeNames.Text.Plain, TestDisplayName = "Invalid with bad content type")]
-        [InlineData("testfilename.jpeg", 10 * 1024, MediaTypeNames.Image.Png, TestDisplayName = "Invalid with mismatched content type")]
-        [InlineData("testfilename.jpg.exe", 30 * 1024, MediaTypeNames.Image.Jpeg, TestDisplayName = "Invalid with double extension")]
-        public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string contentType)
+        [InlineData("invalidfileextension.txt", 30 * 1024, MediaTypeNames.Text.Plain, "", TestDisplayName = "Invalid file extension and content type")]
+        [InlineData("filetoolarge.jpg", (10 * 1024 * 1024) + 1, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Invalid file size")]
+        [InlineData("wrongcontenttype.jpg", 11 * 1024, MediaTypeNames.Text.Plain, "FFD8", TestDisplayName = "Invalid content type")]
+        [InlineData("mismatchedcontenttype.jpeg", 10 * 1024, MediaTypeNames.Image.Png, "FFD8", TestDisplayName = "Invalid with mismatched content type and extension")]
+        [InlineData("doubleexstension.jpg.exe", 30 * 1024, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Invalid with double extension")]
+        [InlineData("invalidsignature.png", 10 * 1024, MediaTypeNames.Image.Png, "4D5A", TestDisplayName = "Invalid file signature")]
+        public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string contentType, string signature)
         {
-            MovieFormDataBody testModel = CreateTestModelInstance(fileName, fileSize, contentType);
-            var context = new ValidationContext(testModel);
+            byte[] fileSignature = Convert.FromHexString(signature);
+            IFormFile testFile = CreateTestFile(fileName, fileSize, contentType, fileSignature);
+            var context = new ValidationContext(new { PosterImage = testFile });
 
             var validationAttribute = new MoviePosterFileAttribute();
-            ValidationResult? result = validationAttribute.GetValidationResult(testModel.PosterImage, context);
-
+            ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
+            
             Assert.NotNull(result);
         }
         
         [Fact]
-        public void IsValid_WithInvalidType_ReturnsValidationResult()
+        public void IsValid_WithInvalidType_ReturnsNull()
         {
             int invalidTypeTestValue = 0;
             var context = new ValidationContext(invalidTypeTestValue);
@@ -50,11 +52,11 @@ namespace Tests.Unit
             var validationAttribute = new MoviePosterFileAttribute();
             ValidationResult? result = validationAttribute.GetValidationResult(invalidTypeTestValue, context);
 
-            Assert.NotNull(result);
+            Assert.Null(result);
         }
 
         [Fact]
-        public void IsValid_WithNull_ReturnsValidationResult()
+        public void IsValid_WithNull_ReturnsNull()
         {
             IFormFile? fakeUploadedFile = null;
             var context = new ValidationContext(new { fakeUploadedFile });
@@ -62,15 +64,15 @@ namespace Tests.Unit
             var validationAttribute = new MoviePosterFileAttribute();
             ValidationResult? result = validationAttribute.GetValidationResult(fakeUploadedFile, context);
 
-            Assert.NotNull(result);
+            Assert.Null(result);
         }
 
-        private static MovieFormDataBody CreateTestModelInstance(string fileName, int fileSize, string contentType)
+        private static IFormFile CreateTestFile(string fileName, int fileSize, string contentType, byte[] signature)
         {
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
-            byte[] testFileBuffer = Encoding.UTF8.GetBytes(fileName);
+            byte[] testFileBuffer = [..signature, ..Encoding.UTF8.GetBytes(fileName)];
             var fakeFileStream = new MemoryStream(testFileBuffer);
 
             IFormFile fakeUploadedFile = new FormFile(
@@ -85,13 +87,7 @@ namespace Tests.Unit
                 ContentDisposition = $"form-data; name=\"{FormInputName}\"; filename=\"{fileName}\""
             };
 
-            return new MovieFormDataBody()
-            {
-                Description = string.Empty,
-                Genres = [],
-                PosterImage = fakeUploadedFile,
-                Title = string.Empty
-            };
+            return fakeUploadedFile;
         }
     }
 }
