@@ -27,7 +27,8 @@ namespace Tests.Unit
         [Theory]
         [InlineData("testfilename.txt", 30 * 1024, MediaTypeNames.Text.Plain, TestDisplayName = "Invalid extension and content type")]
         [InlineData("testfilename.jpg", (10 * 1024 * 1024) + 1, MediaTypeNames.Image.Jpeg, TestDisplayName = "Invalid file size")]
-        [InlineData("testfilename.jpg", 11 * 1024, MediaTypeNames.Text.Plain, TestDisplayName = "Invalid with mismatched content type")]
+        [InlineData("testfilename.jpg", 11 * 1024, MediaTypeNames.Text.Plain, TestDisplayName = "Invalid with bad content type")]
+        [InlineData("testfilename.jpeg", 10 * 1024, MediaTypeNames.Image.Png, TestDisplayName = "Invalid with mismatched content type")]
         [InlineData("testfilename.jpg.exe", 30 * 1024, MediaTypeNames.Image.Jpeg, TestDisplayName = "Invalid with double extension")]
         public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string contentType)
         {
