@@ -8,6 +8,9 @@ namespace Tests.Unit
 {
     public class MoviePosterFileAttributeTests
     {
+        private const string WrongFileErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
+        private const string FileTooLargeErrorMessage = "The uploaded file must be 10mb or smaller.";
+
         [Theory]
         [InlineData("validjpegfile.jpeg", 30 * 1024, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Valid with jpeg")]
         [InlineData("validpngfile.png", 10 * 1024, MediaTypeNames.Image.Png, "89504E470D0A1A0A", TestDisplayName = "Valid with png")]
@@ -25,13 +28,13 @@ namespace Tests.Unit
         }
 
         [Theory]
-        [InlineData("invalidfileextension.txt", 30 * 1024, MediaTypeNames.Text.Plain, "", TestDisplayName = "Invalid file extension and content type")]
-        [InlineData("filetoolarge.jpg", (10 * 1024 * 1024) + 1, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Invalid file size")]
-        [InlineData("wrongcontenttype.jpg", 11 * 1024, MediaTypeNames.Text.Plain, "FFD8", TestDisplayName = "Invalid content type")]
-        [InlineData("mismatchedcontenttype.jpeg", 10 * 1024, MediaTypeNames.Image.Png, "FFD8", TestDisplayName = "Invalid with mismatched content type and extension")]
-        [InlineData("doubleexstension.jpg.exe", 30 * 1024, MediaTypeNames.Image.Jpeg, "FFD8", TestDisplayName = "Invalid with double extension")]
-        [InlineData("invalidsignature.png", 10 * 1024, MediaTypeNames.Image.Png, "4D5A", TestDisplayName = "Invalid file signature")]
-        public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string contentType, string signature)
+        [InlineData("invalidfileextension.txt", 30 * 1024, MediaTypeNames.Text.Plain, "", WrongFileErrorMessage, TestDisplayName = "Invalid file extension and content type")]
+        [InlineData("filetoolarge.jpg", (10 * 1024 * 1024) + 1, MediaTypeNames.Image.Jpeg, "FFD8", FileTooLargeErrorMessage, TestDisplayName = "Invalid file size")]
+        [InlineData("wrongcontenttype.jpg", 11 * 1024, MediaTypeNames.Text.Plain, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid content type")]
+        [InlineData("mismatchedcontenttype.jpeg", 10 * 1024, MediaTypeNames.Image.Png, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid with mismatched content type and extension")]
+        [InlineData("doubleexstension.jpg.exe", 30 * 1024, MediaTypeNames.Image.Jpeg, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid with double extension")]
+        [InlineData("invalidsignature.png", 10 * 1024, MediaTypeNames.Image.Png, "4D5A", WrongFileErrorMessage, TestDisplayName = "Invalid file signature")]
+        public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string contentType, string signature, string expectedErrorMessage)
         {
             byte[] fileSignature = Convert.FromHexString(signature);
             IFormFile testFile = CreateTestFile(fileName, fileSize, contentType, fileSignature);
@@ -41,6 +44,7 @@ namespace Tests.Unit
             ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
             
             Assert.NotNull(result);
+            Assert.Equal(expectedErrorMessage, result.ErrorMessage);
         }
         
         [Fact]
