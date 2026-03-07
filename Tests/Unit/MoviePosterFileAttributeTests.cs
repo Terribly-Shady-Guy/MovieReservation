@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
-using System.Text;
 
 namespace Tests.Unit
 {
@@ -77,8 +76,7 @@ namespace Tests.Unit
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
-            byte[] testFileBuffer = [..signature, ..Encoding.UTF8.GetBytes(fileName)];
-            var fakeFileStream = new MemoryStream(testFileBuffer);
+            var fakeFileStream = new MemoryStream(signature);
 
             IFormFile fakeUploadedFile = new FormFile(
                 baseStream: fakeFileStream,
