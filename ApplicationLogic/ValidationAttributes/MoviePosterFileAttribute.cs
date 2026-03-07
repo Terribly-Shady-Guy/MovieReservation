@@ -34,7 +34,7 @@ namespace ApplicationLogic.ValidationAttributes
             
             if (!_validTypes.TryGetValue(extension, out string? contentType) || file.ContentType != contentType)
             {
-                return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
+                return new ValidationResult("The provided file type or content type is not valid. File type must be one of the following: .jpg, .jpeg, .png.");
             }
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
