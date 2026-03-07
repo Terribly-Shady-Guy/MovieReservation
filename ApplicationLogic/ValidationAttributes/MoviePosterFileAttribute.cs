@@ -6,10 +6,11 @@ namespace ApplicationLogic.ValidationAttributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MoviePosterFileAttribute : ValidationAttribute
     {
-        private readonly Dictionary<string, string[]> _validTypes = new()
+        private readonly Dictionary<string, string> _validTypes = new()
         {
-            [MediaTypeNames.Image.Jpeg] = [".jpg", ".jpeg"],
-            [MediaTypeNames.Image.Png] = [".png"],
+            [".jpg"] = MediaTypeNames.Image.Jpeg,
+            [".jpeg"] = MediaTypeNames.Image.Jpeg,
+            [".png"] = MediaTypeNames.Image.Png,
         };
 
         private readonly Dictionary<string, byte[]> _validSignatures = new()
@@ -31,7 +32,7 @@ namespace ApplicationLogic.ValidationAttributes
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
             
-            if (!_validTypes.TryGetValue(file.ContentType, out string[]? fileTypes) || !fileTypes.Contains(extension))
+            if (!_validTypes.TryGetValue(extension, out string? contentType) || file.ContentType != contentType)
             {
                 return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
             }
