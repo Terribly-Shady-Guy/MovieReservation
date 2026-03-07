@@ -36,12 +36,14 @@ namespace ApplicationLogic.ValidationAttributes
                 return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
             }
 
-            using var reader = new BinaryReader(file.OpenReadStream());
-            byte[] signature = _validSignatures[extension];
-
-            if (!signature.SequenceEqual(reader.ReadBytes(signature.Length)))
+            using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
+                byte[] signature = _validSignatures[extension];
+
+                if (!signature.SequenceEqual(reader.ReadBytes(signature.Length)))
+                {
+                    return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
+                }
             }
 
             if (file.Length > _FileSizeLimitInBytes)
