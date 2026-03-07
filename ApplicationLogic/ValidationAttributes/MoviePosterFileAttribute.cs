@@ -36,7 +36,7 @@ namespace ApplicationLogic.ValidationAttributes
                 return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
             }
 
-            var reader = new BinaryReader(file.OpenReadStream());
+            using var reader = new BinaryReader(file.OpenReadStream());
             byte[] signature = _validSignatures[extension];
 
             if (!signature.SequenceEqual(reader.ReadBytes(signature.Length)))
