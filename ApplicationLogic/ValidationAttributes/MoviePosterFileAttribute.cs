@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace ApplicationLogic.ValidationAttributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class MoviePosterFileAttribute : ValidationAttribute
+    public sealed partial class MoviePosterFileAttribute : ValidationAttribute
     {
         private static readonly Dictionary<string, byte[]> _validSignatures = new()
         {
@@ -13,6 +13,9 @@ namespace ApplicationLogic.ValidationAttributes
             [".png"] = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
         };
 
+        const int FileSizeLimitInBytes = 10 * 1024 * 1024;
+        private static readonly string _invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", _validSignatures.Keys)}.";
+
         protected override ValidationResult? IsValid(object? value, ValidationContext context)
         {
             if (value is not IFormFile file)
@@ -20,13 +23,12 @@ namespace ApplicationLogic.ValidationAttributes
                 return ValidationResult.Success;
             }
 
-            const int FileSizeLimitInBytes = 10 * 1024 * 1024;
             if (file.Length > FileSizeLimitInBytes)
             {
                 return new ValidationResult($"The uploaded file must be {FileSizeLimitInBytes / (1024 * 1024)}mb or smaller.");
             }
 
-            if (!Regex.IsMatch(file.FileName, "^[a-zA-Z0-9-_. ]+$"))
+            if (!CreateFileNameValidationRegex().IsMatch(file.FileName))
             {
                 return new ValidationResult("The file name contains illegal characters. The filename can only contain alphanumeric and the following special characters: -, _, ., and whitespace.");
             }
@@ -34,10 +36,9 @@ namespace ApplicationLogic.ValidationAttributes
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
 
-            string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", _validSignatures.Keys)}.";
             if (!_validSignatures.TryGetValue(extension, out byte[]? validSignature))
             {
-                return new ValidationResult(invalidFileTypeErrorMessage);
+                return new ValidationResult(_invalidFileTypeErrorMessage);
             }
 
             using var reader = new BinaryReader(file.OpenReadStream());
@@ -45,10 +46,13 @@ namespace ApplicationLogic.ValidationAttributes
             byte[] fileSignature = reader.ReadBytes(validSignature.Length);
             if (!fileSignature.SequenceEqual(validSignature))
             {
-                return new ValidationResult(invalidFileTypeErrorMessage);
+                return new ValidationResult(_invalidFileTypeErrorMessage);
             }
 
             return ValidationResult.Success;
         }
+
+        [GeneratedRegex("^[a-zA-Z0-9-_. ]+$")]
+        private static partial Regex CreateFileNameValidationRegex();
     }
 }
