@@ -1,18 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Mime;
 
 namespace ApplicationLogic.ValidationAttributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MoviePosterFileAttribute : ValidationAttribute
     {
-        private readonly Dictionary<string, string> _validTypes = new()
-        {
-            [".jpg"] = MediaTypeNames.Image.Jpeg,
-            [".jpeg"] = MediaTypeNames.Image.Jpeg,
-            [".png"] = MediaTypeNames.Image.Png,
-        };
-
         private readonly Dictionary<string, byte[]> _validSignatures = new()
         {
             [".jpg"] = [0xFF, 0xD8],
@@ -31,18 +23,14 @@ namespace ApplicationLogic.ValidationAttributes
 
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
-            
-            if (!_validTypes.TryGetValue(extension, out string? contentType) || file.ContentType != contentType)
-            {
-                return new ValidationResult("The provided file type or content type is not valid. File type must be one of the following: .jpg, .jpeg, .png.");
-            }
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                byte[] validSignature = _validSignatures[extension];
-                byte[] fileSignature = reader.ReadBytes(validSignature.Length);
-
-                if (!validSignature.SequenceEqual(fileSignature))
+                if (_validSignatures.TryGetValue(extension, out byte[]? validSignature) && !validSignature.SequenceEqual(reader.ReadBytes(validSignature.Length)))
+                {
+                    return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
+                }
+                else if (validSignature is null)
                 {
                     return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
                 }
