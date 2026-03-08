@@ -24,17 +24,17 @@ namespace ApplicationLogic.ValidationAttributes
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                const string InvalidFileTypeErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
+                 string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {_validSignatures.Keys}.";
 
                 if (!_validSignatures.TryGetValue(extension, out byte[]? validSignature))
                 {
-                    return new ValidationResult(InvalidFileTypeErrorMessage);
+                    return new ValidationResult(invalidFileTypeErrorMessage);
                 }
 
                 byte[] fileSignature = reader.ReadBytes(validSignature.Length);
                 if (!fileSignature.SequenceEqual(validSignature))
                 {
-                    return new ValidationResult(InvalidFileTypeErrorMessage);
+                    return new ValidationResult(invalidFileTypeErrorMessage);
                 }
             }
 
