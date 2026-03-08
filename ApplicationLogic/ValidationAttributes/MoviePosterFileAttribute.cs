@@ -34,13 +34,13 @@ namespace ApplicationLogic.ValidationAttributes
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
 
-            using var reader = new BinaryReader(file.OpenReadStream());
-
             string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", _validSignatures.Keys)}.";
             if (!_validSignatures.TryGetValue(extension, out byte[]? validSignature))
             {
                 return new ValidationResult(invalidFileTypeErrorMessage);
             }
+
+            using var reader = new BinaryReader(file.OpenReadStream());
 
             byte[] fileSignature = reader.ReadBytes(validSignature.Length);
             if (!fileSignature.SequenceEqual(validSignature))
