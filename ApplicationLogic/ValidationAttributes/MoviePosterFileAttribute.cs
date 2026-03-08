@@ -5,14 +5,12 @@ namespace ApplicationLogic.ValidationAttributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MoviePosterFileAttribute : ValidationAttribute
     {
-        private readonly Dictionary<string, byte[]> _validSignatures = new()
+        private static readonly Dictionary<string, byte[]> _validSignatures = new()
         {
             [".jpg"] = [0xFF, 0xD8],
             [".jpeg"] = [0xFF, 0xD8],
             [".png"] = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
         };
-
-        private const int _FileSizeLimitInBytes = 10 * 1024 * 1024;
 
         protected override ValidationResult? IsValid(object? value, ValidationContext context)
         {
@@ -26,19 +24,25 @@ namespace ApplicationLogic.ValidationAttributes
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                if (_validSignatures.TryGetValue(extension, out byte[]? validSignature) && !validSignature.SequenceEqual(reader.ReadBytes(validSignature.Length)))
+                const string InvalidFileTypeErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
+
+                if (!_validSignatures.TryGetValue(extension, out byte[]? validSignature))
                 {
-                    return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
+                    return new ValidationResult(InvalidFileTypeErrorMessage);
                 }
-                else if (validSignature is null)
+
+                byte[] fileSignature = reader.ReadBytes(validSignature.Length);
+                if (!fileSignature.SequenceEqual(validSignature))
                 {
-                    return new ValidationResult("This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.");
+                    return new ValidationResult(InvalidFileTypeErrorMessage);
                 }
             }
 
-            if (file.Length > _FileSizeLimitInBytes)
+            const int FileSizeLimitInBytes = 10 * 1024 * 1024;
+
+            if (file.Length > FileSizeLimitInBytes)
             {
-                return new ValidationResult($"The uploaded file must be {_FileSizeLimitInBytes / (1024 * 1024)}mb or smaller.");
+                return new ValidationResult($"The uploaded file must be {FileSizeLimitInBytes / (1024 * 1024)}mb or smaller.");
             }
 
             return ValidationResult.Success;
