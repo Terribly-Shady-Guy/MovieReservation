@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace ApplicationLogic.ValidationAttributes
 {
@@ -19,12 +20,17 @@ namespace ApplicationLogic.ValidationAttributes
                 return ValidationResult.Success;
             }
 
+            if (!Regex.IsMatch(file.FileName, "^[a-zA-Z0-9-_.]+$"))
+            {
+                return new ValidationResult("The file name contains illegal characters.");
+            }
+
             string extension = Path.GetExtension(file.FileName)
                 .ToLowerInvariant();
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {_validSignatures.Keys}.";
+                string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {string.Join(", ", _validSignatures.Keys)}.";
                 if (!_validSignatures.TryGetValue(extension, out byte[]? validSignature))
                 {
                     return new ValidationResult(invalidFileTypeErrorMessage);
