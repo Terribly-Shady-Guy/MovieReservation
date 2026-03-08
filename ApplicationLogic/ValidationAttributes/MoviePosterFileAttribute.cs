@@ -24,8 +24,7 @@ namespace ApplicationLogic.ValidationAttributes
 
             using (var reader = new BinaryReader(file.OpenReadStream()))
             {
-                 string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {_validSignatures.Keys}.";
-
+                string invalidFileTypeErrorMessage = $"This is not a valid file type. File type must be one of the following: {_validSignatures.Keys}.";
                 if (!_validSignatures.TryGetValue(extension, out byte[]? validSignature))
                 {
                     return new ValidationResult(invalidFileTypeErrorMessage);
@@ -39,7 +38,6 @@ namespace ApplicationLogic.ValidationAttributes
             }
 
             const int FileSizeLimitInBytes = 10 * 1024 * 1024;
-
             if (file.Length > FileSizeLimitInBytes)
             {
                 return new ValidationResult($"The uploaded file must be {FileSizeLimitInBytes / (1024 * 1024)}mb or smaller.");
