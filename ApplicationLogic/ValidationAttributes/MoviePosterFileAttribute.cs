@@ -28,7 +28,7 @@ namespace ApplicationLogic.ValidationAttributes
 
             if (!Regex.IsMatch(file.FileName, "^[a-zA-Z0-9-_. ]+$"))
             {
-                return new ValidationResult("The file name contains illegal characters.");
+                return new ValidationResult("The file name contains illegal characters. The filename can only contain alphanumeric and the following special characters: -, _, ., and whitespace.");
             }
 
             string extension = Path.GetExtension(file.FileName)

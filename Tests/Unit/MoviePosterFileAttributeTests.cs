@@ -9,6 +9,7 @@ namespace Tests.Unit
     {
         private const string WrongFileErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
         private const string FileTooLargeErrorMessage = "The uploaded file must be 10mb or smaller.";
+        private const string FileNameIllegalCharactersErrorMessage = "The file name contains illegal characters. The filename can only contain alphanumeric and the following special characters: -, _, ., and whitespace.";
 
         [Theory]
         [InlineData("validjpegfile.jpeg", 30 * 1024, "FFD8", TestDisplayName = "Valid with jpeg")]
@@ -31,7 +32,7 @@ namespace Tests.Unit
         [InlineData("filetoolarge.jpg", (10 * 1024 * 1024) + 1, "FFD8", FileTooLargeErrorMessage, TestDisplayName = "Invalid file size")]
         [InlineData("doubleexstension.jpg.exe", 30 * 1024, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid with double extension")]
         [InlineData("invalidsignature.png", 10 * 1024, "4D5A", WrongFileErrorMessage, TestDisplayName = "Invalid file signature")]
-        [InlineData("invalidcharacters.php%00.jpg", 10 * 1024, "FFD8", "The file name contains illegal characters.", TestDisplayName = "Invalid with null byte.")]
+        [InlineData("invalidcharacters.php%00.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with null byte")]
         public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string signature, string expectedErrorMessage)
         {
             byte[] fileSignature = Convert.FromHexString(signature);
