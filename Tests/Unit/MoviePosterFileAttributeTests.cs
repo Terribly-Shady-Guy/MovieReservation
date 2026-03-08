@@ -13,8 +13,8 @@ namespace Tests.Unit
 
         [Theory]
         [InlineData("validjpegfile.jpeg", 30 * 1024, "FFD8", TestDisplayName = "Valid with jpeg")]
-        [InlineData("validpngfile.png", 10 * 1024, "89504E470D0A1A0A", TestDisplayName = "Valid with png")]
-        [InlineData("validjpgfile.jpg", 10 * 1024 * 1024, "FFD8", TestDisplayName = "Valid with jpg and max file size")]
+        [InlineData("valid-pngfile.png", 10 * 1024, "89504E470D0A1A0A", TestDisplayName = "Valid with png")]
+        [InlineData("valid jpg file.jpg", 10 * 1024 * 1024, "FFD8", TestDisplayName = "Valid with jpg and max file size")]
         public void IsValid_WithFormFile_ReturnsNull(string fileName, int fileSize, string signature)
         {
             byte[] fileSignature = Convert.FromHexString(signature);
