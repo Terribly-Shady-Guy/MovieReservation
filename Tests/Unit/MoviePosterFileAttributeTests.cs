@@ -9,7 +9,7 @@ namespace Tests.Unit
     {
         private const string WrongFileErrorMessage = "This is not a valid file type. File type must be one of the following: .jpg, .jpeg, .png.";
         private const string FileTooLargeErrorMessage = "The uploaded file must be 10mb or smaller.";
-        private const string FileNameIllegalCharactersErrorMessage = "The file name contains illegal characters. The filename can only contain alphanumeric and the following special characters: -, _, ., and whitespace.";
+        private const string FileNameIllegalCharactersErrorMessage = "The file name is too long or contains illegal characters. The filename must be between 5 and 100 characters and only contain alphanumeric and the following special characters: -, _, ., and whitespace.";
 
         [Theory]
         [InlineData("validjpegfile.jpeg", 30 * 1024, "FFD8", TestDisplayName = "Valid with jpeg")]
@@ -33,7 +33,7 @@ namespace Tests.Unit
         [InlineData("doubleexstension.jpg.exe", 30 * 1024, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid with double extension")]
         [InlineData("invalidsignature.png", 10 * 1024, "4D5A", WrongFileErrorMessage, TestDisplayName = "Invalid file signature")]
         [InlineData("invalidcharacters.php%00.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with null byte")]
-        [InlineData("invalidwithtoolongnametoolongtoolongtoolongtoolong.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with file name too long")]
+        [InlineData("invalidwithtoolongnametoolongtoolongtoolongtoolongtoolongwaytoolongwaywaytoolongyougetthepointyet.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with file name too long")]
         public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string signature, string expectedErrorMessage)
         {
             byte[] fileSignature = Convert.FromHexString(signature);

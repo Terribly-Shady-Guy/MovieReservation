@@ -30,7 +30,7 @@ namespace ApplicationLogic.ValidationAttributes
 
             if (!CreateFileNameValidationRegex().IsMatch(file.FileName))
             {
-                return new ValidationResult("The file name contains illegal characters. The filename can only contain alphanumeric and the following special characters: -, _, ., and whitespace.");
+                return new ValidationResult("The file name is too long or contains illegal characters. The filename must be between 5 and 100 characters and only contain alphanumeric and the following special characters: -, _, ., and whitespace.");
             }
 
             string extension = Path.GetExtension(file.FileName)
@@ -41,10 +41,12 @@ namespace ApplicationLogic.ValidationAttributes
                 return new ValidationResult(_invalidFileTypeErrorMessage);
             }
 
-            using BinaryReader reader = new(file.OpenReadStream());
+            using Stream fileContent = file.OpenReadStream();
 
-            byte[] fileSignature = reader.ReadBytes(validSignature.Length);
-            if (!fileSignature.SequenceEqual(validSignature))
+            byte[] fileHeader = new byte[validSignature.Length];
+            fileContent.ReadAtLeast(fileHeader, fileHeader.Length, false);
+
+            if (!fileHeader.SequenceEqual(validSignature))
             {
                 return new ValidationResult(_invalidFileTypeErrorMessage);
             }
@@ -52,7 +54,7 @@ namespace ApplicationLogic.ValidationAttributes
             return ValidationResult.Success;
         }
 
-        [GeneratedRegex("^[a-zA-Z0-9-_. ]{5,50}$")]
+        [GeneratedRegex("^[a-zA-Z0-9-_. ]{5,100}$")]
         private static partial Regex CreateFileNameValidationRegex();
     }
 }
