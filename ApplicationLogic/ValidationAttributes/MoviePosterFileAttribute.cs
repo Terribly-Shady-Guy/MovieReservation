@@ -41,7 +41,7 @@ namespace ApplicationLogic.ValidationAttributes
                 return new ValidationResult(_invalidFileTypeErrorMessage);
             }
 
-            using var reader = new BinaryReader(file.OpenReadStream());
+            using BinaryReader reader = new(file.OpenReadStream());
 
             byte[] fileSignature = reader.ReadBytes(validSignature.Length);
             if (!fileSignature.SequenceEqual(validSignature))
