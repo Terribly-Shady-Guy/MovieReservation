@@ -52,7 +52,7 @@ namespace ApplicationLogic.ValidationAttributes
             return ValidationResult.Success;
         }
 
-        [GeneratedRegex("^[a-zA-Z0-9-_. ]+$")]
+        [GeneratedRegex("^[a-zA-Z0-9-_. ]{5,50}$")]
         private static partial Regex CreateFileNameValidationRegex();
     }
 }
