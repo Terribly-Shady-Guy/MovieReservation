@@ -1,7 +1,6 @@
 ﻿using ApplicationLogic.ValidationAttributes;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Mime;
 
 namespace Tests.Unit
 {
