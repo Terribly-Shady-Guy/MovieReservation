@@ -22,7 +22,7 @@ namespace DbInfrastructure
             services.AddScoped<IDataSeeder, EnumDataSeeder<TheaterType, TheaterTypeLookup>>();
             services.AddScoped<IDataSeeder, EnumDataSeeder<ReservationStatus, ReservationStatusLookup>>();
 
-            services.TryAddScoped<IDataSeedingExecutor>(static (serviceProvider) =>
+            services.TryAddScoped<IDataSeedingExecutor>(static serviceProvider =>
             {
                 ILogger<IDataSeedingExecutor> logger = serviceProvider.GetRequiredService<ILogger<IDataSeedingExecutor>>();
 
