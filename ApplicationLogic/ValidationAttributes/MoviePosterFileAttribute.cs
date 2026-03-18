@@ -43,7 +43,7 @@ namespace ApplicationLogic.ValidationAttributes
 
             using Stream fileContent = file.OpenReadStream();
 
-            byte[] fileHeader = new byte[validSignature.Length];
+            var fileHeader = new byte[validSignature.Length];
             fileContent.ReadAtLeast(fileHeader, fileHeader.Length, false);
 
             if (!fileHeader.SequenceEqual(validSignature))
