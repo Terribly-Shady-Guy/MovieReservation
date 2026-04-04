@@ -78,7 +78,8 @@ namespace MovieReservation.Startup
                     .AddDocuments(descriptionProvider.ApiVersionDescriptions.Select(d => d.GroupName))
                     .WithOperationTitleSource(OperationTitleSource.Path)
                     .DisableTelemetry()
-                    .DisableAgent();
+                    .DisableAgent()
+                    .DisableMcp();
             });
         }
     }
