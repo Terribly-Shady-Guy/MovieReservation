@@ -29,7 +29,11 @@ namespace DbInfrastructure
                 List<IDataSeeder> dataSeeders = serviceProvider.GetServices<IDataSeeder>()
                     .ToList();
 
-                logger.LogInformation("Found {SeederCount} data seeders.", dataSeeders.Count);
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation("Found {SeederCount} data seeders.", dataSeeders.Count);
+                }
+
                 return new DataSeedingExecutor(dataSeeders);
             });
             
