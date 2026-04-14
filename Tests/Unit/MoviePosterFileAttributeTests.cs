@@ -77,14 +77,12 @@ namespace Tests.Unit
 
             var fakeFileStream = new MemoryStream(signature);
 
-            IFormFile fakeUploadedFile = new FormFile(
+            return new FormFile(
                 baseStream: fakeFileStream,
                 baseStreamOffset: StreamOffset,
                 name: FormInputName,
                 fileName: fileName,
                 length: fileSize);
-
-            return fakeUploadedFile;
         }
     }
 }
