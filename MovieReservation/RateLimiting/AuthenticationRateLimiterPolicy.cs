@@ -40,6 +40,8 @@ namespace MovieReservation.RateLimiting
                 int retrySeconds = (int)Math.Ceiling(retryAfterTime.TotalSeconds);
                 rejectedContext.HttpContext.Response.Headers.RetryAfter = retrySeconds.ToString(NumberFormatInfo.InvariantInfo);
             }
+
+            rejectedContext.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
             
             ProblemDetailsContext detailsContext = new()
             {
