@@ -70,7 +70,7 @@ namespace Tests.Unit
             Assert.Null(result);
         }
 
-        private static IFormFile CreateTestFile(string fileName, int fileSize, byte[] signature)
+        private static FormFile CreateTestFile(string fileName, int fileSize, byte[] signature)
         {
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
