@@ -18,9 +18,9 @@ namespace Tests.Unit
         {
             byte[] fileSignature = Convert.FromHexString(signature);
             IFormFile testFile = CreateTestFile(fileName, fileSize, fileSignature);
-            var context = new ValidationContext(new { PosterImage = testFile });
+            ValidationContext context = new(new { PosterImage = testFile });
 
-            var validationAttribute = new MoviePosterFileAttribute();
+            MoviePosterFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
             
             Assert.Null(result);
@@ -37,9 +37,9 @@ namespace Tests.Unit
         {
             byte[] fileSignature = Convert.FromHexString(signature);
             IFormFile testFile = CreateTestFile(fileName, fileSize, fileSignature);
-            var context = new ValidationContext(new { PosterImage = testFile });
+            ValidationContext context = new(new { PosterImage = testFile });
 
-            var validationAttribute = new MoviePosterFileAttribute();
+            MoviePosterFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
             
             Assert.NotNull(result);
@@ -50,9 +50,9 @@ namespace Tests.Unit
         public void IsValid_WithInvalidType_ReturnsNull()
         {
             int invalidTypeTestValue = 0;
-            var context = new ValidationContext(invalidTypeTestValue);
+            ValidationContext context = new(invalidTypeTestValue);
 
-            var validationAttribute = new MoviePosterFileAttribute();
+            MoviePosterFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(invalidTypeTestValue, context);
 
             Assert.Null(result);
@@ -62,9 +62,9 @@ namespace Tests.Unit
         public void IsValid_WithNull_ReturnsNull()
         {
             IFormFile? fakeUploadedFile = null;
-            var context = new ValidationContext(new { fakeUploadedFile });
-            
-            var validationAttribute = new MoviePosterFileAttribute();
+            ValidationContext context = new(new { fakeUploadedFile });
+
+            MoviePosterFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(fakeUploadedFile, context);
 
             Assert.Null(result);
@@ -75,7 +75,7 @@ namespace Tests.Unit
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
-            var fakeFileStream = new MemoryStream(signature);
+            MemoryStream fakeFileStream = new(signature);
 
             return new FormFile(
                 baseStream: fakeFileStream,
