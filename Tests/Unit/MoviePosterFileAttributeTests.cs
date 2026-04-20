@@ -75,7 +75,7 @@ namespace Tests.Unit
             const int StreamOffset = 0;
             const string FormInputName = "posterImage";
 
-            MemoryStream fakeFileStream = new(signature);
+            MemoryStream fakeFileStream = new(signature, false);
 
             return new FormFile(
                 baseStream: fakeFileStream,
