@@ -9,11 +9,11 @@ namespace MovieReservation.OpenApi.Transformers
     {
         public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
         {
-            if (context.Description.IsDeprecated())
+            if (context.Description.IsDeprecated)
             {
                 operation.Deprecated = true;
 
-                SunsetPolicy? policy = context.Description.GetSunsetPolicy();
+                SunsetPolicy? policy = context.Description.SunsetPolicy;
                 operation.Description += $"\n> [!warning] This endpoint is deprecated and {(policy is not null ? $"will be removed on **{policy.Date}**" : "may be removed in a future version")}.";
             }
 
