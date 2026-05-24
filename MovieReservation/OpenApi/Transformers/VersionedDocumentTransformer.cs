@@ -21,7 +21,10 @@ namespace MovieReservation.OpenApi.Transformers
            ApiVersionDescription versionDescription = _apiVersionDescriptionProvider.ApiVersionDescriptions
                 .Single(d => d.GroupName == context.DocumentName);
 
-            _logger.LogInformation("Executing transformer for api group {GroupName}.", versionDescription.GroupName);
+           if (_logger.IsEnabled(LogLevel.Information))
+           {
+               _logger.LogInformation("Executing transformer for api group {GroupName}.", versionDescription.GroupName);
+           }
 
             document.Info.Version = $"v{versionDescription.ApiVersion}";
             document.Info.Title = "Movie Reservation API";
