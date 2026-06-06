@@ -27,9 +27,7 @@ namespace DbInfrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            Type dbContextType = typeof(MovieReservationDbContext);
-            modelBuilder.ApplyConfigurationsFromAssembly(dbContextType.Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieReservationDbContext).Assembly);
         }
     }
 }
