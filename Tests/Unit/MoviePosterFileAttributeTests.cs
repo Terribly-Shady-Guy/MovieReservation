@@ -33,6 +33,7 @@ namespace Tests.Unit
         [InlineData("invalidsignature.png", 10 * 1024, "4D5A", WrongFileErrorMessage, TestDisplayName = "Invalid file signature")]
         [InlineData("invalidcharacters.php%00.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with null byte")]
         [InlineData("invalidwithtoolongnametoolongtoolongtoolongtoolongtoolongwaytoolongwaywaytoolongyougetthepointyet.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with file name too long")]
+        [InlineData("invalidnoextension", 10 * 1024, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid with no extension")]
         public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string signature, string expectedErrorMessage)
         {
             byte[] fileSignature = Convert.FromHexString(signature);
