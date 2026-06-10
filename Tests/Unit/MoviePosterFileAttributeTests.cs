@@ -14,7 +14,7 @@ namespace Tests.Unit
         [InlineData("validjpegfile.jpeg", 30 * 1024, "FFD8", TestDisplayName = "Valid with jpeg")]
         [InlineData("valid-pngfile.png", 10 * 1024, "89504E470D0A1A0A", TestDisplayName = "Valid with png")]
         [InlineData("valid jpg file.jpg", 10 * 1024 * 1024, "FFD8", TestDisplayName = "Valid with jpg and max file size")]
-        public void IsValid_WithFormFile_ReturnsNull(string fileName, int fileSize, string signature)
+        public void IsValid_WithValidFormFile_ReturnsNull(string fileName, int fileSize, string signature)
         {
             byte[] fileSignature = Convert.FromHexString(signature);
             IFormFile testFile = CreateTestFile(fileName, fileSize, fileSignature);
@@ -34,7 +34,7 @@ namespace Tests.Unit
         [InlineData("invalidcharacters.php%00.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with null byte")]
         [InlineData("invalidwithtoolongnametoolongtoolongtoolongtoolongtoolongwaytoolongwaywaytoolongyougetthepointyet.jpg", 10 * 1024, "FFD8", FileNameIllegalCharactersErrorMessage, TestDisplayName = "Invalid with file name too long")]
         [InlineData("invalidnoextension", 10 * 1024, "FFD8", WrongFileErrorMessage, TestDisplayName = "Invalid with no extension")]
-        public void IsValid_WithFormFile_ReturnsValidationResult(string fileName, int fileSize, string signature, string expectedErrorMessage)
+        public void IsValid_WithInvalidFormFile_ReturnsValidationResult(string fileName, int fileSize, string signature, string expectedErrorMessage)
         {
             byte[] fileSignature = Convert.FromHexString(signature);
             IFormFile testFile = CreateTestFile(fileName, fileSize, fileSignature);
