@@ -48,15 +48,21 @@ namespace Tests.Unit
         }
         
         [Fact]
-        public void IsValid_WithInvalidType_ReturnsNull()
+        public void IsValid_WithInvalidType_ThrowsArgumentException()
         {
             int invalidTypeTestValue = 0;
-            ValidationContext context = new(invalidTypeTestValue);
+            ValidationContext context = new(new { PosterImage = invalidTypeTestValue }) 
+            { 
+                MemberName = "PosterImage" 
+            };
 
             MoviePosterFileAttribute validationAttribute = new();
-            ValidationResult? result = validationAttribute.GetValidationResult(invalidTypeTestValue, context);
+            var exception = Assert.Throws<ArgumentException>(() =>
+            {
+                validationAttribute.GetValidationResult(invalidTypeTestValue, context);
+            });
 
-            Assert.Null(result);
+            Assert.Equal("Member PosterImage is not type IFormFile.", exception.Message);
         }
 
         [Fact]

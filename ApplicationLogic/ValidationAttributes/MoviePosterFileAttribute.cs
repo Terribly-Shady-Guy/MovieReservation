@@ -18,9 +18,14 @@ namespace ApplicationLogic.ValidationAttributes
 
         protected override ValidationResult? IsValid(object? value, ValidationContext context)
         {
-            if (value is not IFormFile file)
+            if (value == null)
             {
                 return ValidationResult.Success;
+            }
+            
+            if (value is not IFormFile file)
+            {
+                throw new ArgumentException($"Member {context.MemberName} is not type {nameof(IFormFile)}.");
             }
 
             if (file.Length > FileSizeLimitInBytes)
