@@ -9,7 +9,7 @@ namespace ApplicationLogic.ViewModels
         public required string Title { get; set; }
         [MinLength(1)]
         public required string Description { get; set; }
-        [MoviePosterFile]
+        [ImageFile]
         public required IFormFile PosterImage { get; set; }
         [MinLength(1)]
         public required string[] Genres { get; set; }

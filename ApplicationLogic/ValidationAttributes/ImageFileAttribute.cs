@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace ApplicationLogic.ValidationAttributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed partial class MoviePosterFileAttribute : ValidationAttribute
+    public sealed partial class ImageFileAttribute : ValidationAttribute
     {
         private static readonly Dictionary<string, byte[]> _validSignatures = new()
         {

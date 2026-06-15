@@ -20,7 +20,7 @@ namespace Tests.Unit
             IFormFile testFile = CreateTestFile(fileName, fileSize, fileSignature);
             ValidationContext context = new(new { PosterImage = testFile });
 
-            MoviePosterFileAttribute validationAttribute = new();
+            ImageFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
             
             Assert.Null(result);
@@ -40,7 +40,7 @@ namespace Tests.Unit
             IFormFile testFile = CreateTestFile(fileName, fileSize, fileSignature);
             ValidationContext context = new(new { PosterImage = testFile });
 
-            MoviePosterFileAttribute validationAttribute = new();
+            ImageFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(testFile, context);
             
             Assert.NotNull(result);
@@ -56,7 +56,7 @@ namespace Tests.Unit
                 MemberName = "PosterImage" 
             };
 
-            MoviePosterFileAttribute validationAttribute = new();
+            ImageFileAttribute validationAttribute = new();
             var exception = Assert.Throws<ArgumentException>(() =>
             {
                 validationAttribute.GetValidationResult(invalidTypeTestValue, context);
@@ -71,7 +71,7 @@ namespace Tests.Unit
             IFormFile? fakeUploadedFile = null;
             ValidationContext context = new(new { fakeUploadedFile });
 
-            MoviePosterFileAttribute validationAttribute = new();
+            ImageFileAttribute validationAttribute = new();
             ValidationResult? result = validationAttribute.GetValidationResult(fakeUploadedFile, context);
 
             Assert.Null(result);
