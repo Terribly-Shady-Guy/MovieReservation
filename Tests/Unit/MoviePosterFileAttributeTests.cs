@@ -53,7 +53,7 @@ namespace Tests.Unit
             int invalidTypeTestValue = 0;
             ValidationContext context = new(new { PosterImage = invalidTypeTestValue }) 
             { 
-                MemberName = "PosterImage" 
+                MemberName = "PosterImage"
             };
 
             ImageFileAttribute validationAttribute = new();
