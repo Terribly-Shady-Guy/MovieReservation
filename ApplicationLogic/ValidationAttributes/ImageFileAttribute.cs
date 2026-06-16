@@ -3,6 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace ApplicationLogic.ValidationAttributes
 {
+    /// <summary>
+    /// Specifies that an <see cref="IFormFile"/> is an image.
+    /// </summary>
+    /// <remarks>
+    /// This attribute supports the following file types: .jpg, .jpeg, and .png.
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Property)]
     public sealed partial class ImageFileAttribute : ValidationAttribute
     {
