@@ -31,7 +31,7 @@ namespace ApplicationLogic.ValidationAttributes
             
             if (value is not IFormFile file)
             {
-                throw new ArgumentException($"Member {context.MemberName} is not type {nameof(IFormFile)}.");
+                throw new ArgumentException($"Member {context.MemberName} is not type IFormFile.");
             }
 
             if (file.Length > FileSizeLimitInBytes)
